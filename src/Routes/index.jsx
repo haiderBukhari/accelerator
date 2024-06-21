@@ -11,6 +11,7 @@ import Messages from '../pages/Messages';
 import MessagesList from '../pages/Messages/MessageList';
 import Members from '../pages/Members';
 import Courses from '../pages/Courses';
+import Events from '../pages/Events';
 
 const index = () => {
     return (
@@ -29,6 +30,7 @@ const index = () => {
                 <Route path="/dashboard/messages/:id" element={<MessagesList />}/>
                 <Route path="/dashboard/members" element={<Members />}/>
                 <Route path="/dashboard/course" element={<Courses />}/>
+                <Route path="/dashboard/events" element={<Events />}/>
                 <Route path="*" element={<Home />}/>
             </Routes>
         </>
