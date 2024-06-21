@@ -6,6 +6,7 @@ import OtpConfirmation from '../components/Auth/OtpConfirmation';
 import ChangePassword from '../components/Auth/ChangePassword';
 import Home from '../pages/Home'
 import Posts from '../pages/Posts';
+import Groups from '../pages/Groups';
 
 const index = () => {
     return (
@@ -19,6 +20,7 @@ const index = () => {
                 <Route path="/change-password" element={<ChangePassword />}/>
                 <Route path="/home" element={<Home />}/>
                 <Route path="/dashboard/home" element={<Posts />}/>
+                <Route path="/dashboard/groups" element={<Groups />}/>
                 <Route path="*" element={<Home />}/>
             </Routes>
         </>
