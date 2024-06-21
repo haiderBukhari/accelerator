@@ -30,7 +30,6 @@ export default function Groups() {
                                         </div>
                                         <div className="text-xs text-ellipsis text-neutral-500">
                                             {text.length > 60 ? text.slice(0, 60) + '...' : text}
-
                                         </div>
                                     </div>
                                 </div>

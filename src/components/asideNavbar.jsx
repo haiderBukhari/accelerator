@@ -52,7 +52,7 @@ const AsideNavbar = () => {
                         hyperLinks.map((hyperLink) => (
                             <div className="flex items-center h-[35px] my-1" key={hyperLink.icon}>
                                 {
-                                    (Location.pathname === hyperLink.link) && <div className="shrink-0 w-1.5 bg-violet-800 h-[35px]" />
+                                    (Location.pathname === hyperLink.link || location.pathname.includes(hyperLink.link)) && <div className="shrink-0 w-1.5 bg-violet-800 h-[35px]" />
                                 }
                                 <div className={`flex gap-2.5 pr-5 ml-8 ${Location.pathname === hyperLink.link ? 'text-violet-800' : 'text-neutral-500 w-18.5'}`}>
                                     <img

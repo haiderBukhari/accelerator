@@ -7,6 +7,8 @@ import ChangePassword from '../components/Auth/ChangePassword';
 import Home from '../pages/Home'
 import Posts from '../pages/Posts';
 import Groups from '../pages/Groups';
+import Messages from '../pages/Messages';
+import MessagesList from '../pages/Messages/MessageList';
 
 const index = () => {
     return (
@@ -21,6 +23,8 @@ const index = () => {
                 <Route path="/home" element={<Home />}/>
                 <Route path="/dashboard/home" element={<Posts />}/>
                 <Route path="/dashboard/groups" element={<Groups />}/>
+                <Route path="/dashboard/messages" element={<Messages />}/>
+                <Route path="/dashboard/messages/:id" element={<MessagesList />}/>
                 <Route path="*" element={<Home />}/>
             </Routes>
         </>
