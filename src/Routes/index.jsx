@@ -5,6 +5,7 @@ import RecoveryEmail from '../components/Auth/RecoveryEmail';
 import OtpConfirmation from '../components/Auth/OtpConfirmation';
 import ChangePassword from '../components/Auth/ChangePassword';
 import Home from '../pages/Home'
+import Posts from '../pages/Posts';
 
 const index = () => {
     return (
@@ -17,6 +18,7 @@ const index = () => {
                 <Route path="/otp" element={<OtpConfirmation />}/>
                 <Route path="/change-password" element={<ChangePassword />}/>
                 <Route path="/home" element={<Home />}/>
+                <Route path="/dashboard/home" element={<Posts />}/>
                 <Route path="*" element={<Home />}/>
             </Routes>
         </>

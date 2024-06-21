@@ -1,25 +1,25 @@
 
 export default function AsideSettings() {
     return (
-        <div className="flex flex-col px-9 py-10 w-full bg-neutral-200 max-w-[430px]">
+        <div className="flex flex-col px-9 py-10 w-full bg-neutral-200 max-w-[300px]">
             <div className="flex gap-5">
-                <div className="flex gap-5">
+                <div className="flex gap-2">
                     <img
                         loading="lazy"
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/547142d9a722297aa5375ffeec2ac51228e396ace65520fe4c323cc9dc9cdc56?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                        className="shrink-0 aspect-square w-[60px]"
+                        className="shrink-0 aspect-square w-[35px]"
                     />
                     <img
                         loading="lazy"
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/44bac1ef3fcf5c5c8e6360efc056bd45ccc33e5414f6fdcb3d5a1a4d354909b9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                        className="shrink-0 aspect-square w-[60px]"
+                        className="shrink-0 aspect-square w-[35px]"
                     />
                 </div>
                 <div className="flex gap-4 text-base font-medium rounded-2xl border border-solid bg-neutral-200 border-neutral-400 text-zinc-800">
                     <img
                         loading="lazy"
                         srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                        className="shrink-0 border-4 border-violet-800 border-solid aspect-square w-[60px]"
+                        className="shrink-0 border-4 border-violet-800 border-solid aspect-square w-[40px]"
                     />
                     <div className="flex gap-4 pr-3 my-auto">
                         <div>Mr. Michael </div>
@@ -39,7 +39,7 @@ export default function AsideSettings() {
                 <img
                     loading="lazy"
                     srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                    className="object-cover absolute inset-0 size-full"
+                    className="object-cover absolute inset-0 size-full h-[200px]"
                 />
                 <div className="flex relative gap-5 items-start">
                     <div className="flex-auto self-end mt-18 text-2xl font-semibold">
