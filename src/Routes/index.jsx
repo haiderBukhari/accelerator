@@ -9,6 +9,7 @@ import Posts from '../pages/Posts';
 import Groups from '../pages/Groups';
 import Messages from '../pages/Messages';
 import MessagesList from '../pages/Messages/MessageList';
+import Members from '../pages/Members';
 
 const index = () => {
     return (
@@ -25,6 +26,7 @@ const index = () => {
                 <Route path="/dashboard/groups" element={<Groups />}/>
                 <Route path="/dashboard/messages" element={<Messages />}/>
                 <Route path="/dashboard/messages/:id" element={<MessagesList />}/>
+                <Route path="/dashboard/members" element={<Members />}/>
                 <Route path="*" element={<Home />}/>
             </Routes>
         </>
