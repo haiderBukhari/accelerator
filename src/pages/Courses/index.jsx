@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 export default function Courses() {
+    const Navigate = useNavigate();
     return (
         <div className="flex flex-col px-5 pb-10 pt-10 bg-neutral-100">
             <div className="flex gap-5 justify-between w-full text-base font-bold text-zinc-800 max-md:flex-wrap max-md:max-w-full">
@@ -59,9 +61,10 @@ export default function Courses() {
                             </div>
                         </div>
                         <img
+                            onClick={()=>{Navigate('/dashboard/course/details')}}
                             loading="lazy"
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/f7c99789c18d7823e75d0ea2e0789fa546a117a0f4744c541ab08390c619b505?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                            className="shrink-0 self-stretch my-auto aspect-[1.25] w-[75px]"
+                            className="shrink-0 self-stretch my-auto aspect-[1.25] w-[75px] cursor-pointer"
                         />
                     </div>
                     <div className="shrink-0 self-center mt-7 h-[1px] border border-solid bg-neutral-400 border-neutral-400 max-w-[80%] w-full mx-auto" />

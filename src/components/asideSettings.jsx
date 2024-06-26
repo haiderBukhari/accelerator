@@ -1,7 +1,7 @@
 
 export default function AsideSettings() {
     return (
-        <div className="flex flex-col px-9 py-10 w-full bg-neutral-200 max-w-[300px]">
+        <div className="flex flex-col px-9 py-10 w-full bg-neutral-200 max-w-[375px]">
             <div className="flex gap-5">
                 <div className="flex gap-2">
                     <img

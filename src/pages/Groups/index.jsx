@@ -1,5 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 export default function Groups() {
     const text = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.';
+    const Navigate = useNavigate();
     return (
         <div className="flex flex-col px-5 max-w-[860px]">
             <div className="flex gap-5 w-full text-base font-medium text-zinc-800 max-md:flex-wrap max-md:max-w-full">
@@ -44,7 +47,7 @@ export default function Groups() {
                                         />
                                         <div className="my-auto">27k</div>
                                     </div>
-                                    <div className="justify-center px-5 py-1 text-lg text-white bg-violet-800 rounded-xl border border-solid w-[120px] border-neutral-400 max-md:px-5">
+                                    <div onClick={()=>{Navigate('/dashboard/details/groups')}} className="justify-center px-5 py-1 text-lg text-white bg-violet-800 rounded-xl border border-solid w-[120px] border-neutral-400 max-md:px-5">
                                         Join Now
                                     </div>
                                 </div>
