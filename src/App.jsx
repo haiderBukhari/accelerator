@@ -11,11 +11,15 @@ function App() {
   return (
     <div className={`${currentLocation && 'flex min-h-screen'}`}>
       {currentLocation ? <AsideNavbar /> : null}
-      {location.pathname !== '/home' ? <Routes /> : null}
+      <div className='w-full'>
+        {location.pathname !== '/home' ? <Routes /> : null}
+      </div>
       {(currentLocation && !location.pathname.includes('/dashboard/messages') && location.pathname!== '/dashboard/members' && !location.pathname.includes('/dashboard/course') && !location.pathname.includes('dashboard/details/groups') && location.pathname !== '/dashboard/course/details' && location.pathname !== '/dashboard/events') ? <AsideSettings /> : null}
+      <div className='absolute'>
       {
         (currentLocation && !location.pathname.includes('/dashboard/messages') && location.pathname!== '/dashboard/members' && !location.pathname.includes('/dashboard/course') && location.pathname !== '/dashboard/events') && <AsideMessages/>
       }
+      </div>
     </div>
   )
 }

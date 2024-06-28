@@ -123,7 +123,6 @@ const AsideMessages = () => {
                     </div>
                 </div>
             }
-
         </div>
     )
 }

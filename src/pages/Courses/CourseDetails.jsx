@@ -68,7 +68,7 @@ export default function CourseDetails() {
                         </div>
                     </div>
                     <div className="flex flex-col ml-5 w-[400px] max-md:ml-0 max-md:w-full">
-                        <div className="flex flex-col items-start py-8 pl-10 w-[400px] rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:mt-7 w-full">
+                        <div className="flex flex-col items-start py-8 pl-10 w-[400px] rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:mt-7 ">
                             <div className="text-xl font-bold text-neutral-700 max-md:max-w-full">
                                 Other Sessions In This Module
                             </div>

@@ -4,7 +4,7 @@ export default function Groups() {
     const text = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.';
     const Navigate = useNavigate();
     return (
-        <div className="flex flex-col px-5 max-w-[860px]">
+        <div className="flex flex-col px-5 max-w-[1060px] ">
             <div className="flex gap-5 w-full text-base font-medium text-zinc-800 max-md:flex-wrap max-md:max-w-full">
                 <div className="flex-auto my-auto">Search on The App Accelerator </div>
                 <img
