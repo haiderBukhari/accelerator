@@ -1,4 +1,11 @@
+import { useState } from "react";
+import CommentsDialog from "../../components/comments";
+import { useNavigate } from "react-router-dom";
+
 export default function Posts() {
+    const [open, setOpen] = useState(false);
+    const Navigate = useNavigate();
+
     return (
         <div className="flex flex-col max-w-[1060px] mx-7 mt-5">
             <div className="flex gap-5 px-5 w-full text-base font-medium text-zinc-800 max-md:flex-wrap max-md:max-w-full">
@@ -67,7 +74,7 @@ export default function Posts() {
                 </div>
                 <div className="flex gap-5 justify-between px-px mt-6 w-full text-sm max-md:flex-wrap max-md:max-w-full">
                     <div className="flex w-full flex-col justify-center text-neutral-400 max-md:max-w-full">
-                        <button className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full">
+                        <button onClick={()=>{setOpen(!open)}} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full">
                             Write a comment
                         </button>
                     </div>
@@ -125,15 +132,13 @@ export default function Posts() {
                     srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/6d119490dc93903df22a90c1eeec8da331d41c78f88f8dc549d48d26a1612c30?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/6d119490dc93903df22a90c1eeec8da331d41c78f88f8dc549d48d26a1612c30?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/6d119490dc93903df22a90c1eeec8da331d41c78f88f8dc549d48d26a1612c30?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/6d119490dc93903df22a90c1eeec8da331d41c78f88f8dc549d48d26a1612c30?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/6d119490dc93903df22a90c1eeec8da331d41c78f88f8dc549d48d26a1612c30?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/6d119490dc93903df22a90c1eeec8da331d41c78f88f8dc549d48d26a1612c30?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/6d119490dc93903df22a90c1eeec8da331d41c78f88f8dc549d48d26a1612c30?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/6d119490dc93903df22a90c1eeec8da331d41c78f88f8dc549d48d26a1612c30?apiKey=cf358c329e0d49a792d02d32277323ef&"
                     className="self-center mt-6 w-full border border-solid aspect-[2.63] border-neutral-400 max-w-[784px] max-md:max-w-full"
                 />
-                <div className="flex gap-5 justify-between mt-8 w-full text-sm max-md:flex-wrap max-md:max-w-full">
-                    <div className="flex flex-col justify-center text-neutral-400 max-md:max-w-full">
-                        <div className="flex w-full flex-col justify-center text-neutral-400 max-md:max-w-full">
-                            <button className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full">
-                                Write a comment
-                            </button>
-                        </div>
+                <div className="flex gap-5 justify-between px-px mt-6 w-full text-sm max-md:flex-wrap max-md:max-w-full">
+                    <div className="flex w-full flex-col justify-center text-neutral-400 max-md:max-w-full">
+                        <button onClick={()=>{setOpen(!open)}} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full">
+                            Write a comment
+                        </button>
                     </div>
-                    <div className="flex gap-2.5 justify-between my-auto whitespace-nowrap text-neutral-400">
+                    <div className="flex max-w-[200px] justify-between w-full my-auto whitespace-nowrap text-neutral-400">
                         <img
                             loading="lazy"
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/057f6797c1a65234653a3b14b6904c6026c5676f9bba3f9afe3213ffb0ea12d6?apiKey=cf358c329e0d49a792d02d32277323ef&"
@@ -155,6 +160,7 @@ export default function Posts() {
                     </div>
                 </div>
             </div>
+            <CommentsDialog open={open} setOpen={setOpen}/>
         </div>
     );
 }
