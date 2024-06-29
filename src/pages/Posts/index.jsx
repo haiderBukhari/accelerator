@@ -7,7 +7,7 @@ export default function Posts() {
     const Navigate = useNavigate();
 
     return (
-        <div className="flex flex-col max-w-[1060px] mx-7 mt-5">
+        <div className="flex flex-col max-w-[97%] mx-7 mt-5">
             <div className="flex gap-5 px-5 w-full text-base font-medium text-zinc-800 max-md:flex-wrap max-md:max-w-full">
                 <div className="flex-auto my-auto">Search on The App Accelerator </div>
                 <img

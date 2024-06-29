@@ -20,8 +20,8 @@ export default function GroupsDetails() {
                 srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&"
                 className="w-full border-2 border-solid aspect-[5] border-neutral-400 max-w-auto mt-7"
             />
-            <div className="flex z-10 flex-col pr-6 pl-16 mt-0 w-full max-md:px-5 max-md:max-w-full">
-                <div className="max-w-full w-[529px] absolute top-[160px]">
+            <div className="flex z-10 flex-col pr-6 pl-16 mt-0 relative w-full max-md:px-5 max-md:max-w-full">
+                <div className={`max-w-full w-[529px] absolute ${selected === 1 ? 'top-[-11%]' : selected === 2 ? 'top-[-14%]' : selected === 3 ? 'top-[-14%]' : 'top-[-6%]'}`}>
                     <div className="flex gap-5 max-md:flex-col max-md:gap-0">
                         <div className="flex flex-col w-[46%] max-md:ml-0 max-md:w-full">
                             <img
@@ -526,7 +526,7 @@ export default function GroupsDetails() {
                 }
                 {
                     selected === 4 && <>
-                        <div className="mt-14 text-2xl font-bold text-violet-800 max-md:mt-10 max-md:max-w-full">
+                        <div className="my-10 text-2xl font-bold text-violet-800 max-md:mt-10 max-md:max-w-full">
                             Mobile App Development
                         </div>
                         {
@@ -585,7 +585,6 @@ export default function GroupsDetails() {
                                 </div>
                             ))
                         }
-
                     </>
                 }
             </div>
