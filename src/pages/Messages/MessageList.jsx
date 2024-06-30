@@ -1,7 +1,7 @@
 export default function Messages() {
     const text = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.';
     return (
-        <div className="w-full">
+        <div className="w-full mt-5">
             <div className="flex max-md:flex-col max-md:gap-0 h-full w-full">
                 <div className="flex-col w-6/12 max-md:ml-0 max-md:w-full hidden md:flex">
                     <div className="flex flex-col grow px-6 pt-11 pb-20 w-full text-base bg-stone-300 max-md:px-5 max-md:mt-10 max-md:max-w-full">
@@ -86,33 +86,51 @@ export default function Messages() {
                 </div>
                 <div className="flex flex-col w-full">
                     <div className="flex flex-col max-md:max-w-full">
-                        <div className="flex gap-5 justify-between px-12 py-6 w-full bg-[#E0E0E0] max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                            <div className="flex gap-5 text-lg">
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="shrink-0 border-4 border-solid aspect-[1.02] border-neutral-400 w-[60px] h-[60px]"
-                                />
-                                <div className="flex flex-col py-1.5 my-auto">
-                                    <div className="font-medium text-zinc-800">John Smith</div>
-                                    <div className="text-ellipsis text-neutral-500">Active</div>
+                        <div className="mx-4">
+                            <div className="flex gap-5 justify-between px-12 py-6 w-full bg-[#E0E0E0] rounded-2xl md:rounded-none max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                                <div className="flex gap-5 text-lg">
+                                    <img
+                                        loading="lazy"
+                                        srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/86a7748a9c425565703d2d92843a3b5d006b34f60d27bb8ba18aa0026b4fbb54?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                        className="shrink-0 border-4 border-solid aspect-[1.02] border-neutral-400 w-[60px] h-[60px]"
+                                    />
+                                    <div className="flex flex-col md:py-1.5 my-auto">
+                                        <div className="font-medium text-zinc-800">John Smith</div>
+                                        <div className="text-ellipsis text-neutral-500">Active</div>
+                                    </div>
+                                </div>
+                                <div className="flex gap-5 justify-between my-auto">
+                                    <img
+                                        loading="lazy"
+                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/0875e08c910b2ca80c6353466fd26d849803614b91b12ed0f6c0755eb0f7f694?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                        className="shrink-0 aspect-square w-[25px] md:w-[35px]"
+                                    />
+                                    <img
+                                        loading="lazy"
+                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/791b92829cb2704be8ebe8c7af937be2f83b1c99aa55482a7d4ffbe2df299e8f?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                        className="shrink-0 aspect-square w-[25px] md:w-[35px]"
+                                    />
+                                    <div className="shrink-0 self-start h-[33px] w-[7px]" />
                                 </div>
                             </div>
-                            <div className="flex gap-5 justify-between my-auto">
-                                <img
-                                    loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/0875e08c910b2ca80c6353466fd26d849803614b91b12ed0f6c0755eb0f7f694?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="shrink-0 aspect-square w-[35px]"
-                                />
-                                <img
-                                    loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/791b92829cb2704be8ebe8c7af937be2f83b1c99aa55482a7d4ffbe2df299e8f?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="shrink-0 aspect-square w-[35px]"
-                                />
-                                <div className="shrink-0 self-start h-[33px] w-[7px]" />
+                        </div>
+                        <div className="flex flex-col items-center px-5 max-w-[292px] mx-auto mt-5">
+                            <img
+                                loading="lazy"
+                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                className="aspect-square max-w-[154px] w-[154px]"
+                            />
+                            <div className="mt-1.5 text-xl font-bold text-neutral-700">
+                                Chat With Friends
+                            </div>
+                            <div className="self-stretch mt-4 w-full text-xs text-center text-neutral-500">
+                                Lorem Ipsum is simply dummy text of the printing and typesetting
+                                industry. Lorem Ipsum has been the industrys standard dummy text ever
+                                since the 1500s
                             </div>
                         </div>
-                        <div className="flex flex-col px-12 pt-[622px] max-md:px-5 max-md:mt-10 max-md:max-w-full bg-neutral-100">
+
+                        <div className="flex flex-col px-12 pt-[12px] md:pt-[622px] max-md:px-5 max-md:mt-10 max-md:max-w-full bg-neutral-100">
                             <div className="flex flex-col items-start py-2.5 pr-8 pl-4 border border-solid bg-orange-600 bg-opacity-10 border-neutral-400 w-[103px] rounded-xl max-md:pr-5">
                                 <div className="text-xs text-zinc-600">2:30 PM</div>
                                 <div className="mt-1.5 text-xl text-black">Hi</div>
@@ -122,10 +140,10 @@ export default function Messages() {
                                 <div className="mt-1.5 text-xl text-black">Hello</div>
                             </div>
                         </div>
-                        <div className="flex gap-5 self-center pt-20 max-md:flex-wrap max-md:mt-10 w-full px-5 pb-10 bg-neutral-100">
-                            <div className="flex flex-auto gap-5 justify-between py-3.5 rounded-xl border border-solid bg-[#CCCCCC] border-stone-300 max-md:flex-wrap w-full px-10">
+                        <div className="flex gap-5 self-center pt-5 md:pt-20 md:max-md:flex-wrap max-md:mt-10 w-full px-5 pb-10 bg-neutral-100">
+                            <div className="flex flex-auto gap-5 justify-between py-3.5 rounded-xl border border-solid bg-[#CCCCCC] border-stone-300 md:max-md:flex-wrap w-full pr-10 pl-5">
                                 <div className="my-auto text-lg text-neutral-500 w-full bg-[#CCCCCC]">Type Here</div>
-                                <div className="flex gap-2.5 justify-between ">
+                                <div className="flex gap-2.5 justify-between">
                                     <img
                                         loading="lazy"
                                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/0ddfcc9b84d86a41700fda54352c1076c20ed5ff21004f6c63a60947ab4dd937?apiKey=cf358c329e0d49a792d02d32277323ef&"
