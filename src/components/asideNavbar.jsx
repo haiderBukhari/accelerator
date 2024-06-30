@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom"
+import { X } from 'lucide-react';
 
-const AsideNavbar = () => {
+const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
     const Location = useLocation();
     const hyperLinks = [
         {
@@ -35,13 +36,16 @@ const AsideNavbar = () => {
         }
     ]
     return (
-        <div className="flex flex-col py-5 w-full bg-neutral-200 max-w-[290px]">
+        <div style={{zIndex: 10}} className={`flex-col py-5 w-full bg-neutral-200 max-w-[290px]  ${location.pathname === '/home' ? 'flex' : `${navbarOpen ? 'fixed overflow-auto top-0 left-0' : 'hidden md:flex'} `}`}>
             <div className="flex flex-col items-start pl-9 w-full text-2xl font-bold whitespace-nowrap text-zinc-500">
-                <img
-                    loading="lazy"
-                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                    className="max-w-full aspect-[2.27] w-[115px]"
-                />
+                <div onClick={() => setNavbarOpen(false)} className="flex justify-between w-full items-center pr-4">
+                    <img
+                        loading="lazy"
+                        srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/f0ad6f027ff0eeb3bac787ac9569d03c2884dd446eab26215d7954c3e71f7f74?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                        className="max-w-full aspect-[2.27] w-[115px]"
+                    />
+                    <X />
+                </div>
                 <div style={{ border: "1px solid #000", width: "full" }}></div>
                 {/* <div className="shrink-0 mt-6 h-px border border-solid bg-black border-stone-300" /> */}
                 <div className="mt-6 text-lg">Menu</div>

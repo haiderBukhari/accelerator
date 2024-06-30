@@ -5,14 +5,6 @@ export default function Groups() {
     const Navigate = useNavigate();
     return (
         <div className="flex flex-col px-5 max-w-[99%] ">
-            <div className="flex gap-5 w-full text-base font-medium text-zinc-800 max-md:flex-wrap max-md:max-w-full">
-                <div className="flex-auto my-auto">Search on The App Accelerator </div>
-                <img
-                    loading="lazy"
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/44c5df01ac7b3823e2df88cf5d0a1554b5bbd054c9c91c494efc638bb720e856?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                    className="shrink-0 aspect-square w-[30px]"
-                />
-            </div>
             <div className="mt-14 w-full text-2xl font-semibold text-zinc-500 max-md:mt-10 max-md:max-w-full">
                 Entrepreneur Groups{" "}
             </div>

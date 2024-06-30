@@ -3,7 +3,7 @@ export default function Messages() {
     return (
         <div className="w-full">
             <div className="flex max-md:flex-col max-md:gap-0 h-full w-full">
-                <div className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
+                <div className="flex-col w-6/12 max-md:ml-0 max-md:w-full hidden md:flex">
                     <div className="flex flex-col grow px-6 pt-11 pb-20 w-full text-base bg-stone-300 max-md:px-5 max-md:mt-10 max-md:max-w-full">
                         <div className="flex gap-5 items-start px-5 py-3 rounded-xl border border-solid bg-neutral-200 border-stone-300 text-neutral-500 max-md:pr-5">
                             <input className="flex-auto my-auto bg-transparent outline-none" type='text' placeholder="Search Friends" />
