@@ -20,15 +20,19 @@ const Register = () => {
                     Create a New <br /> Account
                 </div>
                 <div className="mt-8 text-xl tracking-wider text-neutral-700 max-md:mt-10 max-md:max-w-full">
-                    Full Name
+                    First Name
                 </div>
-                <input placeholder="i.e. john delton" type='text' className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none max-md:px-5 max-md:max-w-full" />
+                <input placeholder="i.e. john" type='text' className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none max-md:px-5 max-md:max-w-full" />
+                <div className="mt-8 text-xl tracking-wider text-neutral-700 max-md:mt-10 max-md:max-w-full">
+                    Last Name
+                </div>
+                <input placeholder="i.e. delton" type='text' className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none max-md:px-5 max-md:max-w-full" />
                 <div className="mt-8 text-xl tracking-wider text-neutral-700 max-md:mt-10 max-md:max-w-full">
                     Email Address
                 </div>
                 <input placeholder="i.e. jhon_e,abc@example.com" type='text' className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none max-md:px-5 max-md:max-w-full" />
                 <div className="mt-8 text-xl tracking-wider text-neutral-700 max-md:mt-10 max-md:max-w-full">
-                    Contact Information
+                    Phone Number
                 </div>
                 <input placeholder="i.e. (XX) XXX XXXXXXX" type='text' className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none max-md:px-5 max-md:max-w-full" />
                 <div className="mt-4 text-xl tracking-wider text-neutral-700 max-md:max-w-full">
