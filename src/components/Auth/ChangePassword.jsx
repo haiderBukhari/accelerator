@@ -1,9 +1,41 @@
+import axios from "axios";
 import { useState } from "react"
+import { failedToast, successToast } from "../../utils/toastNotifications";
 import { useNavigate } from "react-router-dom"
+import { useSearchParams } from "react-router-dom";
 
 const ChangePassword = () => {
     const Navigate = useNavigate();
-    const [showPassword, setShowPassword] = useState(false)
+    const [showPassword, setShowPassword] = useState(false);
+    const [searchParams] = useSearchParams();
+    const [password, setPassword] = useState("");
+    const [cpassword, setCPassword] = useState("");
+    const id = searchParams.get("id");
+
+    const onSubmit = () => {
+        if(password !== cpassword){
+          return failedToast("Password doesnot matches");
+        }
+        axios
+        .patch(
+          `${import.meta.env.VITE_APP_BACKEND_URL}/auth/password`, {
+            "id": id,
+            "password": password        
+          },{
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((Item) => {
+          Navigate(`/home`)
+          return successToast("Password Changed Successfully");
+        })
+        .catch((err) => {
+          return failedToast(err.response.data.error);
+        });
+    }
+
     return (
         <div className="pt-10 md:pt-0 bg-[#f2f2f2] md:bg-transparent">
             <img
@@ -24,18 +56,16 @@ const ChangePassword = () => {
                     <div className="mt-7 text-xl tracking-wider text-neutral-700 max-md:mt-10 max-md:max-w-full">
                         Enter New Password
                     </div>
-                    <input className="justify-center items-start px-6 py-3 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 max-md:px-5 max-md:max-w-full" type={`${showPassword ? 'text' : 'password'}`} placeholder="Type Here." />
+                    <input onChange={(e)=>{setPassword(e.target.value)}} value={password}  className="justify-center items-start px-6 py-3 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 max-md:px-5 max-md:max-w-full" type={`${showPassword ? 'text' : 'password'}`} placeholder="Type Here." />
                     <div className="mt-4 text-xl tracking-wider text-neutral-700 max-md:max-w-full">
                         Confirm Password
                     </div>
-                    <input className="justify-center items-start px-6 py-3 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 max-md:px-5 max-md:max-w-full" type={`${showPassword ? 'text' : 'password'}`} placeholder="Type Here." />
+                    <input onChange={(e)=>{setCPassword(e.target.value)}} value={cpassword} className="justify-center items-start px-6 py-3 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 max-md:px-5 max-md:max-w-full" type={`${showPassword ? 'text' : 'password'}`} placeholder="Type Here." />
                     <div className="flex gap-3.5 justify-end self-start mt-6 text-base tracking-wider text-black">
                         <input onChange={() => setShowPassword(!showPassword)} className="shrink-0 w-6 h-6 rounded-md border border-solid border-stone-300 bg-black outline-none" type='checkbox' checked={showPassword} />
                         <div onClick={() => setShowPassword(!showPassword)} className="flex-auto my-auto cursor-pointer">Show Password</div>
                     </div>
-                    <div onClick={() => {
-                        Navigate('/home')
-                    }} className="justify-center self-start px-16 py-3.5 mt-9 text-2xl leading-6 text-white whitespace-nowrap bg-violet-800 rounded-2xl max-md:px-5 cursor-pointer hover:opacity-50">
+                    <div onClick={onSubmit} className="justify-center self-start px-16 py-3.5 mt-9 text-2xl leading-6 text-white whitespace-nowrap bg-violet-800 rounded-2xl max-md:px-5 cursor-pointer hover:opacity-50">
                         Submit
                     </div>
                 </div>

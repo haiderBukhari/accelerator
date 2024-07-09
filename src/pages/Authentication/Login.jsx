@@ -1,10 +1,36 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import { failedToast } from "../../utils/toastNotifications";
+import axios from "axios";
 
 const Login = () => {
     const Navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
     const onSubmit = () => {
+        if (
+          email === "" ||
+          password === ""
+        ) {
+          return failedToast("All fields are required");
+        }
+        axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth?email=${email}&password=${password}`, {
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }).then((Item) => {
+            if(!Item.data.recoveryEmail){
+                Navigate(`/recovery-email?id=${Item.data.id}`);
+            }else{
+                Navigate('/home')
+            }
+        }).catch((err)=>{
+            return failedToast(err.response.data.error);
+        });
+      };
+        const forgotPassword = () => {
         Navigate('/recovery-email')
     }
     const [showPassword, setShowPassword] = useState(false)
@@ -27,11 +53,11 @@ const Login = () => {
                 <div className="mt-8 text-xl tracking-wider text-neutral-700 max-md:mt-10 max-md:max-w-full">
                     Username/Email Address
                 </div>
-                <input placeholder="i.e. jhon_e,abc@example.com" type='text' className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none max-md:px-5 max-md:max-w-full" />
+                <input onChange={(e)=>{setEmail(e.target.value)}} value={email} placeholder="i.e. jhon_e,abc@example.com" type='text' className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none max-md:px-5 max-md:max-w-full" />
                 <div className="mt-4 text-xl tracking-wider text-neutral-700 max-md:max-w-full">
                     Password
                 </div>
-                <input type={`${showPassword ? 'text' : 'password'}`} className="justify-center items-start px-6 py-2 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 max-md:px-5 max-md:max-w-full outline-none" placeholder="Type Here" />
+                <input onChange={(e)=>{setPassword(e.target.value)}} value={password} type={`${showPassword ? 'text' : 'password'}`} className="justify-center items-start px-6 py-2 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 max-md:px-5 max-md:max-w-full outline-none" placeholder="Type Here" />
                 <div className="flex gap-3.5 justify-end self-start mt-6 text-base tracking-wider text-black">
                     <input onChange={() => setShowPassword(!showPassword)} className="shrink-0 w-6 h-6 rounded-md border border-solid border-stone-300 bg-black outline-none" type='checkbox' />
                     <div className="flex-auto my-auto">Show Password</div>
@@ -40,7 +66,7 @@ const Login = () => {
                     <div onClick={onSubmit} className="justify-center px-12 py-2 text-2xl text-white whitespace-nowrap bg-violet-800 rounded-2xl max-md:px-5 cursor-pointer">
                         Login
                     </div>
-                    <div className="justify-center p-0.5 my-auto text-xl text-[#0000FF]">
+                    <div onClick={forgotPassword} className="justify-center p-0.5 my-auto text-xl text-[#0000FF] cursor-pointer ">
                         Forgot Password
                     </div>
                 </div>

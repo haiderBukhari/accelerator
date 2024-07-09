@@ -1,9 +1,34 @@
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { failedToast, successToast } from "../../utils/toastNotifications";
+import { useState } from "react";
 
 const OtpConfirmation = () => {
     const Navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const [otp, setOtp] = useState("");
+    const email = searchParams.get("email");
+  
     const onSubmit = () => {
-        Navigate('/change-password')
+        if(!otp){
+          return failedToast('Invalid Otp');
+        }
+        axios
+        .get(
+          `${import.meta.env.VITE_APP_BACKEND_URL}/otp?email=${email}&otp=${otp}`,{
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((Item) => {
+          Navigate(`/change-password?id=${Item.data.id}`)
+          return successToast("OTP verified successfully");
+        })
+        .catch((err) => {
+          return failedToast(err.response.data.error);
+        });
     }
     return (
         <div className="pt-10 md:pt-0 bg-[#f2f2f2] md:bg-transparent">
@@ -32,7 +57,7 @@ const OtpConfirmation = () => {
                     <div className="mt-10 text-lg tracking-wider leading-5 text-neutral-700 max-md:mt-10 max-md:max-w-full">
                         Enter 5 Digits OTP
                     </div>
-                    <input className="justify-center items-start px-6 py-5 mt-4 text-lg tracking-wider leading-4 whitespace-nowrap rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 max-md:px-5 w-full" type='text' placeholder="X-X-X-X-X" />
+                    <input onChange={(e)=>{setOtp(e.target.value)}} value={otp} className="justify-center items-start px-6 py-5 mt-4 text-lg tracking-wider leading-4 whitespace-nowrap rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 max-md:px-5 w-full" type='text' placeholder="X-X-X-X-X" />
                     <div className="flex gap-5 justify-between mt-11 max-md:flex-wrap max-md:mt-10 max-md:max-w-full">
                         <div onClick={onSubmit} className="justify-center px-14 py-3.5 text-2xl text-white whitespace-nowrap bg-violet-800 rounded-2xl max-md:px-5 hover:opacity-50 cursor-pointer">
                             Submit
