@@ -43,9 +43,11 @@ const Register = () => {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true
         }
       )
       .then((Item) => {
+        successToast("Registered Successfully")
         Navigate(`/recovery-email?id=${Item.data.id}`);
       })
       .catch((err) => {

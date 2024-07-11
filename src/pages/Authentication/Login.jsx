@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-import { failedToast } from "../../utils/toastNotifications";
+import { failedToast, successToast } from "../../utils/toastNotifications";
 import axios from "axios";
 
 const Login = () => {
@@ -19,18 +19,22 @@ const Login = () => {
         axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth?email=${email}&password=${password}`, {
             headers: {
                 "Content-Type": "application/json",
-            }
+            },
+            withCredentials: true
         }).then((Item) => {
             if(!Item.data.recoveryEmail){
+                successToast("Successfully LogedIn")
                 Navigate(`/recovery-email?id=${Item.data.id}`);
             }else{
+                successToast("Successfully LogedIn")
                 Navigate('/home')
             }
         }).catch((err)=>{
             return failedToast(err.response.data.error);
         });
       };
-        const forgotPassword = () => {
+    
+      const forgotPassword = () => {
         Navigate('/recovery-email')
     }
     const [showPassword, setShowPassword] = useState(false)

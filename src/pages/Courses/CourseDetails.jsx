@@ -4,14 +4,6 @@ export default function CourseDetails() {
 
     return (
         <div className="flex flex-col px-5">
-            <div className="flex gap-5 justify-between w-full text-base font-bold text-zinc-800 max-md:flex-wrap max-md:max-w-full">
-                <div className="my-auto">Search on The App Accelerator </div>
-                <img
-                    loading="lazy"
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/de21b4000fa69414b51a64c3e78cf4ba7573a8578fc7faea23c01f96cda53df9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                    className="shrink-0 aspect-square w-[30px]"
-                />
-            </div>
             <div className="mt-12 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-md:max-w-full">
                 Introduction to Mobile App Development
             </div>

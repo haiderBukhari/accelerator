@@ -3,9 +3,6 @@ export default function Courses() {
     const Navigate = useNavigate();
     return (
         <div className="flex flex-col px-5 pb-10 pt-10 bg-neutral-100">
-            <div className="flex gap-5 justify-between w-full text-base font-bold text-zinc-800 max-md:flex-wrap max-md:max-w-full">
-                <div className="my-auto">Search on The App Accelerator </div>
-            </div>
             <div className="mt-14 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-md:max-w-full">
                 Course
             </div>
