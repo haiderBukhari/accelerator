@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { failedToast } from "../../utils/toastNotifications";
+import { failedToast, successToast } from "../../utils/toastNotifications";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -45,13 +45,11 @@ const Register = () => {
           },
           withCredentials: true
         }
-      )
-      .then((Item) => {
-        successToast("Registered Successfully")
+      ).then((Item) => {
         Navigate(`/recovery-email?id=${Item.data.id}`);
-      })
-      .catch((err) => {
-        return failedToast(err.response.data.error);
+        successToast("Registered Successfully")
+      }).catch((err) => {
+        return failedToast(err.response?.data?.error);
       });
   };
   return (
@@ -80,7 +78,7 @@ const Register = () => {
           value={fname}
           placeholder="i.e. john"
           type="text"
-          className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none max-md:px-5 max-md:max-w-full"
+          className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none max-md:px-5 max-md:max-w-full"
         />
         <div className="mt-8 text-xl tracking-wider text-neutral-700 max-md:mt-10 max-md:max-w-full">
           Last Name
@@ -92,7 +90,7 @@ const Register = () => {
           value={lname}
           placeholder="i.e. delton"
           type="text"
-          className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none max-md:px-5 max-md:max-w-full"
+          className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none max-md:px-5 max-md:max-w-full"
         />
         <div className="mt-8 text-xl tracking-wider text-neutral-700 max-md:mt-10 max-md:max-w-full">
           Email Address
@@ -104,7 +102,7 @@ const Register = () => {
           value={email}
           placeholder="i.e. jhon_e,abc@example.com"
           type="text"
-          className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none max-md:px-5 max-md:max-w-full"
+          className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none max-md:px-5 max-md:max-w-full"
         />
         <div className="mt-8 text-xl tracking-wider text-neutral-700 max-md:mt-10 max-md:max-w-full">
           Phone Number
@@ -116,7 +114,7 @@ const Register = () => {
           value={phoneNumber}
           placeholder="i.e. (XX) XXX XXXXXXX"
           type="text"
-          className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none max-md:px-5 max-md:max-w-full"
+          className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none max-md:px-5 max-md:max-w-full"
         />
         <div className="mt-4 text-xl tracking-wider text-neutral-700 max-md:max-w-full">
           Password
@@ -127,7 +125,7 @@ const Register = () => {
           }}
           value={password}
           type={`${showPassword ? "text" : "password"}`}
-          className="justify-center items-start px-6 py-2 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 max-md:px-5 max-md:max-w-full outline-none"
+          className="justify-center items-start px-6 py-2 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black max-md:px-5 max-md:max-w-full outline-none"
           placeholder="Type Here"
         />
         <div className="mt-4 text-xl tracking-wider text-neutral-700 max-md:max-w-full">
@@ -139,7 +137,7 @@ const Register = () => {
           }}
           value={cpassword}
           type={`${showPassword ? "text" : "password"}`}
-          className="justify-center items-start px-6 py-2 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 max-md:px-5 max-md:max-w-full outline-none"
+          className="justify-center items-start px-6 py-2 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black max-md:px-5 max-md:max-w-full outline-none"
           placeholder="Type Here"
         />
         <div className="flex gap-3.5 justify-end self-start mt-6 text-base tracking-wider text-black">
@@ -174,7 +172,7 @@ const Register = () => {
             Back to Login
           </Link>
         </div>
-        <div className="flex gap-5 justify-between items-center mt-10 text-xl leading-5 whitespace-nowrap text-neutral-400 md:max-md:flex-wrap">
+        <div className="flex gap-5 justify-between items-center mt-10 text-xl leading-5 whitespace-nowrap text-black md:max-md:flex-wrap">
           <div className="shrink-0 self-stretch my-auto h-0.5 border border-solid bg-neutral-400 border-neutral-400 flex-1" />
           <div className="self-stretch">Or</div>
           <div className="shrink-0 self-stretch my-auto h-0.5 border border-solid bg-neutral-400 border-neutral-400 flex-1" />

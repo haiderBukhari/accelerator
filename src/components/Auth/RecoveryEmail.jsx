@@ -22,10 +22,12 @@ const RecoveryEmail = () => {
             headers: {
               "Content-Type": "application/json",
             },
+            withCredentials: true,
           }
         )
         .then((Item) => {
           Navigate(`/home`);
+          successToast('Recovery Email added Successfully')
         })
         .catch((err) => {
           return failedToast(err.response.data.error);

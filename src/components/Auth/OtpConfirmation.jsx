@@ -20,6 +20,7 @@ const OtpConfirmation = () => {
             headers: {
               "Content-Type": "application/json",
             },
+            withCredentials: true,
           }
         )
         .then((Item) => {

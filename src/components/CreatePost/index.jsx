@@ -13,7 +13,7 @@ import axios from 'axios';
 import { failedToast, successToast } from '../../utils/toastNotifications';
 import { CircularProgress } from '@mui/material';
 
-export default function CreatePostDialog({ open, setOpen }) {
+export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAgain }) {
     const fileInputRef = React.useRef(null);
     const [uploadType, setUploadType] = React.useState(null);
     const [file, setFile] = React.useState(null)
@@ -67,6 +67,7 @@ export default function CreatePostDialog({ open, setOpen }) {
                     withCredentials: true,
                 });
                 successToast("Post Uploaded Successfully");
+                setFetchAgain(!fetchAgain)
                 handleClose();
             } catch (error) {
                 console.error('Error uploading file:', error);
@@ -87,6 +88,7 @@ export default function CreatePostDialog({ open, setOpen }) {
                     withCredentials: true,
                 });
                 successToast("Post Uploaded Successfully");
+                setFetchAgain(!fetchAgain)
                 handleClose();
             } catch (error) {
                 console.error('Error uploading file:', error);

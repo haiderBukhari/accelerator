@@ -57,11 +57,11 @@ const Login = () => {
                 <div className="mt-8 text-xl tracking-wider text-neutral-700 max-md:mt-10 max-md:max-w-full">
                     Username/Email Address
                 </div>
-                <input onChange={(e)=>{setEmail(e.target.value)}} value={email} placeholder="i.e. jhon_e,abc@example.com" type='text' className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none max-md:px-5 max-md:max-w-full" />
+                <input onChange={(e)=>{setEmail(e.target.value)}} value={email} placeholder="i.e. jhon_e,abc@example.com" type='text' className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none max-md:px-5 max-md:max-w-full" />
                 <div className="mt-4 text-xl tracking-wider text-neutral-700 max-md:max-w-full">
                     Password
                 </div>
-                <input onChange={(e)=>{setPassword(e.target.value)}} value={password} type={`${showPassword ? 'text' : 'password'}`} className="justify-center items-start px-6 py-2 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 max-md:px-5 max-md:max-w-full outline-none" placeholder="Type Here" />
+                <input onChange={(e)=>{setPassword(e.target.value)}} value={password} type={`${showPassword ? 'text' : 'password'}`} className="justify-center items-start px-6 py-2 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black max-md:px-5 max-md:max-w-full outline-none" placeholder="Type Here" />
                 <div className="flex gap-3.5 justify-end self-start mt-6 text-base tracking-wider text-black">
                     <input onChange={() => setShowPassword(!showPassword)} className="shrink-0 w-6 h-6 rounded-md border border-solid border-stone-300 bg-black outline-none" type='checkbox' />
                     <div className="flex-auto my-auto">Show Password</div>
@@ -78,7 +78,7 @@ const Login = () => {
                     Don’t have an account!{" "}
                     <Link to="/register" className="font-bold text-blue-700 underline">Create One</Link>
                 </div>
-                <div className="flex gap-5 justify-between items-center mt-10 text-xl leading-5 whitespace-nowrap text-neutral-400 md:max-md:flex-wrap">
+                <div className="flex gap-5 justify-between items-center mt-10 text-xl leading-5 whitespace-nowrap text-black md:max-md:flex-wrap">
                     <div className="shrink-0 self-stretch my-auto h-0.5 border border-solid bg-neutral-400 border-neutral-400 flex-1" />
                     <div className="self-stretch">Or</div>
                     <div className="shrink-0 self-stretch my-auto h-0.5 border border-solid bg-neutral-400 border-neutral-400 flex-1" />
