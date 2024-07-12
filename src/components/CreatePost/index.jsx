@@ -11,12 +11,14 @@ import { Video } from 'lucide-react';
 import { X } from 'lucide-react';
 import axios from 'axios';
 import { failedToast, successToast } from '../../utils/toastNotifications';
+import { CircularProgress } from '@mui/material';
 
 export default function CreatePostDialog({ open, setOpen }) {
     const fileInputRef = React.useRef(null);
     const [uploadType, setUploadType] = React.useState(null);
     const [file, setFile] = React.useState(null)
-    const [text, setText] = React.useState('')
+    const [text, setText] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -27,12 +29,13 @@ export default function CreatePostDialog({ open, setOpen }) {
         setUploadType(null);
         setText('');
         setFile(null);
+        setLoading(false);
     };
 
     const handleUploadClick = (type) => {
         setUploadType(type);
         setFile(null);
-        setTimeout(()=>{
+        setTimeout(() => {
             fileInputRef.current.click(); // Trigger the file input click
         }, 240)
     };
@@ -48,6 +51,7 @@ export default function CreatePostDialog({ open, setOpen }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true);
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
@@ -67,6 +71,7 @@ export default function CreatePostDialog({ open, setOpen }) {
             } catch (error) {
                 console.error('Error uploading file:', error);
                 alert('Error uploading file');
+                setLoading(false);
             }
         } else {
             if (!text) {
@@ -86,6 +91,7 @@ export default function CreatePostDialog({ open, setOpen }) {
             } catch (error) {
                 console.error('Error uploading file:', error);
                 alert('Error uploading file');
+                setLoading(false);
             }
         }
     };
@@ -151,6 +157,9 @@ export default function CreatePostDialog({ open, setOpen }) {
                         </div>
                     </div>
                 </DialogActions>
+                {
+                    loading && <CircularProgress className='absolute' style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} />
+                }
             </Dialog>
         </React.Fragment>
     );
