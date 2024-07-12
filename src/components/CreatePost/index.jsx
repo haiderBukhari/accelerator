@@ -146,7 +146,7 @@ export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAg
                                     />
                                 </> : <>
                                     <div className='flex'>
-                                        <p>{file.name}</p>
+                                        <p>{file.name.slice(0, 20)}</p>
                                         <X className='p-1 ml-2 cursor-pointer' onClick={() => { setFile(null) }} />
                                     </div>
                                 </>
