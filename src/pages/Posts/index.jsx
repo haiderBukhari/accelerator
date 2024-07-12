@@ -28,7 +28,7 @@ export default function Posts() {
     }
     useEffect(() => {
         getPosts();
-    }, [])
+    }, [fetchAgain])
 
     return (
         <div className="flex flex-col max-w-[97%] mx-7 mt-5">
