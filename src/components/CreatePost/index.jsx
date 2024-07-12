@@ -9,6 +9,8 @@ import { MoveRight } from 'lucide-react';
 import { Image } from 'lucide-react';
 import { Video } from 'lucide-react';
 import { X } from 'lucide-react';
+import axios from 'axios';
+import { failedToast, successToast } from '../../utils/toastNotifications';
 
 export default function CreatePostDialog({ open, setOpen }) {
     const fileInputRef = React.useRef(null);
@@ -23,11 +25,16 @@ export default function CreatePostDialog({ open, setOpen }) {
     const handleClose = () => {
         setOpen(false);
         setUploadType(null);
+        setText('');
+        setFile(null);
     };
 
     const handleUploadClick = (type) => {
         setUploadType(type);
-        fileInputRef.current.click(); // Trigger the file input click
+        setFile(null);
+        setTimeout(()=>{
+            fileInputRef.current.click(); // Trigger the file input click
+        }, 240)
     };
 
     const handleFileChange = (event) => {
@@ -41,23 +48,41 @@ export default function CreatePostDialog({ open, setOpen }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
             formData.append('text', text);
-            formData.append('isImage', uploadType === 'image');
-            formData.append('isVideo', uploadType !== 'image');
+            formData.append('isImage', uploadType === 'image' ? 'true' : 'false');
+            formData.append('isVideo', uploadType !== 'image' ? 'true' : 'false');
 
             try {
-                const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/auth`, formData, {
+                await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/post/upload`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                     withCredentials: true,
                 });
-                console.log(response.data);
-                alert('File uploaded successfully');
+                successToast("Post Uploaded Successfully");
+                handleClose();
+            } catch (error) {
+                console.error('Error uploading file:', error);
+                alert('Error uploading file');
+            }
+        } else {
+            if (!text) {
+                return failedToast("Post Cant be empty");
+            }
+            try {
+                await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/post`, {
+                    text: text
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    withCredentials: true,
+                });
+                successToast("Post Uploaded Successfully");
+                handleClose();
             } catch (error) {
                 console.error('Error uploading file:', error);
                 alert('Error uploading file');
@@ -67,9 +92,6 @@ export default function CreatePostDialog({ open, setOpen }) {
 
     return (
         <React.Fragment>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                Open alert dialog
-            </Button>
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -81,7 +103,7 @@ export default function CreatePostDialog({ open, setOpen }) {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        <div className="flex flex-col w-[200px] md:w-[460px] mx-auto">
+                        <div className="flex flex-col w-[300px] md:w-[460px] mx-auto">
                             <div className="w-full">
                                 <textarea
                                     style={{ border: "2px solid #ccc" }}
@@ -92,18 +114,9 @@ export default function CreatePostDialog({ open, setOpen }) {
                                 ></textarea>
                             </div>
                         </div>
-                        {/* {uploadType && (
-                            <div className="mt-4">
-                                {uploadType === 'image' ? (
-                                    <p>Ready to upload an image...</p>
-                                ) : (
-                                    <p>Ready to upload a video...</p>
-                                )}
-                            </div>
-                        )} */}
                         <input
                             type="file"
-                            accept={uploadType === 'image' ? 'video/*' : 'image/*'}
+                            accept={uploadType === 'image' ? 'image/*' : 'video/*'}
                             ref={fileInputRef}
                             style={{ display: 'none' }} // Hide the input
                             onChange={handleFileChange}
@@ -133,7 +146,7 @@ export default function CreatePostDialog({ open, setOpen }) {
                         </div>
                         <div className="flex flex-col justify-center max-w-[135px] w-full">
                             <div className="flex justify-center items-center px-4 py-4 w-full bg-violet-800 rounded-xl border border-solid border-stone-300 cursor-pointer hover:bg-opacity-70">
-                                <p className="text-white font-semibold text-md inline text-lg">Post <MoveRight className="text-white inline ml-2 w-[20px]" /></p>
+                                <p onClick={handleSubmit} className="text-white font-semibold text-md inline text-lg">Post <MoveRight className="text-white inline ml-2 w-[20px]" /></p>
                             </div>
                         </div>
                     </div>
