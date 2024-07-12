@@ -1,21 +1,23 @@
 import { useState } from "react";
 import CommentsDialog from "../../components/comments";
 import { useNavigate } from "react-router-dom";
+import CreatePostDialog from "../../components/CreatePost";
 
 export default function Posts() {
     const [open, setOpen] = useState(false);
+    const [createPost, setCreatePost] = useState(false);
     const Navigate = useNavigate();
 
     return (
         <div className="flex flex-col max-w-[97%] mx-7 mt-5">
             <div className="flex flex-col md:flex-row gap-5 justify-between pl-5 mt-10 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:flex-wrap max-md:max-w-full h-[200px] md:h-auto">
-                <div className="flex gap-4 my-auto text-base font-medium text-zinc-500">
+                <div onClick={()=>{setCreatePost(!createPost)}} className="flex gap-4 my-auto text-base font-medium text-zinc-500">
                     <img
                         loading="lazy"
                         srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&"
                         className="shrink-0 w-10 border-4 border-violet-800 border-solid aspect-square hidden md:block"
                     />
-                    <div className="flex-auto my-auto">Let’s make something new!</div>
+                    <div className="flex-auto my-auto cursor-pointer bg-opacity-80">Let’s make something new!</div>
                 </div>
                 <div className="flex flex-col justify-center self-end md:self-auto mr-4 px-9 py-4 bg-violet-800 rounded-3xl border border-solid border-neutral-400 max-md:px-5 h-[50px] w-[170px] mb-4 mt-0 md:mt-4 pl-5">
                     <div className="flex gap-5 justify-between">
@@ -153,6 +155,7 @@ export default function Posts() {
                 </div>
             </div>
             <CommentsDialog open={open} setOpen={setOpen}/>
+            <CreatePostDialog open={createPost} setOpen={setCreatePost}/>
         </div>
     );
 }
