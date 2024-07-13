@@ -19,8 +19,7 @@ const OtpConfirmation = () => {
           `${import.meta.env.VITE_APP_BACKEND_URL}/otp?email=${email}&otp=${otp}`,{
             headers: {
               "Content-Type": "application/json",
-            },
-            withCredentials: true,
+            }
           }
         )
         .then((Item) => {

@@ -3,11 +3,14 @@ import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { failedToast, successToast } from "../../utils/toastNotifications";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { modifyJWT } from "../../features/profile";
 
 const Login = () => {
     const Navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const dispatch = useDispatch();
 
     const onSubmit = () => {
         if (
@@ -19,9 +22,9 @@ const Login = () => {
         axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth?email=${email}&password=${password}`, {
             headers: {
                 "Content-Type": "application/json",
-            },
-            withCredentials: true
+            }
         }).then((Item) => {
+            dispatch(modifyJWT(Item.data.token))
             if(!Item.data.recoveryEmail){
                 successToast("Successfully LogedIn")
                 Navigate(`/recovery-email?id=${Item.data.id}`);

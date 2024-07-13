@@ -3,8 +3,11 @@ import { useState } from "react"
 import { failedToast, successToast } from "../../utils/toastNotifications";
 import { useNavigate } from "react-router-dom"
 import { useSearchParams } from "react-router-dom";
+import { modifyJWT } from "../../features/profile";
+import { useDispatch } from "react-redux";
 
 const ChangePassword = () => {
+    const dispatch = useDispatch();
     const Navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [searchParams] = useSearchParams();
@@ -24,12 +27,12 @@ const ChangePassword = () => {
           },{
             headers: {
               "Content-Type": "application/json",
-            },
-            withCredentials: true,
+            }
           }
         )
         .then((Item) => {
-          Navigate(`/home`)
+          Navigate(`/home`);
+          dispatch(modifyJWT(Item.data.token))
           return successToast("Password Changed Successfully");
         })
         .catch((err) => {

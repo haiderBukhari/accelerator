@@ -6,13 +6,17 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MoveToTop from './components/MoveToTop.jsx';
+import { Provider } from 'react-redux'
+import { Store } from './store/index.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Router>
-      <App />
-    <MoveToTop />
-    </Router>
-    <ToastContainer />
+    <Provider store={Store}>
+      <Router>
+        <App />
+        <MoveToTop />
+      </Router>
+      <ToastContainer />
+    </Provider>
   </React.StrictMode>,
 )

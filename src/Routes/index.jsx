@@ -17,6 +17,7 @@ import CourseDetails from "../pages/Courses/CourseDetails";
 import { useLocation } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { getCookie } from "../utils/Cookies";
+import { useSelector } from "react-redux";
 
 const index = ({ navbarOpen, setNavbarOpen }) => {
   const location = useLocation();
@@ -28,7 +29,7 @@ const index = ({ navbarOpen, setNavbarOpen }) => {
     location.pathname === "/otp" ||
     location.pathname === "/change-password";
 
-  const token = getCookie('token');
+  const token = useSelector(state=>state.profile.jwt)
   return (
     <div>
       {!currentLocation && (

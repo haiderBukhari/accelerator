@@ -3,10 +3,13 @@ import { useState } from "react";
 import { failedToast, successToast } from "../../utils/toastNotifications";
 import { useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
+import { modifyJWT } from "../../features/profile";
+import { useDispatch } from "react-redux";
 
 const RecoveryEmail = () => {
   const [searchParams] = useSearchParams();
   const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
   const id = searchParams.get("id");
   const Navigate = useNavigate();
   const onSubmit = () => {
@@ -21,19 +24,19 @@ const RecoveryEmail = () => {
           {
             headers: {
               "Content-Type": "application/json",
-            },
-            withCredentials: true,
+            }
           }
         )
         .then((Item) => {
           Navigate(`/home`);
+          dispatch(modifyJWT(Item.data.token))
           successToast('Recovery Email added Successfully')
         })
         .catch((err) => {
           return failedToast(err.response.data.error);
         });
-    }else{
-        axios
+    } else {
+      axios
         .post(
           `${import.meta.env.VITE_APP_BACKEND_URL}/otp`,
           {
