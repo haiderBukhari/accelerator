@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import CreatePostDialog from "../../components/CreatePost";
 import axios from "axios";
 import ReactPlayer from 'react-player/youtube'
+import { useSelector } from "react-redux";
+import { failedToast } from "../../utils/toastNotifications";
 
 export default function Posts() {
     const [open, setOpen] = useState(false);
@@ -12,13 +14,14 @@ export default function Posts() {
     const [data, setData] = useState([])
     const [fetched, setFetched] = useState(false);
     const [fetchAgain, setFetchAgain] = useState(false);
+    const token = useSelector(state=>state.profile.jwt);
 
     async function getPosts() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/post`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
-            withCredentials: true,
         }).then((Item) => {
             setData(Item.data);
             setFetched(Item.data.length ? false : true)

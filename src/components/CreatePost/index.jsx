@@ -12,6 +12,7 @@ import { X } from 'lucide-react';
 import axios from 'axios';
 import { failedToast, successToast } from '../../utils/toastNotifications';
 import { CircularProgress } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAgain }) {
     const fileInputRef = React.useRef(null);
@@ -19,6 +20,7 @@ export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAg
     const [file, setFile] = React.useState(null)
     const [text, setText] = React.useState('');
     const [loading, setLoading] = React.useState(false);
+    const token = useSelector(state=>state.profile.jwt);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -63,6 +65,7 @@ export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAg
                 await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/post/upload`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}`
                     },
                     withCredentials: true,
                 });
@@ -84,8 +87,8 @@ export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAg
                 }, {
                     headers: {
                         'Content-Type': 'application/json',
-                    },
-                    withCredentials: true,
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
                 successToast("Post Uploaded Successfully");
                 setFetchAgain(!fetchAgain)
