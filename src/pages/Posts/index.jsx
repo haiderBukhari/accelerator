@@ -14,7 +14,7 @@ export default function Posts() {
     const [data, setData] = useState([])
     const [fetched, setFetched] = useState(false);
     const [fetchAgain, setFetchAgain] = useState(false);
-    const token = useSelector(state=>state.profile.jwt);
+    const token = useSelector(state => state.profile.jwt);
 
     async function getPosts() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/post`, {
@@ -36,7 +36,7 @@ export default function Posts() {
     return (
         <div className="flex flex-col max-w-[97%] mx-7 mt-5">
             <div onClick={() => { setCreatePost(!createPost) }} className="flex flex-col md:flex-row gap-5 justify-between pl-5 mt-10 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:flex-wrap max-md:max-w-full h-[200px] md:h-auto">
-                <div  className="flex gap-4 my-auto text-base font-medium text-zinc-500">
+                <div className="flex gap-4 my-auto text-base font-medium text-zinc-500">
                     <img
                         loading="lazy"
                         srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&"
@@ -100,8 +100,9 @@ export default function Posts() {
                         {
                             Item.imageUrl && <img
                                 loading="lazy"
-                                srcSet={Item.imageUrl}
-                                className="self-center mt-6 w-full border border-solid aspect-[2.63] border-neutral-400 max-w-[784px] max-md:max-w-full"
+                                src={Item.imageUrl}
+                                className="self-center mt-6 w-full border border-solid border-neutral-400 max-w-[784px] h-auto max-md:max-w-full"
+                                style={{ aspectRatio: '2.63' }}
                             />
                         }
                         {
@@ -138,7 +139,7 @@ export default function Posts() {
                 ))
             }
             <CommentsDialog open={open} setOpen={setOpen} />
-            <CreatePostDialog open={createPost} setOpen={setCreatePost} fetchAgain={fetchAgain} setFetchAgain={setFetchAgain}/>
+            <CreatePostDialog open={createPost} setOpen={setCreatePost} fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
         </div>
     );
 }

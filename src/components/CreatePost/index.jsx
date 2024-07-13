@@ -60,14 +60,12 @@ export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAg
             formData.append('text', text);
             formData.append('isImage', uploadType === 'image' ? 'true' : 'false');
             formData.append('isVideo', uploadType !== 'image' ? 'true' : 'false');
-
             try {
                 await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/post/upload`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${token}`
-                    },
-                    withCredentials: true,
+                    }
                 });
                 successToast("Post Uploaded Successfully");
                 setFetchAgain(!fetchAgain)

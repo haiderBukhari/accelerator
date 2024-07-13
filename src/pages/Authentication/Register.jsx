@@ -42,8 +42,7 @@ const Register = () => {
         {
           headers: {
             "Content-Type": "application/json",
-          },
-          withCredentials: true
+          }
         }
       ).then((Item) => {
         Navigate(`/recovery-email?id=${Item.data.id}`);
