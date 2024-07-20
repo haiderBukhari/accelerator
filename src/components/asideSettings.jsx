@@ -1,6 +1,6 @@
 import { ChevronDown } from 'lucide-react';
-import EditProfileDialog from './profile/EditProfileDialog';
 import { useState } from 'react';
+import SettingDialog from './profile/SettingDialog';
 
 export default function AsideSettings() {
     const [open, setOpen] = useState(false);
@@ -81,7 +81,7 @@ export default function AsideSettings() {
                     RSVP Now
                 </div>
             </div>
-            <EditProfileDialog open={open} setOpen={setOpen}/>
+            <SettingDialog open={open} setOpen={setOpen}/>
         </div>
     );
 }
