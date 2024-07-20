@@ -16,10 +16,9 @@ import GroupsDetails from "../pages/GroupDetails";
 import CourseDetails from "../pages/Courses/CourseDetails";
 import { useLocation } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import { getCookie } from "../utils/Cookies";
 import { useSelector } from "react-redux";
 
-const index = ({ navbarOpen, setNavbarOpen }) => {
+const Index = ({ navbarOpen, setNavbarOpen }) => {
   const location = useLocation();
   const currentLocation =
     location.pathname === "/" ||
@@ -80,4 +79,4 @@ const index = ({ navbarOpen, setNavbarOpen }) => {
   );
 };
 
-export default index;
+export default Index;

@@ -1,5 +1,9 @@
+import { ChevronDown } from 'lucide-react';
+import EditProfileDialog from './profile/EditProfileDialog';
+import { useState } from 'react';
 
 export default function AsideSettings() {
+    const [open, setOpen] = useState(false);
     return (
         <div className="hidden md:flex flex-col px-9 py-10 w-full bg-neutral-200 max-w-[375px]">
             <div className="flex gap-5">
@@ -15,7 +19,7 @@ export default function AsideSettings() {
                         className="shrink-0 aspect-square w-[35px]"
                     />
                 </div>
-                <div className="flex gap-4 text-base font-medium rounded-2xl border border-solid bg-neutral-200 border-neutral-400 text-zinc-800">
+                <div onClick={()=>{setOpen(!open)}} className="flex gap-4 text-base font-medium rounded-2xl border border-solid bg-neutral-200 border-neutral-400 text-zinc-800 cursor-pointer">
                     <img
                         loading="lazy"
                         srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&"
@@ -23,11 +27,7 @@ export default function AsideSettings() {
                     />
                     <div className="flex gap-4 pr-3 my-auto">
                         <div>Mr. Michael </div>
-                        {/* <img
-                            loading="lazy"
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/67567fd1caa93ac07ef6ea6718e9800b60d7f9d605134c0f786213c3c2368ccb?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                            className="shrink-0 my-auto border border-solid aspect-square border-zinc-800 stroke-[1.332px] stroke-zinc-800 w-[5px]"
-                        /> */}
+                        <ChevronDown/>
                     </div>
                 </div>
             </div>
@@ -81,6 +81,7 @@ export default function AsideSettings() {
                     RSVP Now
                 </div>
             </div>
+            <EditProfileDialog open={open} setOpen={setOpen}/>
         </div>
     );
 }
