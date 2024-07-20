@@ -1,3 +1,6 @@
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
 export default function Members() {
     return (
         <div className="flex flex-col px-5 mt-5 pb-20">
@@ -26,7 +29,7 @@ export default function Members() {
             </div>
             <div className="mt-4 md:mt-14 w-full max-md:mt-10 max-md:max-w-full">
                 <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-                    <div className="flex flex-col w-9/12 max-md:ml-0 max-md:w-full">
+                    <div className="flex flex-col items-center w-9/12 max-md:ml-0 max-md:w-full">
                         <div className="flex flex-col flex-wrap grow content-start max-md:mt-10 max-md:max-w-full">
                             <div className="w-full">
                                 <div className="flex gap-5 max-md:flex-col max-md:gap-0">
@@ -349,6 +352,9 @@ export default function Members() {
                                 </div>
                             </div>
                         </div>
+                        <Stack className='mt-5' spacing={2}>
+                            <Pagination count={10} color="primary" />
+                        </Stack>
                     </div>
                     <div className="flex flex-col ml-5 w-7/12 max-md:ml-0 max-md:w-full">
                         <img
