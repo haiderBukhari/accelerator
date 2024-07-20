@@ -3,7 +3,7 @@ import { useState } from "react"
 import { failedToast, successToast } from "../../utils/toastNotifications";
 import { useNavigate } from "react-router-dom"
 import { useSearchParams } from "react-router-dom";
-import { modifyJWT } from "../../features/profile";
+import { addUserDetails } from "../../features/profile";
 import { useDispatch } from "react-redux";
 
 const ChangePassword = () => {
@@ -32,7 +32,12 @@ const ChangePassword = () => {
         )
         .then((Item) => {
           Navigate(`/home`);
-          dispatch(modifyJWT(Item.data.token))
+          dispatch(addUserDetails({
+            jwt: Item.data.token,
+            firstName: Item.data.firstName,
+            lastName: Item.data.lastName,
+            profilePicture: Item.data.profilePicture
+          }))
           return successToast("Password Changed Successfully");
         })
         .catch((err) => {

@@ -1,9 +1,13 @@
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import SettingDialog from './profile/SettingDialog';
+import { useSelector } from 'react-redux';
 
 export default function AsideSettings() {
     const [open, setOpen] = useState(false);
+    const firstName = useSelector(state=>state.profile.firstName);
+    const lastName = useSelector(state=>state.profile.lastName);
+    const profilePicture = useSelector(state=>state.profile.profilePicture);
     return (
         <div className="hidden md:flex flex-col px-9 py-10 w-full bg-neutral-200 max-w-[375px]">
             <div className="flex gap-5">
@@ -22,11 +26,11 @@ export default function AsideSettings() {
                 <div onClick={()=>{setOpen(!open)}} className="flex gap-4 text-base font-medium rounded-2xl border border-solid bg-neutral-200 border-neutral-400 text-zinc-800 cursor-pointer">
                     <img
                         loading="lazy"
-                        srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/49d3c50b0c4f95f49e7c1a9c7d0f7ca31f24a67ea610bbb8f0d0c0906cbfa49f?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                        className="shrink-0 border-4 border-violet-800 border-solid aspect-square w-[40px]"
+                        src={profilePicture}
+                        className="shrink-0 border-4 border-violet-800 border-solid aspect-square w-[40px] rounded-lg"
                     />
-                    <div className="flex gap-4 pr-3 my-auto">
-                        <div>Mr. Michael </div>
+                    <div className="flex items-center gap-4 pr-3 my-auto">
+                        <p className='text-sm'>{firstName} {lastName} </p>
                         <ChevronDown/>
                     </div>
                 </div>

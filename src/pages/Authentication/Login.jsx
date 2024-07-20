@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { failedToast, successToast } from "../../utils/toastNotifications";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { modifyJWT } from "../../features/profile";
+import { addUserDetails } from "../../features/profile";
 
 const Login = () => {
     const Navigate = useNavigate();
@@ -24,8 +24,13 @@ const Login = () => {
                 "Content-Type": "application/json",
             }
         }).then((Item) => {
-            dispatch(modifyJWT(Item.data.token))
-            if(!Item.data.recoveryEmail){
+            dispatch(addUserDetails({
+                jwt: Item.data.token,
+                firstName: Item.data.firstName,
+                lastName: Item.data.lastName,
+                profilePicture: Item.data.profilePicture
+              }))
+                if(!Item.data.recoveryEmail){
                 successToast("Successfully LogedIn")
                 Navigate(`/recovery-email?id=${Item.data.id}`);
             }else{

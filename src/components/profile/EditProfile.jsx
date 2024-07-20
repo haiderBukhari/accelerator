@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { failedToast, successToast } from '../../utils/toastNotifications';
+import { useDispatch } from 'react-redux';
+import { changeFirstName, changeLastName, changeProfilePicture } from '../../features/profile';
 
 const EditProfile = ({open, handleClose, loading, setLoading, clickedSave, setSelectedContent}) => {
     const [userData, setUserData] = useState({});
@@ -9,6 +11,7 @@ const EditProfile = ({open, handleClose, loading, setLoading, clickedSave, setSe
     const [profilePhoto, setProfilePhoto] = useState(null);
     const fileInputRef = useRef(null);
     const token = useSelector(state=>state.profile.jwt);
+    const dispatch = useDispatch();
 
     const handlePhotoChange = (event) => {
         setProfilePhoto(event.target.files[0]);
@@ -34,10 +37,14 @@ const EditProfile = ({open, handleClose, loading, setLoading, clickedSave, setSe
                         'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${token}`
                     }
-                });
-                setLoading(false)
-                successToast("Profile Uploaded Successfully");
-                handleClose();
+                }).then((Item) => {
+                    setLoading(false)
+                    successToast("Profile Uploaded Successfully");
+                    dispatch(changeProfilePicture(Item.data.profilePicture))
+                    dispatch(changeFirstName(Item.data.firstName))
+                    dispatch(changeLastName(Item.data.lastName))
+                    handleClose();
+                })
             } catch (error) {
                 setLoading(false);
                 console.error('Error uploading file:', error);
@@ -58,10 +65,13 @@ const EditProfile = ({open, handleClose, loading, setLoading, clickedSave, setSe
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     }
-                });
-                successToast("Profile Uploaded Successfully");
-                setLoading(false)
-                handleClose();
+                }).then((Item)=>{
+                    successToast("Profile Uploaded Successfully");
+                    dispatch(changeFirstName(Item.data.firstName))
+                    dispatch(changeLastName(Item.data.lastName))
+                    setLoading(false)
+                    handleClose();
+                })
             } catch (error) {
                 console.error('Error uploading file:', error);
                 alert('Error uploading file');

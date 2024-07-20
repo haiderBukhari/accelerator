@@ -4,7 +4,7 @@ import { removeCookie } from "../utils/Cookies";
 import { useNavigate } from "react-router-dom";
 import { failedToast, successToast } from "../utils/toastNotifications";
 import { useDispatch } from "react-redux";
-import { removeJWT } from "../features/profile";
+import { removeUserDetails } from "../features/profile";
 
 const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
     const Location = useLocation();
@@ -96,7 +96,7 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                         </div>
                     ))}
                     <div className="flex cursor-pointer items-center h-[35px] my-1">
-                        <div onClick={()=>{ dispatch(removeJWT()); Navigate('/'); successToast("Successfully Loged out")}}
+                        <div onClick={()=>{ dispatch(removeUserDetails()); Navigate('/'); successToast("Successfully Loged out")}}
                             className={`flex gap-2.5 pr-5 ml-8 text-neutral-500 w-18.5 `}
                         >
                             <LogOut className="w-[20px]"/>
