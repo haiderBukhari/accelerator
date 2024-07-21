@@ -1,5 +1,32 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { failedToast } from "../../utils/toastNotifications";
+import { useSelector } from "react-redux";
+import professionalPicture from '../../assets/professionalPicture.jpeg'
+import { useNavigate } from "react-router-dom";
+
 export default function Messages() {
-    const text = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.';
+
+    const token = useSelector(state => state.profile.jwt);
+    const [userList, setUserList] = useState([])
+    const Navigate = useNavigate();
+
+    async function getFriends() {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/chat/friends`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setUserList(Item.data);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+    useEffect(() => {
+        getFriends();
+    }, [])
+
     return (
         <div className="w-full mt-5">
             <div className="flex max-md:flex-col max-md:gap-0 h-full w-full">
@@ -13,21 +40,29 @@ export default function Messages() {
                                 className="shrink-0 self-start aspect-square w-[23px] cursor-pointer"
                             />
                         </div>
-                        <div className="flex gap-5 pr-2 mt-7">
-                            <img
-                                loading="lazy"
-                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/979d721c6cbe22df2c2ff22187abbee383449297d50e7184f77237d22830103b?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/979d721c6cbe22df2c2ff22187abbee383449297d50e7184f77237d22830103b?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/979d721c6cbe22df2c2ff22187abbee383449297d50e7184f77237d22830103b?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/979d721c6cbe22df2c2ff22187abbee383449297d50e7184f77237d22830103b?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/979d721c6cbe22df2c2ff22187abbee383449297d50e7184f77237d22830103b?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/979d721c6cbe22df2c2ff22187abbee383449297d50e7184f77237d22830103b?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/979d721c6cbe22df2c2ff22187abbee383449297d50e7184f77237d22830103b?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/979d721c6cbe22df2c2ff22187abbee383449297d50e7184f77237d22830103b?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[50px] h-[50px]"
-                            />
-                            <div className="flex flex-col grow shrink-0 my-auto basis-0 w-fit">
-                                <div className="font-medium text-zinc-800">John Smith</div>
-                                <div className="whitespace-nowrap text-ellipsis text-neutral-500">
-                                    {text.length > 40 ? text.slice(0, 24) + '...' : text}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="shrink-0 mt-5 h-px border border-solid bg-neutral-400 border-neutral-400" />
-                        <div className="flex gap-5 pr-2 mt-5">
+                        {
+                            userList.map((Item, Index) => (
+                                <>
+                                    <div onClick={()=>{Navigate(`/dashboard/messages/${Item.friendId}`)}} className="flex gap-5 pr-2 mt-5 cursor-pointer">
+                                        <img
+                                            loading="lazy"
+                                            src={Item.photo ? Item.photo : professionalPicture}
+                                            className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[50px] h-[50px]"
+                                        />
+                                        <div className="flex flex-col grow shrink-0 my-auto basis-0 w-fit">
+                                            <div className="font-medium text-zinc-800">{Item.firstName} {Item.lastName}</div>
+                                            <div className="whitespace-nowrap text-ellipsis text-neutral-500">
+                                            {Item.latestMessage.length > 40 ? Item.latestMessage.slice(0, 24) + '...' : Item.latestMessage}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {
+                                        Index !== userList.length - 1 && <div className="shrink-0 mt-5 h-px border border-solid bg-neutral-400 border-neutral-400" />
+                                    }
+                                </>
+                            ))
+                        }
+                        {/* <div className="flex gap-5 pr-2 mt-5">
                             <img
                                 loading="lazy"
                                 srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&"
@@ -79,7 +114,7 @@ export default function Messages() {
                                 <div className="whitespace-nowrap text-ellipsis text-neutral-500">
                                     {text.length > 40 ? text.slice(0, 24) + '...' : text}                                </div>
                             </div>
-                        </div>
+                        </div> */}
                         <div style={{ height: '2px' }} className="self-center mt-10 mb-2 w-60 bg-neutral-400"></div>
                         <div className="self-center font-bold text-neutral-400">End</div>
                     </div>
@@ -114,7 +149,7 @@ export default function Messages() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col items-center px-5 max-w-[292px] mx-auto mt-5">
+                        {/* <div className="flex flex-col items-center px-5 max-w-[292px] mx-auto mt-5">
                             <img
                                 loading="lazy"
                                 srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&"
@@ -128,7 +163,7 @@ export default function Messages() {
                                 industry. Lorem Ipsum has been the industrys standard dummy text ever
                                 since the 1500s
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="flex flex-col px-12 pt-[12px] md:pt-[622px] max-md:px-5 max-md:mt-10 max-md:max-w-full bg-neutral-100">
                             <div className="flex flex-col items-start py-2.5 pr-8 pl-4 border border-solid bg-orange-600 bg-opacity-10 border-neutral-400 w-[103px] rounded-xl max-md:pr-5">

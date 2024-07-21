@@ -18,6 +18,7 @@ export default function Members() {
 
     const handlePageChange = (event, value) => {
         if (page === value) return;
+        setData([])
         setPage(value);
         getNonFriendsList(value);
     };
@@ -127,7 +128,7 @@ export default function Members() {
                                                     <div className="mt-3.5 text-base tracking-wider leading-4 text-zinc-500 hidden md:block">
                                                         {Item.aboutMe}
                                                     </div>
-                                                    <div onClick={() => { addFriend(Item._id) }} className="md:mt-3 justify-center self-end px-8 py-2 text-base leading-4 text-white bg-violet-800 hover:bg-opacity-55 cursor-pointer rounded-xl max-md:px-5">
+                                                    <div onClick={() => { setData([]); setPage(1); addFriend(Item._id) }} className="md:mt-3 justify-center self-end px-8 py-2 text-base leading-4 text-white bg-violet-800 hover:bg-opacity-55 cursor-pointer rounded-xl max-md:px-5">
                                                         Add Friend
                                                     </div>
                                                 </div>
