@@ -71,7 +71,7 @@ export default function Posts() {
             }
             {
                 data?.map((Item) => (
-                    <div className="flex flex-col px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pl-5 max-md:max-w-full">
+                    <div key={Item.text ?? ''} className="flex flex-col px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pl-5 max-md:max-w-full">
                         <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                             <div className="flex gap-4">
                                 <img

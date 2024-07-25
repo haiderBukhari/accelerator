@@ -62,59 +62,6 @@ export default function Messages() {
                                 </>
                             ))
                         }
-                        {/* <div className="flex gap-5 pr-2 mt-5">
-                            <img
-                                loading="lazy"
-                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/cca925130ea0dd784a9ecf6b36ae3b4f12a0f082ff27f7ae22e187c703405542?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[50px] h-[50px]"
-                            />
-                            <div className="flex flex-col grow shrink-0 my-auto basis-0 w-fit">
-                                <div className="font-medium text-zinc-800">James Johnson</div>
-                                <div className="whitespace-nowrap text-ellipsis text-neutral-500">
-                                    {text.length > 40 ? text.slice(0, 24) + '...' : text}                                </div>
-                            </div>
-                        </div>
-                        <div className="shrink-0 mt-5 h-0.5 border border-solid bg-neutral-400 border-neutral-400" />
-                        <div className="flex gap-5 pr-2 mt-5">
-                            <img
-                                loading="lazy"
-                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/1260e6377d5a1bef2506cdcb26fa8db360b7e0742f229275cce195d21fe8a80a?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/1260e6377d5a1bef2506cdcb26fa8db360b7e0742f229275cce195d21fe8a80a?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/1260e6377d5a1bef2506cdcb26fa8db360b7e0742f229275cce195d21fe8a80a?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/1260e6377d5a1bef2506cdcb26fa8db360b7e0742f229275cce195d21fe8a80a?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/1260e6377d5a1bef2506cdcb26fa8db360b7e0742f229275cce195d21fe8a80a?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/1260e6377d5a1bef2506cdcb26fa8db360b7e0742f229275cce195d21fe8a80a?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/1260e6377d5a1bef2506cdcb26fa8db360b7e0742f229275cce195d21fe8a80a?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/1260e6377d5a1bef2506cdcb26fa8db360b7e0742f229275cce195d21fe8a80a?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[50px] h-[50px]"
-                            />
-                            <div className="flex flex-col grow shrink-0 my-auto basis-0 w-fit">
-                                <div className="font-medium text-zinc-800">Michael Brown</div>
-                                <div className="whitespace-nowrap text-ellipsis text-neutral-500">
-                                    {text.length > 40 ? text.slice(0, 24) + '...' : text}                                </div>
-                            </div>
-                        </div>
-                        <div className="shrink-0 mt-5 h-px border border-solid bg-neutral-400 border-neutral-400" />
-                        <div className="flex gap-5 pr-2 mt-5">
-                            <img
-                                loading="lazy"
-                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/792c97025bc6c2efb98bbc0f0ecc4ac453ba10afcec09d7dd22608efd32b677d?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/792c97025bc6c2efb98bbc0f0ecc4ac453ba10afcec09d7dd22608efd32b677d?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/792c97025bc6c2efb98bbc0f0ecc4ac453ba10afcec09d7dd22608efd32b677d?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/792c97025bc6c2efb98bbc0f0ecc4ac453ba10afcec09d7dd22608efd32b677d?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/792c97025bc6c2efb98bbc0f0ecc4ac453ba10afcec09d7dd22608efd32b677d?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/792c97025bc6c2efb98bbc0f0ecc4ac453ba10afcec09d7dd22608efd32b677d?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/792c97025bc6c2efb98bbc0f0ecc4ac453ba10afcec09d7dd22608efd32b677d?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/792c97025bc6c2efb98bbc0f0ecc4ac453ba10afcec09d7dd22608efd32b677d?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[50px] h-[50px]"
-                            />
-                            <div className="flex flex-col grow shrink-0 my-auto basis-0 w-fit">
-                                <div className="font-medium text-zinc-800">
-                                    William Williams
-                                </div>
-                                <div className="whitespace-nowrap text-ellipsis text-neutral-500">
-                                    {text.length > 40 ? text.slice(0, 24) + '...' : text}                                </div>
-                            </div>
-                        </div>
-                        <div className="shrink-0 mt-5 h-px border border-solid bg-neutral-400 border-neutral-400" />
-                        <div className="flex gap-5 pr-2 mt-5">
-                            <img
-                                loading="lazy"
-                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/ca2a70c57a51979456d0babbab7e94efe3873d31b58297a2f28489e1647d1eff?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/ca2a70c57a51979456d0babbab7e94efe3873d31b58297a2f28489e1647d1eff?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ca2a70c57a51979456d0babbab7e94efe3873d31b58297a2f28489e1647d1eff?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/ca2a70c57a51979456d0babbab7e94efe3873d31b58297a2f28489e1647d1eff?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/ca2a70c57a51979456d0babbab7e94efe3873d31b58297a2f28489e1647d1eff?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ca2a70c57a51979456d0babbab7e94efe3873d31b58297a2f28489e1647d1eff?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/ca2a70c57a51979456d0babbab7e94efe3873d31b58297a2f28489e1647d1eff?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/ca2a70c57a51979456d0babbab7e94efe3873d31b58297a2f28489e1647d1eff?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[50px] h-[50px]"
-                            />
-                            <div className="flex flex-col grow shrink-0 my-auto basis-0 w-fit">
-                                <div className="font-medium text-zinc-800">David Jones</div>
-                                <div className="whitespace-nowrap text-ellipsis text-neutral-500">
-                                    {text.length > 40 ? text.slice(0, 24) + '...' : text}                                </div>
-                            </div>
-                        </div> */}
                         <div style={{ height: '2px' }} className="self-center mt-10 mb-2 w-60 bg-neutral-400"></div>
                         <div className="self-center font-bold text-neutral-400">End</div>
                     </div>

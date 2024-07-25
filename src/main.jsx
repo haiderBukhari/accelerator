@@ -10,7 +10,7 @@ import { Provider } from 'react-redux'
 import { Store } from './store/index.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <>
     <Provider store={Store}>
       <Router>
         <App />
@@ -18,5 +18,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       </Router>
       <ToastContainer />
     </Provider>
-  </React.StrictMode>,
+  </>,
 )

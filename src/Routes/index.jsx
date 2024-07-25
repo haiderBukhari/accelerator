@@ -76,7 +76,7 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
         <Route path="/dashboard/modules" element={token ? <CreateModule /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/events" element={token ? <Events /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/details/groups" element={token ? <GroupsDetails /> : <Navigate to ="/login"/>} />
-        <Route path="/dashboard/course/details" element={token ? <CourseDetails /> : <Navigate to ="/login"/>} />
+        <Route path="/dashboard/course/details/:id" element={token ? <CourseDetails /> : <Navigate to ="/login"/>} />
         <Route path="*" element={<Home />} />
       </Routes>
     </div>

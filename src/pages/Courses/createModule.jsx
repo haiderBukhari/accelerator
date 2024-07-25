@@ -19,23 +19,6 @@ export default function CreateModule() {
     const [shortDescription, setShortDescription] = useState("")
     const [longdescription, setLongDescription] = useState("")
 
-    async function getUserData() {
-        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/courses`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-        }).then((Item) => {
-            setData(Item.data.course);
-        }).catch((err) => {
-            return failedToast(err.response.data.error);
-        });
-    }
-
-    useEffect(() => {
-        getUserData();
-    }, []);
-
     const getCourses = async () => {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/courses`, {
             headers: {
@@ -43,7 +26,7 @@ export default function CreateModule() {
                 'Authorization': `Bearer ${token}`
             },
         }).then((res) => {
-            setData(res.data.course);
+            setData(res.data.courses);
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
@@ -70,6 +53,10 @@ export default function CreateModule() {
     }
 
     const createNewModule = async () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // 'auto' for instant scrolling, 'smooth' for smooth scrolling
+        });
         setLoading(true);
         const formdata = new FormData();
         formdata.append('courseId', selectedCourseId)
@@ -107,11 +94,11 @@ export default function CreateModule() {
                         <div className="flex flex-col w-[50%] w-full max-md:ml-0 max-md:w-full">
                             <div className="flex flex-col flex-wrap content-start py-px text-base font-medium tracking-wider leading-4 text-neutral-800 max-md:mt-10">
                                 <div>Course Name</div>
-                                <select className="px-5 py-3 mt-5 text-base tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 w-full outline-none text-black" name="" id="">
+                                <select onChange={(e) => { setSelectedCourseId(e.target.value) }} className="px-5 py-3 mt-5 text-base tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 w-full outline-none text-black" name="" id="">
                                     <option className="text-black" selected disabled value="">Select Course Name</option>
                                     {
                                         data?.map((Item) => (
-                                            <option onClick={() => { setSelectedCourseId(Item._id) }} key={Item._id} className="text-black" value="">{Item.title}</option>
+                                            <option key={Item.id} className="text-black" value={Item.id}>{Item.name}</option>
                                         ))
                                     }
                                 </select>

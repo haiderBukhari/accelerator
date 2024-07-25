@@ -73,9 +73,12 @@ export default function Courses() {
                         <div className="mt-14 text-3xl font-bold text-violet-800 max-md:mt-10 max-md:max-w-full">
                             {Item.name}
                         </div>
-                        <div className="w-full flex justify-between my-5">
-                            <button onClick={() => { Navigate('/dashboard/modules') }} className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl mx-auto">Add New Module</button>
-                        </div>
+                        {
+                            userData.isAdmin &&
+                            <div className="w-full flex justify-between my-5">
+                                <button onClick={() => { Navigate('/dashboard/modules') }} className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl mx-auto">Add New Module</button>
+                            </div>
+                        }
                         {
                             Item.modules.map((ItemDetails) => (
                                 <div key={ItemDetails.id}>
@@ -112,7 +115,7 @@ export default function Courses() {
                                             </div>
                                         </div>
                                         <img
-                                            onClick={() => { Navigate(`/dashboard/course/details?id=${ItemDetails.id}`) }}
+                                            onClick={() => { Navigate(`/dashboard/course/details/${ItemDetails.id}`) }}
                                             loading="lazy"
                                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/f7c99789c18d7823e75d0ea2e0789fa546a117a0f4744c541ab08390c619b505?apiKey=cf358c329e0d49a792d02d32277323ef&"
                                             className="shrink-0 self-stretch my-auto aspect-[1.25] w-[75px] cursor-pointer"
