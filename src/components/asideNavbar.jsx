@@ -1,8 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { LogOut, X } from "lucide-react";
-import { removeCookie } from "../utils/Cookies";
 import { useNavigate } from "react-router-dom";
-import { failedToast, successToast } from "../utils/toastNotifications";
+import {  successToast } from "../utils/toastNotifications";
 import { useDispatch } from "react-redux";
 import { removeUserDetails } from "../features/profile";
 
