@@ -13,7 +13,7 @@ function App() {
   return (
     <div className={`${currentLocation && 'flex min-h-screen'} bg-[#f2f2f2] md:bg-transparent`}>
       {currentLocation ? <AsideNavbar  navbarOpen={navbarOpen} setNavbarOpen={setNavbarOpen}/> : null}
-      <div className='w-full'>
+      <div className='w-full pt-0'>
         {location.pathname !== '/home' ? <Routes navbarOpen={navbarOpen} setNavbarOpen={setNavbarOpen} /> : null}
       </div>
       {(currentLocation && !location.pathname.includes('/dashboard/messages') && location.pathname!== '/dashboard/members' && !location.pathname.includes('/dashboard/course') && !location.pathname.includes('dashboard/details/groups') && location.pathname !== '/dashboard/course/details' && location.pathname !== '/dashboard/events') ? <AsideSettings /> : null}

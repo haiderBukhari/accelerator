@@ -28,12 +28,14 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
     location.pathname === "/otp" ||
     location.pathname === "/change-password";
 
+    const blueBgColor = location.pathname === '/dashboard/course' ? 'bg-neutral-100': 'bg-white'  
+
   const token = useSelector(state=>state.profile.jwt)
   return (
     <div>
       {!currentLocation && (
-        <div className="mx-7">
-          <div className="flex justify-between items-center mt-4 px-5 w-full text-base font-medium text-zinc-800 max-md:flex-wrap max-md:max-w-full">
+        <div className={`${blueBgColor}`}>
+          <div className="flex justify-between items-center pt-4 px-5 w-full text-base font-medium text-zinc-800 max-md:flex-wrap max-md:max-w-full">
             <p>Search on  The App Accelerator </p>
             <img
               loading="lazy"
