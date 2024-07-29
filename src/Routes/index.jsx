@@ -18,6 +18,7 @@ import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CourseDetails from "../pages/Courses/CourseDetails";
 import CreateModule from "../pages/Courses/createModule";
+import CreateEvent from "../pages/Events/createEvents";
 
 const Index = ({ navbarOpen, setNavbarOpen }) => {
   const location = useLocation();
@@ -75,6 +76,7 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
         <Route path="/dashboard/course" element={token ? <Courses /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/modules" element={token ? <CreateModule /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/events" element={token ? <Events /> : <Navigate to ="/login"/>} />
+        <Route path="/dashboard/events/create" element={token ? <CreateEvent /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/details/groups" element={token ? <GroupsDetails /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/course/details/:id" element={token ? <CourseDetails /> : <Navigate to ="/login"/>} />
         <Route path="*" element={<Home />} />

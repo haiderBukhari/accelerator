@@ -1,10 +1,80 @@
+import { useEffect, useState } from "react";
+import { failedToast } from "../../utils/toastNotifications";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { DataGrid } from '@mui/x-data-grid';
+
 export default function Events() {
+    const [userData, setUserData] = useState({});
+    const token = useSelector(state => state.profile.jwt);
+    const Navigate = useNavigate();
+
+    async function getUserData() {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/userData`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setUserData(Item.data.user);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+    useEffect(() => {
+        getUserData();
+    }, [])
+
+    const columns = [
+        { field: 'id', headerName: 'Date', width: 100 },
+        { field: 'eventName', headerName: 'Event Name', width: 400 },
+        { field: 'peoples', headerName: 'People Attending', width: 130 },
+        {
+            field: 'about',
+            headerName: 'Talks About',
+            width: 120,
+        },
+        {
+            field: 'likes',
+            headerName: 'Likes',
+            width: 100,
+        },
+        {
+            field: '',
+            headerName: 'Action',
+            width: 130,
+        },
+    ];
+
+    const rows = [
+        { id: 1, eventName: 'Snow', peoples: 'Jon', about:'World', likes: 35 },
+        { id: 2, eventName: 'Lannister', peoples: 'Cersei', about:'World', likes: 42 },
+        { id: 3, eventName: 'Lannister', peoples: 'Jaime', about:'World', likes: 45 },
+        { id: 4, eventName: 'Stark', peoples: 'Arya', about:'World', likes: 16 },
+        { id: 5, eventName: 'Targaryen', peoples: 'Daenerys', about:'World', likes: null },
+        { id: 6, eventName: 'Melisandre', peoples: null, about:'World', likes: 150 },
+        { id: 7, eventName: 'Clifford', peoples: 'Ferrara', about:'World', likes: 44 },
+        { id: 8, eventName: 'Frances', peoples: 'Rossini', about:'World', likes: 36 },
+        { id: 9, eventName: 'Roxie', peoples: 'Harvey', about:'World', likes: 65 },
+    ];
+
     return (
         <div className="flex flex-col px-5 w-full pt-6 pb-10">
-            <div className="mt-12 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-md:max-w-full">
-                Event Calendar
+            <div className="flex justify-between items-center">
+                <div className="mt-12 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-md:max-w-full">
+                    Event Calendar
+                </div>
+                {
+                    userData.isAdmin && <button
+                        onClick={() => Navigate('/dashboard/events/create')}
+                        className="inline-flex items-center justify-center w-[170px] px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-violet-800 border border-transparent hover:bg-violet-700 focus:outline-none focus:ring-offset-2 focus:ring-violet-700 rounded-2xl"
+                    >
+                        Add New Event
+                    </button>
+                }
             </div>
-            <div className="flex gap-5 w-full max-md:flex-wrap max-md:max-w-full">
+            <div className="flex gap-5 w-full max-md:flex-wrap max-md:max-w-full mb-10">
                 <div className="flex-auto self-start mt-5 text-xl text-zinc-500">
                     Click The Event To See Their Details.
                 </div>
@@ -35,6 +105,18 @@ export default function Events() {
                         />
                     </div>
                 </div>
+            </div>
+            <div style={{ height: 400, width: '100%' }}>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    initialState={{
+                        pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                        },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                />
             </div>
             <div className="flex flex-col px-7 py-7 mt-9 w-full text-lg rounded-2xl border border-solid bg-neutral-200 border-neutral-400 max-md:px-5 max-md:max-w-full">
                 <div className="flex gap-5 justify-between w-full font-bold text-neutral-700 max-md:flex-wrap max-md:mr-0.5 max-md:max-w-full">

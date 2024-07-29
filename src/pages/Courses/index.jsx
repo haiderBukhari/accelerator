@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { failedToast } from "../../utils/toastNotifications";
 import CreateCourseDialog from "../../components/courses/createCourse";
+
 export default function Courses() {
     const Navigate = useNavigate();
     const [userData, setUserData] = useState({});
