@@ -5,8 +5,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateEvent() {
-    const text = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.';
-
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [startDate, setStartDate] = useState('')
@@ -112,14 +110,9 @@ export default function CreateEvent() {
                                         </div>
                                         <div className="flex gap-5 justify-between my-auto">
                                             <div className="flex gap-2.5 justify-between my-auto text-xs whitespace-nowrap text-neutral-400">
-                                                <img
-                                                    loading="lazy"
-                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/e45efcd8a3638df871cc14afaa75b1ee2011719bf58f769dc55268937e7ba224?"
-                                                    className="shrink-0 aspect-square w-[23px]"
-                                                />
-                                                <div className="my-auto">27k</div>
+                                                <div className="my-auto">{Item.attendingPeoples.length} {"Attending"}</div>
                                             </div>
-                                            <div className="px-5 py-1 text-base text-white bg-violet-800 rounded-lg border border-solid border-neutral-400">
+                                            <div className="px-5 py-1 text-md text-white bg-violet-800 rounded-lg border border-solid border-neutral-400">
                                                 Attend event
                                             </div>
                                         </div>
