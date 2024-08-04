@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import CommentsDialog from "../../components/comments";
-import { useNavigate } from "react-router-dom";
 import CreatePostDialog from "../../components/CreatePost";
 import axios from "axios";
-import ReactPlayer from 'react-player/youtube'
 import { useSelector } from "react-redux";
 import { failedToast } from "../../utils/toastNotifications";
+import professionalPicture from '../../assets/professionalPicture.jpeg'
+import { formatDistanceToNow } from 'date-fns';
 
 export default function Posts() {
     const [open, setOpen] = useState(false);
     const [createPost, setCreatePost] = useState(false);
-    const Navigate = useNavigate();
     const [data, setData] = useState([])
     const [fetched, setFetched] = useState(false);
     const [fetchAgain, setFetchAgain] = useState(false);
     const token = useSelector(state => state.profile.jwt);
+
+    const timeElapsed = (dateString) => {
+        const date = new Date(dateString);
+        return formatDistanceToNow(date, { addSuffix: true });
+    };
 
     async function getPosts() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/post`, {
@@ -76,14 +80,14 @@ export default function Posts() {
                             <div className="flex gap-4">
                                 <img
                                     loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/38c5b4735a899f8e1f0330e48ffd4f7e6b5350d54ab094cd0066d3ec939cb22c?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/38c5b4735a899f8e1f0330e48ffd4f7e6b5350d54ab094cd0066d3ec939cb22c?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/38c5b4735a899f8e1f0330e48ffd4f7e6b5350d54ab094cd0066d3ec939cb22c?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/38c5b4735a899f8e1f0330e48ffd4f7e6b5350d54ab094cd0066d3ec939cb22c?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/38c5b4735a899f8e1f0330e48ffd4f7e6b5350d54ab094cd0066d3ec939cb22c?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/38c5b4735a899f8e1f0330e48ffd4f7e6b5350d54ab094cd0066d3ec939cb22c?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/38c5b4735a899f8e1f0330e48ffd4f7e6b5350d54ab094cd0066d3ec939cb22c?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/38c5b4735a899f8e1f0330e48ffd4f7e6b5350d54ab094cd0066d3ec939cb22c?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                    src={Item.userInfo.profilePicture ? Item.userInfo.profilePicture : professionalPicture}
                                     className="shrink-0 border-4 border-violet-800 border-solid aspect-square w-[60px]"
                                 />
                                 <div className="flex flex-col py-1 my-auto">
                                     <div className="text-base font-medium text-zinc-800">
-                                        Michael William{" "}
+                                        {Item.userInfo.firstName} {Item.userInfo.lastName}
                                     </div>
-                                    <div className="mt-2 text-xs text-neutral-500">20 mins. ago</div>
+                                    <div className="mt-2 text-xs text-neutral-500">{timeElapsed(Item.createdAt)}</div>
                                 </div>
                             </div>
                             <img
