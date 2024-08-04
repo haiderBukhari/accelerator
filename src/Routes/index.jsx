@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import CourseDetails from "../pages/Courses/CourseDetails";
 import CreateModule from "../pages/Courses/createModule";
 import CreateEvent from "../pages/Events/createEvents";
+import MembersRequests from "../pages/Members/membersRequest";
 
 const Index = ({ navbarOpen, setNavbarOpen }) => {
   const location = useLocation();
@@ -73,6 +74,7 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
         <Route path="/dashboard/messages" element={token ? <Messages /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/messages/:id" element={token ? <MessagesList /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/members" element={token ? <Members /> : <Navigate to ="/login"/>} />
+        <Route path="/dashboard/members/requests" element={token ? <MembersRequests /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/course" element={token ? <Courses /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/modules" element={token ? <CreateModule /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/events" element={token ? <Events /> : <Navigate to ="/login"/>} />

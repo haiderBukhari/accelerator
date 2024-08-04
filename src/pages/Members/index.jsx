@@ -5,16 +5,18 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { failedToast, successToast } from '../../utils/toastNotifications';
 import professionalPicture from '../../assets/professionalPicture.jpeg'
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Members() {
     const token = useSelector(state => state.profile.jwt);
     const [data, setData] = useState([])
     const [totalList, setTotalList] = useState(0)
-    const [currentPage, setCurrentPage] = useState(1)
     const [fetchAgain, setFetchAgain] = useState(false)
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
+    const [pendingApprovals, setPendingApprovals] = useState(0);
+    const Navigate = useNavigate('')
 
     const handlePageChange = (event, value) => {
         if (page === value) return;
@@ -32,6 +34,7 @@ export default function Members() {
             },
         }).then((Item) => {
             setData(Item.data.nonFriends);
+            setPendingApprovals(Item.data.pendingFriends);
             setTotalList(Item.data.total)
             setLoading(false);
         }).catch((err) => {
@@ -61,11 +64,24 @@ export default function Members() {
 
     return (
         <div className="flex flex-col px-5 mt-5 pb-20">
-            <div className="mt-12 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-md:max-w-full">
-                Find Friends
-            </div>
-            <div className="mt-4 w-full text-xl text-zinc-500 max-md:max-w-full">
-                Lets make a community online
+            <div className='flex justify-between items-center'>
+                <div>
+                    <div className="mt-12 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-md:max-w-full">
+                        Find Friends
+                    </div>
+                    <div className="mt-4 w-full text-xl text-zinc-500 max-md:max-w-full">
+                        Lets make a community online
+                    </div>
+                </div>
+                <div className='relative'>
+                    <button
+                        onClick={() => { Navigate('/dashboard/members/requests') }}
+                        className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-violet-800 border border-transparent hover:bg-violet-700 focus:outline-none focus:ring-offset-2 focus:ring-violet-700 rounded-2xl h-[40px]"
+                    >
+                        Show Friends Requests
+                    </button>
+                    <div className='bg-red-500 absolute top-[-10px] left-[-10px] rounded-full flex justify-center items-center h-7 w-7 font-bold text-white text-center'>{pendingApprovals}</div>
+                </div>
             </div>
             <div className="flex items-center gap-5 pr-20 mt-10 font-medium leading-[95%] max-md:flex-wrap max-md:pr-5">
                 <div className="flex flex-col w-full md:w-auto justify-center">
