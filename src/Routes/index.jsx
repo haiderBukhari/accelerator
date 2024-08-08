@@ -29,7 +29,8 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
     location.pathname === "/register" ||
     location.pathname === "/recovery-email" ||
     location.pathname === "/otp" ||
-    location.pathname === "/change-password";
+    location.pathname === "/change-password" || 
+    location.pathname.includes('/dashboard/messages')
 
     const blueBgColor = (location.pathname === '/dashboard/course' || location.pathname === '/dashboard/modules') ? 'bg-neutral-100': 'bg-white'  
 
