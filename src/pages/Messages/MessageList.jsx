@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { failedToast } from "../../utils/toastNotifications";
 import { useSelector } from "react-redux";
 import professionalPicture from '../../assets/professionalPicture.jpeg'
@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { socket } from "../../socket";
 import { useParams } from 'react-router-dom';
 import moment from "moment";
+import ScrollToBottom from 'react-scroll-to-bottom';
+import { css } from '@emotion/react';
 
 export default function Messages() {
     const token = useSelector(state => state.profile.jwt);
@@ -19,6 +21,11 @@ export default function Messages() {
     const [isConnected, setIsConnected] = useState(socket.connected);
     const { id } = useParams();
 
+    const ROOT_CSS = css({
+        height: 100,
+        width: 400
+    });
+
     useEffect(() => {
         function onConnect() {
             setIsConnected(true);
@@ -29,7 +36,7 @@ export default function Messages() {
         }
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         socket.on('recieve_message', getMessages)
     }, [])
 
@@ -66,7 +73,7 @@ export default function Messages() {
     }
 
     async function getMessages() {
-        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/messages`, {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/messages?secondPersonId=${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -171,25 +178,27 @@ export default function Messages() {
                                 since the 1500s
                             </div>
                         </div> */}
+                        <ScrollToBottom className={ROOT_CSS}>
 
-                        <div className="flex flex-col px-12 pt-[12px] md:pt-[122px] max-md:px-5 max-md:mt-10 max-md:max-w-full bg-neutral-100">
-                            {
-                                messagesList.map((message, index) => (
-                                    <div
-                                        key={index}
-                                        className={`flex flex-col my-3 py-2.5 max-w-[400px] pr-8 pl-4 ${message.senderId == id ? "border-blue-700 border-opacity-10 self-start items-start rounded-xl bg-orange-600 bg-opacity-10 max-md:pr-5" : "border-opacity-10 items-end rounded-xl max-md:pr-5 bg-blue-700 self-end bg-opacity-10"
-                                            }`}
-                                    >
-                                        <div className="text-xs text-zinc-600">
-                                            {moment(message.createdAt).format("hh:mm A")}
+                            <div className="flex flex-col px-12 pt-[12px] md:pt-[122px] max-md:px-5 max-md:mt-10 max-md:max-w-full bg-neutral-100">
+                                {
+                                    messagesList.map((message, index) => (
+                                        <div
+                                            key={index}
+                                            className={`flex flex-col my-3 py-2.5 max-w-[400px] pr-8 pl-4 ${message.senderId == id ? "border-blue-700 border-opacity-10 self-start items-start rounded-xl bg-orange-600 bg-opacity-10 max-md:pr-5" : "border-opacity-10 items-end rounded-xl max-md:pr-5 bg-blue-700 self-end bg-opacity-10"
+                                                }`}
+                                        >
+                                            <div className="text-xs text-zinc-600">
+                                                {moment(message.createdAt).format("hh:mm A")}
+                                            </div>
+                                            <div className="mt-1.5 text-xl text-black">
+                                                {message.message}
+                                            </div>
                                         </div>
-                                        <div className="mt-1.5 text-xl text-black">
-                                            {message.message}
-                                        </div>
-                                    </div>
-                                ))
-                            }                        
-                        </div>
+                                    ))
+                                }
+                            </div>
+                        </ScrollToBottom>
                         <div className="flex gap-5 self-center pt-5 md:pt-20 md:max-md:flex-wrap max-md:mt-10 w-full px-5 pb-10 bg-neutral-100">
                             <div className="flex flex-auto gap-5 justify-between py-3.5 rounded-xl border border-solid bg-[#CCCCCC] border-stone-300 md:max-md:flex-wrap w-full pr-10 pl-5">
                                 <input value={message} onChange={(e) => { setMessage(e.target.value) }} className="my-auto text-lg text-neutral-500 w-full bg-[#CCCCCC] outline-none" type="text" name="" id="" placeholder="Type Here" />
