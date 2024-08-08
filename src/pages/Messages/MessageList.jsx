@@ -22,7 +22,7 @@ export default function Messages() {
     const { id } = useParams();
 
     const ROOT_CSS = css({
-        height: 100,
+        height: 500,
         width: 400
     });
 
@@ -94,7 +94,7 @@ export default function Messages() {
 
     return (
         <div className="w-full">
-            <div className="flex max-md:flex-col min-h-screen max-md:gap-0 h-full w-full">
+            <div className="flex max-md:flex-col max-md:gap-0 h-full w-full">
                 <div className="flex-col w-6/12 max-md:ml-0 max-md:w-full hidden md:flex">
                     <div className="flex flex-col grow px-6 pt-11 pb-20 w-full text-base bg-stone-300 max-md:px-5 max-md:mt-10 max-md:max-w-full">
                         <div className="flex gap-5 items-start px-5 py-3 rounded-xl border border-solid bg-neutral-200 border-stone-300 text-neutral-500 max-md:pr-5">
@@ -130,7 +130,7 @@ export default function Messages() {
                                 </>
                             ))
                         }
-                        <div style={{ height: '2px' }} className="self-center mt-10 mb-2 w-60 bg-neutral-400"></div>
+                        <div style={{ height: '2px' }} className="self-center mt-10 w-60 bg-neutral-400"></div>
                         <div className="self-center font-bold text-neutral-400">End</div>
                     </div>
                 </div>
@@ -163,24 +163,8 @@ export default function Messages() {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="flex flex-col items-center px-5 max-w-[292px] mx-auto mt-5">
-                            <img
-                                loading="lazy"
-                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/0af808b65673e8e260a8ba2f216bd68cc94586dc2ada803a8fc2e774e4aaec92?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                className="aspect-square max-w-[154px] w-[154px]"
-                            />
-                            <div className="mt-1.5 text-xl font-bold text-neutral-700">
-                                Chat With Friends
-                            </div>
-                            <div className="self-stretch mt-4 w-full text-xs text-center text-neutral-500">
-                                Lorem Ipsum is simply dummy text of the printing and typesetting
-                                industry. Lorem Ipsum has been the industrys standard dummy text ever
-                                since the 1500s
-                            </div>
-                        </div> */}
                         <ScrollToBottom className={ROOT_CSS}>
-
-                            <div className="flex flex-col px-12 pt-[12px] md:pt-[122px] max-md:px-5 max-md:mt-10 max-md:max-w-full bg-neutral-100">
+                            <div className="flex flex-col px-12 pt-[12px] md:pt-[122px] max-md:px-5 h-[600px] max-md:mt-10 max-md:max-w-full bg-transparent">
                                 {
                                     messagesList.map((message, index) => (
                                         <div
@@ -199,7 +183,7 @@ export default function Messages() {
                                 }
                             </div>
                         </ScrollToBottom>
-                        <div className="flex gap-5 self-center pt-5 md:pt-20 md:max-md:flex-wrap max-md:mt-10 w-full px-5 pb-10 bg-neutral-100">
+                        <div className="flex gap-5 self-center pt-5 md:pt-20 md:max-md:flex-wrap max-md:mt-10 w-full px-5 pb-10 bg-transparent">
                             <div className="flex flex-auto gap-5 justify-between py-3.5 rounded-xl border border-solid bg-[#CCCCCC] border-stone-300 md:max-md:flex-wrap w-full pr-10 pl-5">
                                 <input value={message} onChange={(e) => { setMessage(e.target.value) }} className="my-auto text-lg text-neutral-500 w-full bg-[#CCCCCC] outline-none" type="text" name="" id="" placeholder="Type Here" />
                                 <div className="flex gap-2.5 justify-between">
