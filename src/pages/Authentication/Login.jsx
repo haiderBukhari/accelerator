@@ -53,7 +53,8 @@ const Login = () => {
                 srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&"
                 className="max-w-full aspect-[2.33] w-[250px] mt-10 mx-auto h-auto block md:hidden"
             />
-            <div className="flex flex-col px-14 py-5 mb-16 font-medium md:mx-auto mt-20 md:mt-10 rounded-[60px] md:rounded-2xl border border-solid shadow-lg bg-[#e2e2e2] border-stone-300 leading-[95%] max-w-full md:max-w-[504px] w-full max-md:px-5 min-h-[100vh] md:min-h-auto">
+            <div className="min-h-[100vh] flex flex-col justify-center">
+            <div className="flex flex-col px-14 py-5 mb-16 font-medium md:mx-auto mt-20 md:mt-10 rounded-[60px] md:rounded-2xl border border-solid shadow-lg bg-[#e2e2e2] border-stone-300 leading-[95%] max-w-full md:max-w-[504px] w-full max-md:px-5 min-h-[100%] md:min-h-auto">
                 <img
                     loading="lazy"
                     srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&"
@@ -65,20 +66,20 @@ const Login = () => {
                 <div className="mt-8 text-xl tracking-wider text-neutral-700 max-md:mt-10 max-md:max-w-full">
                     Username/Email Address
                 </div>
-                <input onChange={(e)=>{setEmail(e.target.value)}} value={email} placeholder="i.e. jhon_e,abc@example.com" type='text' className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none max-md:px-5 max-md:max-w-full" />
+                <input onChange={(e)=>{setEmail(e.target.value)}} value={email} placeholder="i.e. jhon_e,abc@example.com" type='text' className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none max-md:px-5 max-md:max-w-full focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300]" />
                 <div className="mt-4 text-xl tracking-wider text-neutral-700 max-md:max-w-full">
                     Password
                 </div>
-                <input onChange={(e)=>{setPassword(e.target.value)}} value={password} type={`${showPassword ? 'text' : 'password'}`} className="justify-center items-start px-6 py-2 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black max-md:px-5 max-md:max-w-full outline-none" placeholder="Type Here" />
+                <input onChange={(e)=>{setPassword(e.target.value)}} value={password} type={`${showPassword ? 'text' : 'password'}`} className="justify-center items-start px-6 py-2 mt-5 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black max-md:px-5 max-md:max-w-full outline-none focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300]" placeholder="Type Here" />
                 <div className="flex gap-3.5 justify-end self-start mt-6 text-base tracking-wider text-black">
-                    <input onChange={() => setShowPassword(!showPassword)} className="shrink-0 w-6 h-6 rounded-md border border-solid border-stone-300 bg-black outline-none" type='checkbox' />
+                    <input onChange={() => setShowPassword(!showPassword)} className="shrink-0 w-5 h-5 rounded-md border border-solid border-stone-300 bg-black outline-none" type='checkbox' />
                     <div className="flex-auto my-auto">Show Password</div>
                 </div>
                 <div className="flex gap-5 justify-between mt-9 leading-[105%] max-md:flex-wrap max-md:max-w-full">
-                    <div onClick={onSubmit} className="justify-center px-12 py-2 text-2xl text-white whitespace-nowrap bg-violet-800 rounded-2xl max-md:px-5 cursor-pointer">
+                    <div onClick={onSubmit} className=" justify-center px-12 py-2 text-white whitespace-nowrap bg-violet-800 rounded-2xl max-md:px-5 cursor-pointer text-lg hover:text-white hover:bg-[#FA5300] transition-colors duration-300">
                         Login
                     </div>
-                    <div onClick={forgotPassword} className="justify-center p-0.5 my-auto text-xl text-[#0000FF] cursor-pointer ">
+                    <div onClick={forgotPassword} className="justify-center p-0.5 my-auto text-xl text-[#0000FF] cursor-pointer hover:text-[#FA5300] transition-colors duration-300">
                         Forgot Password
                     </div>
                 </div>
@@ -113,6 +114,7 @@ const Login = () => {
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     )
