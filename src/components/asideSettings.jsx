@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { failedToast } from '../utils/toastNotifications';
 import axios from 'axios';
 import ViewEvent from '../pages/Events/viewEvent';
+import defaultPerson from '../assets/professionalPicture.jpeg'
 
 export default function AsideSettings() {
     const [open, setOpen] = useState(false);
@@ -51,7 +52,7 @@ export default function AsideSettings() {
                 <div onClick={() => { setOpen(!open) }} className="flex gap-4 text-base font-medium rounded-2xl border border-solid bg-neutral-200 border-neutral-400 text-zinc-800 cursor-pointer">
                     <img
                         loading="lazy"
-                        src={profilePicture}
+                        src={profilePicture || defaultPerson}
                         className="shrink-0 border-4 border-violet-800 border-solid aspect-square w-[40px] rounded-lg"
                     />
                     <div className="flex items-center gap-4 pr-3 my-auto">

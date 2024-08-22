@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { failedToast, successToast } from '../../utils/toastNotifications';
 import professionalPicture from '../../assets/professionalPicture.jpeg'
-
+import { useNavigate } from 'react-router-dom';
 
 export default function MembersRequests() {
+    const Navigate = useNavigate();
     const token = useSelector(state => state.profile.jwt);
     const [data, setData] = useState([])
     const [fetchAgain, setFetchAgain] = useState(false)
@@ -82,8 +83,8 @@ export default function MembersRequests() {
                     </div>}
                     {
                         data?.map((Item) => (
-                            <div key={Item._id} className="flex m-3  gap-5 justify-between items-center self-stretch p-2.5 rounded-2xl bg-neutral-200 min-w-[240px] w-[370px] h-[100px]">
-                                <div className="flex gap-2.5 items-center self-stretch my-auto">
+                            <div key={Item.friendId} className="flex m-3  gap-5 justify-between items-center self-stretch p-2.5 rounded-2xl bg-neutral-200 min-w-[240px] w-[370px] h-[100px]">
+                                <div onClick={()=>{Navigate(`/dashboard/profile/${Item.owner}`)}} className="flex gap-2.5 items-center self-stretch my-auto cursor-pointer">
                                     <img
                                         loading="lazy"
                                         src={Item.friendDetails.profilePicture ? Item.friendDetails.profilePicture : professionalPicture}

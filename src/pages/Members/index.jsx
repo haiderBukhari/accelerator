@@ -7,7 +7,6 @@ import { failedToast, successToast } from '../../utils/toastNotifications';
 import professionalPicture from '../../assets/professionalPicture.jpeg'
 import { useNavigate } from 'react-router-dom';
 
-
 export default function Members() {
     const token = useSelector(state => state.profile.jwt);
     const [data, setData] = useState([])
@@ -113,7 +112,7 @@ export default function Members() {
                             <div className="w-full grid grid-cols-1 md:grid-cols-2 mx-auto">
                                 {
                                     data?.map((Item, Index) => (
-                                        <div key={Item.firstName} className={`flex flex-col w-full mb-5 max-md:ml-0 gap-5 ${Index % 2 != 0 ? 'ml-4' : 'mr-4'}`}>
+                                        <div onClick={()=>{Navigate(`/dashboard/profile/${Item._id}`)}} key={Item.firstName} className={`flex flex-col w-full cursor-pointer mb-5 max-md:ml-0 gap-5 ${Index % 2 != 0 ? 'ml-4' : 'mr-4'}`}>
                                             <div className="flex flex-col grow justify-center font-medium max-md:mt-8">
                                                 <div className="flex flex-row md:flex-col justify-between px-4 py-5 w-full rounded-2xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
                                                     <div className="flex gap-4 justify-between leading-[95%]">

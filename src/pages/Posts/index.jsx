@@ -6,8 +6,10 @@ import { useSelector } from "react-redux";
 import { failedToast } from "../../utils/toastNotifications";
 import professionalPicture from '../../assets/professionalPicture.jpeg'
 import { formatDistanceToNow } from 'date-fns';
+import { useNavigate } from "react-router-dom";
 
 export default function Posts() {
+    const Navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [createPost, setCreatePost] = useState(false);
     const [data, setData] = useState([])
@@ -77,7 +79,7 @@ export default function Posts() {
                 data?.map((Item) => (
                     <div key={Item.text ?? ''} className="flex flex-col px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pl-5 max-md:max-w-full">
                         <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
-                            <div className="flex gap-4">
+                            <div onClick={()=>{Navigate(`/dashboard/profile/${Item._id}`)}} className="flex gap-4 cursor-pointer">
                                 <img
                                     loading="lazy"
                                     src={Item.userInfo.profilePicture ? Item.userInfo.profilePicture : professionalPicture}

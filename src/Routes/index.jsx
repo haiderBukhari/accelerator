@@ -20,6 +20,7 @@ import CourseDetails from "../pages/Courses/CourseDetails";
 import CreateModule from "../pages/Courses/createModule";
 import CreateEvent from "../pages/Events/createEvents";
 import MembersRequests from "../pages/Members/membersRequest";
+import ProfilePage from "../pages/profilePage";
 
 const Index = ({ navbarOpen, setNavbarOpen }) => {
   const location = useLocation();
@@ -82,6 +83,7 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
         <Route path="/dashboard/events/create" element={token ? <CreateEvent /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/details/groups" element={token ? <GroupsDetails /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/course/details/:id" element={token ? <CourseDetails /> : <Navigate to ="/login"/>} />
+        <Route path="/dashboard/profile/:id" element={token ? <ProfilePage /> : <Navigate to ="/login"/>} />
         <Route path="*" element={<Home />} />
       </Routes>
     </div>
