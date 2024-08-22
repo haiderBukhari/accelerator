@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { failedToast } from "../../utils/toastNotifications";
 import CreateCourseDialog from "../../components/courses/createCourse";
+import { Trash2 } from 'lucide-react';
 
 export default function Courses() {
     const Navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function Courses() {
     const token = useSelector(state => state.profile.jwt);
     const [open, setOpen] = useState(false)
     const [data, setData] = useState([])
+    const [fetchAgain, setFetchAgain] = useState(false);
 
     async function getUserData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/userData`, {
@@ -24,6 +26,7 @@ export default function Courses() {
             return failedToast(err.response.data.error);
         });
     }
+
     useEffect(() => {
         getUserData();
     }, [])
@@ -42,9 +45,22 @@ export default function Courses() {
         });
     }
 
+    const DeleteCourses = async (id) => {
+        await axios.delete(`${import.meta.env.VITE_APP_BACKEND_URL}/courses?id=${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
+            setFetchAgain(!fetchAgain)
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
     useEffect(() => {
         getCourses();
-    }, [])
+    }, [open, fetchAgain])
 
     return (
         <div className="flex flex-col px-5 pb-10 pt-3 bg-neutral-100 min-h-screen">
@@ -71,15 +87,20 @@ export default function Courses() {
             {
                 data?.map((Item) => (
                     <div key={Item.name}>
-                        <div className="mt-14 text-3xl font-bold text-violet-800 max-md:mt-10 max-md:max-w-full">
-                            {Item.name}
-                        </div>
-                        {
-                            userData.isAdmin &&
-                            <div className="w-full flex justify-between my-5">
-                                <button onClick={() => { Navigate('/dashboard/modules') }} className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl mx-auto">Add New Module</button>
+                        <div className="flex flex-row justify-between w-full items-center hover:opacity-80 cursor-pointer">
+                            <div className="w-full">
+                                <div className="mt-14 text-3xl font-bold text-violet-800 max-md:mt-10 max-md:max-w-full">
+                                    {Item.name}
+                                </div>
+                                {
+                                    userData.isAdmin &&
+                                    <div className="w-full flex justify-between my-5">
+                                        <button onClick={() => { Navigate('/dashboard/modules') }} className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl mx-auto">Add New Module</button>
+                                    </div>
+                                }
                             </div>
-                        }
+                            <Trash2 onClick={()=>{DeleteCourses(Item.id)}} className="text-red-900 text-5xl"/>
+                        </div>
                         {
                             Item.modules.map((ItemDetails) => (
                                 <div key={ItemDetails.id}>
