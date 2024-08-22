@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { failedToast, successToast } from "../../utils/toastNotifications";
 import { CircularProgress } from '@mui/material';
+import { useSearchParams } from 'react-router-dom';
 
 export default function CreateModule() {
     const Navigate = useNavigate();
@@ -18,6 +19,8 @@ export default function CreateModule() {
     const [name, setName] = useState("")
     const [shortDescription, setShortDescription] = useState("")
     const [longdescription, setLongDescription] = useState("")
+    const [searchParams] = useSearchParams();
+    const title = searchParams.get('title'); // Get the 'title' query parameter
 
     const getCourses = async () => {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/courses`, {
@@ -26,7 +29,11 @@ export default function CreateModule() {
                 'Authorization': `Bearer ${token}`
             },
         }).then((res) => {
-            setData(res.data.courses);
+            res.data.courses.map((Item) => {
+                if(Item.name.toLowerCase() == title.toLowerCase()){
+                    setSelectedCourseId(Item.id)
+                }
+            })
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
@@ -84,26 +91,17 @@ export default function CreateModule() {
         <div className="flex flex-col px-5 pb-10 pt-3 bg-neutral-100 min-h-screen">
             <div className="flex flex-col px-5">
                 <div className="mt-14 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-w-full">
-                    Add New Course
+                    Add New Module in Web Development Course
                 </div>
                 <div className="mt-4 w-full text-base text-neutral-500 max-md:max-w-full">
                     Fill the given fields.
                 </div>
-                <div className="mt-14 max-md:mt-10 max-md:max-w-full">
+                <div className="max-md:max-w-full">
                     <div className="flex gap-5 max-md:flex-col">
                         <div className="flex flex-col w-[50%] w-full max-md:ml-0 max-md:w-full">
-                            <div className="flex flex-col flex-wrap content-start py-px text-base font-medium tracking-wider leading-4 text-neutral-800 max-md:mt-10">
-                                <div>Course Name</div>
-                                <select onChange={(e) => { setSelectedCourseId(e.target.value) }} className="px-5 py-3 mt-5 text-base tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 w-full outline-none text-black" name="" id="">
-                                    <option className="text-black" selected disabled value="">Select Course Name</option>
-                                    {
-                                        data?.map((Item) => (
-                                            <option key={Item.id} className="text-black" value={Item.id}>{Item.name}</option>
-                                        ))
-                                    }
-                                </select>
+                            <div className="flex flex-col flex-wrap content-start py-px text-base font-medium tracking-wider leading-4 text-neutral-800 max-md:mt-10 w-full">
                                 <div className="mt-10 max-md:mt-10">Module Name</div>
-                                <input onChange={(e) => { setName(e.target.value) }} className="px-5 py-3.5 mt-5 text-base tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 outline-none text-black" type="text" name="" id="" placeholder="i.e. Introduction" />
+                                <input onChange={(e) => { setName(e.target.value) }} className="px-5 w-full py-3.5 mt-5 text-base tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 outline-none text-black" type="text" name="" id="" placeholder="i.e. Introduction" />
                                 <div className="mt-10">Module Description (Short)</div>
                                 <textarea onChange={(e) => { setShortDescription(e.target.value) }} rows={2} name="" id="" className="px-5 py-3.5 mt-3.5 text-base tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none" placeholder="Type Here."></textarea>
                                 <div className="mt-10">Module Description (Detailed)</div>

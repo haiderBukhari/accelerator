@@ -95,7 +95,7 @@ export default function Courses() {
                                 {
                                     userData.isAdmin &&
                                     <div className="w-full flex justify-between my-5">
-                                        <button onClick={() => { Navigate('/dashboard/modules') }} className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl mx-auto">Add New Module</button>
+                                        <button onClick={() => { Navigate(`/dashboard/modules?title=${Item.name}`) }} className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl mx-auto">Add New Module</button>
                                     </div>
                                 }
                             </div>
