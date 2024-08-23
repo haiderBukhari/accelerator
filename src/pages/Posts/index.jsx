@@ -40,32 +40,32 @@ export default function Posts() {
     }, [fetchAgain])
 
     return (
-        <div className="flex flex-col max-w-[97%] mx-7 mt-5">
-            <div onClick={() => { setCreatePost(!createPost) }} className="flex flex-col md:flex-row gap-5 justify-between pl-5 mt-10 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:flex-wrap max-md:max-w-full h-[200px] md:h-auto">
-                <div className="flex gap-4 my-auto text-base font-medium text-zinc-500">
+        <div className="flex flex-col w-full max-w-[100%] px-5 mx-auto mt-5">
+            <div onClick={() => { setCreatePost(!createPost) }} className="flex flex-col md:flex-row gap-5 justify-between pl-5 mt-10 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:flex-wrap max-md:max-w-full h-[200px] max-md:h-[170px] md:h-auto">
+                <div className="flex gap-4 max-md:mt-5 my-auto text-base font-medium text-zinc-500">
                     <img
                         loading="lazy"
                         srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                        className="shrink-0 w-10 border-4 border-violet-800 border-solid aspect-square hidden md:block"
+                        className="shrink-0 w-10 border-4 rounded-xl border-violet-800 border-solid aspect-square hidden md:block"
                     />
-                    <div className="flex-auto my-auto cursor-pointer bg-opacity-80">Let’s make something new!</div>
+                    <div className="flex-auto my-auto cursor-pointer bg-opacity-80 text-[#8A8A8A]">Let’s make something new!</div>
                 </div>
-                <div className="flex flex-col justify-center self-end md:self-auto mr-4 px-9 py-4 bg-violet-800 rounded-3xl border border-solid border-neutral-400 max-md:px-5 h-[50px] w-[170px] mb-4 mt-0 md:mt-4 pl-5">
-                    <div className="flex gap-5 justify-between">
+                <div className="flex flex-col justify-center self-end md:self-auto m-0 h-auto p-0 w-full max-w-[160px] max-md:max-w-[150px] py-2 md:py-4 mb-3 mr-2 md:mr-0 md:mb-0 bg-[#4C1DBE] rounded-xl md:rounded-3xl border border-solid border-[#AAAAAA]">
+                    <div className="flex gap-0.5 justify-between px-4">
                         <img
                             loading="lazy"
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/5c6a5bfa10bfc829411928f0545a1d2f4e7be548a242a2f03a64730f289bb110?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                            className="shrink-0 aspect-square w-[30px]"
+                            className="shrink-0 aspect-square w-[20px]"
                         />
                         <img
                             loading="lazy"
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/9928e221ff81dcf989ef8b7146178be0ddd02598d4bac98b3ccafb8a5bc31b37?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                            className="shrink-0 aspect-square w-[30px]"
+                            className="shrink-0 aspect-square w-[20px]"
                         />
                         <img
                             loading="lazy"
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/99a946cab8c72acff3b6467ffde7e90e4ede4b672a22273cb1a6a2a56cc84de5?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                            className="shrink-0 aspect-square w-[30px]"
+                            className="shrink-0 aspect-square w-[20px]"
                         />
                     </div>
                 </div>
@@ -77,50 +77,53 @@ export default function Posts() {
             }
             {
                 data?.map((Item) => (
-                    <div key={Item.text ?? ''} className="flex flex-col px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pl-5 max-md:max-w-full">
+                    <div key={Item.text ?? ''} className="flex flex-col px-5 md:px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400  max-md:max-w-full">
                         <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
-                            <div onClick={()=>{Navigate(`/dashboard/profile/${Item._id}`)}} className="flex gap-4 cursor-pointer">
+                            <div onClick={()=>{Navigate(`/dashboard/profile/${Item._id}`)}} className="flex gap-2 md:gap-4 cursor-pointer">
                                 <img
                                     loading="lazy"
                                     src={Item.userInfo.profilePicture ? Item.userInfo.profilePicture : professionalPicture}
-                                    className="shrink-0 border-4 border-violet-800 border-solid aspect-square w-[60px]"
+                                    className="shrink-0 border-4 border-violet-800 border-solid aspect-square w-[45px] max-md:h-[45px] md:w-[60px] rounded-xl"
                                 />
                                 <div className="flex flex-col py-1 my-auto">
-                                    <div className="text-base font-medium text-zinc-800">
+                                    <div className="text-sm md:text-base font-medium text-zinc-800">
                                         {Item.userInfo.firstName} {Item.userInfo.lastName}
                                     </div>
-                                    <div className="mt-2 text-xs text-neutral-500">{timeElapsed(Item.createdAt)}</div>
+                                    <div className="mt-0 md:mt-2 text-xs text-neutral-500">{timeElapsed(Item.createdAt)}</div>
                                 </div>
                             </div>
                             <img
                                 loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/17fb2d504a4a46adf611331825b24e3490f3ff0a7aa1ff0f0783d4da246b0be9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                className="shrink-0 my-auto aspect-square w-[25px]"
+                                className="shrink-0 my-auto aspect-square w-[20px] md:w-[25px]"
                             />
                         </div>
+                        
                         {
-                            Item.text && <div className="self-start mt-6 text-base text-zinc-800 max-md:max-w-full">
+                            Item.text && <div className="self-start mt-6 text-base text-[#2A2A2A] max-md:max-w-full">
                                 {Item.text}
                             </div>
                         }
+                        <div className="mt-6 w-full border border-solid border-neutral-400 overflow-hidden rounded-xl">
                         {
                             Item.imageUrl && <img
                                 loading="lazy"
                                 src={Item.imageUrl}
-                                className="self-center mt-6 w-full border border-solid border-neutral-400 max-w-[784px] h-auto max-md:max-w-full"
-                                style={{ aspectRatio: '2.63' }}
+                                className="w-full h-full md:max-h-[300px] max-h-[120px]"
+                                // style={{ aspectRatio: '1.63' }}
                             />
                         }
                         {
                             Item.videoUrl && <video className="mt-6" src={Item.videoUrl} controls />
                         }
+                        </div>
                         <div className="flex gap-5 justify-between px-px mt-6 w-full text-sm max-md:flex-wrap max-md:max-w-full">
                             <div className="flex w-full flex-col justify-center text-neutral-400 max-md:max-w-full">
                                 <button onClick={() => { setOpen(!open) }} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full hidden md:block">
                                     Write a comment
                                 </button>
                             </div>
-                            <div className="flex max-w-[200px] justify-between w-full my-auto whitespace-nowrap text-neutral-400">
+                            <div className="flex max-w-[150px] md:max-w-[200px] justify-between w-full my-auto whitespace-nowrap text-neutral-400">
                                 <img
                                     loading="lazy"
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/057f6797c1a65234653a3b14b6904c6026c5676f9bba3f9afe3213ffb0ea12d6?apiKey=cf358c329e0d49a792d02d32277323ef&"

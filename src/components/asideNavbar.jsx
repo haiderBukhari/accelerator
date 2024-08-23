@@ -44,13 +44,13 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
     return (
         <div
             style={{ zIndex: 10 }}
-            className={`flex-col py-5 w-full bg-neutral-200 max-w-[290px]  ${location.pathname === "/home"
+            className={`flex-col py-5 w-full bg-neutral-200 max-w-[290px] md:max-w-[250px] lg:max-w-[240px]  max-md:h-full ${location.pathname === "/home"
                     ? "flex"
                     : `${navbarOpen ? "fixed overflow-auto top-0 left-0" : "hidden md:flex"
                     } `
                 }`}
         >
-            <div className="flex flex-col items-start pl-9 w-full text-2xl font-bold whitespace-nowrap text-zinc-500">
+            <div className="flex flex-col items-start pl-9 md:pl-5 lg:pl-9 w-full text-2xl font-bold whitespace-nowrap text-zinc-500">
                 <div
                     onClick={() => setNavbarOpen(false)}
                     className="flex justify-between w-full items-center pr-4"
@@ -70,15 +70,15 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                 <div className="flex flex-col grow shrink-0 mt-1 basis-0 w-fit">
                     {hyperLinks.map((hyperLink) => (
                         <div
-                            className="flex items-center h-[35px] my-1"
+                            className="flex items-center h-[35px] my-1 relative"
                             key={hyperLink.icon}
                         >
                             {(Location.pathname === hyperLink.link ||
                                 location.pathname.includes(hyperLink.link)) && (
-                                    <div className="shrink-0 w-1.5 bg-violet-800 h-[35px]" />
+                                    <div className="shrink-0 w-1.5 bg-violet-800 h-[35px] absolute left-0 top-0" />
                                 )}
                             <div
-                                className={`flex gap-2.5 pr-5 ml-8 ${Location.pathname === hyperLink.link
+                                className={`flex gap-2.5 pr-5 ml-8 md:ml-5 ${Location.pathname === hyperLink.link
                                         ? "text-violet-800"
                                         : "text-neutral-500 w-18.5"
                                     }`}
@@ -96,7 +96,7 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                     ))}
                     <div className="flex cursor-pointer items-center h-[35px] my-1">
                         <div onClick={()=>{ dispatch(removeUserDetails()); Navigate('/'); successToast("Successfully Loged out")}}
-                            className={`flex gap-2.5 pr-5 ml-8 text-neutral-500 w-18.5 `}
+                            className={`flex gap-2.5 pr-5 ml-8 md:ml-5 text-neutral-500 w-18.5 `}
                         >
                             <LogOut className="w-[20px]"/>
                             <p className="text-sm">
@@ -106,7 +106,7 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col items-start pl-9 mt-5 w-full">
+            <div className="flex flex-col items-start pl-9 md:pl-5 mt-5 w-full">
                 <div className="shrink-0 h-px border border-solid bg-stone-300 border-stone-300" />
                 <div className="z-10 shrink-0 h-px border border-solid bg-stone-300 border-stone-300" />
                 <div className="mt-5 text-lg font-semibold text-zinc-500">
