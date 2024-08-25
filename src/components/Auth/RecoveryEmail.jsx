@@ -33,7 +33,8 @@ const RecoveryEmail = () => {
             jwt: Item.data.token,
             firstName: Item.data.firstName,
             lastName: Item.data.lastName,
-            profilePicture: Item.data.profilePicture
+            profilePicture: Item.data.profilePicture,
+            id: Item.data.id
           }))
           successToast('Recovery Email added Successfully')
         })

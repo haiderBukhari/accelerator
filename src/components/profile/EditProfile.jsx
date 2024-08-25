@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { failedToast, successToast } from '../../utils/toastNotifications';
 import { useDispatch } from 'react-redux';
 import { changeFirstName, changeLastName, changeProfilePicture } from '../../features/profile';
+import { useNavigate } from 'react-router-dom';
 
 const EditProfile = ({open, handleClose, loading, setLoading, clickedSave, setSelectedContent}) => {
     const [userData, setUserData] = useState({});
@@ -11,7 +12,9 @@ const EditProfile = ({open, handleClose, loading, setLoading, clickedSave, setSe
     const [profilePhoto, setProfilePhoto] = useState(null);
     const fileInputRef = useRef(null);
     const token = useSelector(state=>state.profile.jwt);
+    const id = useSelector(state=>state.profile.id);
     const dispatch = useDispatch();
+    const Navigate = useNavigate();
 
     const handlePhotoChange = (event) => {
         setProfilePhoto(event.target.files[0]);
@@ -119,6 +122,7 @@ const EditProfile = ({open, handleClose, loading, setLoading, clickedSave, setSe
                     <div className="my-auto text-[17px] ml-0">Change Profile Picture</div>
                 </div>
             </div>
+            <button onClick={()=>{Navigate(`/dashboard/profile/${id}`)}} className='w-[200px] mt-5 px-10 py-2 rounded-xl text-center text-white bg-[#4C1DBE]'>View Profile</button>
             <input
                 type="file"
                 accept="image/*"

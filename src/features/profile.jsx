@@ -7,6 +7,7 @@ export const profileSlice = createSlice({
         firstName: localStorage.getItem('firstName') || '',
         lastName: localStorage.getItem('lastName') || '',
         profilePicture: localStorage.getItem('profilePicture') || '',
+        id: localStorage.getItem('id')
     },
     reducers: {
         addUserDetails: (state, action) => {
@@ -14,16 +15,19 @@ export const profileSlice = createSlice({
             state.firstName = action.payload.firstName;
             state.lastName = action.payload.lastName;
             state.profilePicture = action.payload.profilePicture;
+            state.id = action.payload.id;
             localStorage.setItem('jwt', action.payload.jwt);
             localStorage.setItem('firstName', action.payload.firstName);
             localStorage.setItem('lastName', action.payload.lastName);
             localStorage.setItem('profilePicture', action.payload.profilePicture);
+            localStorage.setItem('id', action.payload.id);
         },
         removeUserDetails: (state) => {
             state.jwt = '';
             state.firstName = '';
             state.lastName = '';
             state.profilePicture = '';
+            state.id = '';
             localStorage.removeItem('jwt');
             localStorage.removeItem('firstName');
             localStorage.removeItem('lastName');

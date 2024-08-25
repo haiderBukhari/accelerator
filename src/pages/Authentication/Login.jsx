@@ -28,7 +28,8 @@ const Login = () => {
                 jwt: Item.data.token,
                 firstName: Item.data.firstName,
                 lastName: Item.data.lastName,
-                profilePicture: Item.data.profilePicture
+                profilePicture: Item.data.profilePicture,
+                id: Item.data.id
               }))
                 if(!Item.data.recoveryEmail){
                 successToast("Successfully LogedIn")
