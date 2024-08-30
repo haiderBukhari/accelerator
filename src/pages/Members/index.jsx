@@ -83,19 +83,19 @@ export default function Members() {
                 </div>
             </div>
             <div className="flex items-center gap-5 pr-20 mt-10 font-medium leading-[95%] max-md:flex-wrap max-md:pr-5">
-                <div className="flex flex-col w-full md:w-auto justify-center">
+                <div className="flex flex-col w-full max-w-[300px] justify-center">
                     <div className="text-base tracking-wider text-neutral-800">
                         Name / Keyword
                     </div>
-                    <input type='text' className="justify-center items-start px-5 py-3 mt-3.5 text-base tracking-wider rounded-xl border border-solid outline-none bg-zinc-300 border-stone-300 text-neutral-400 w-full md:w-auto" placeholder="i.e. jhon_e,abc@example.com" />
+                    <input type='text' className="justify-center items-start px-5 py-3 mt-3.5 text-base tracking-wider rounded-xl border border-solid outline-none bg-zinc-300 border-stone-300 text-neutral-400 w-full max-md:max-w-full focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300]" placeholder="i.e. jhon_e,abc@example.com" />
                 </div>
-                <div className="flex flex-col justify-center py-px w-full md:w-auto">
+                <div className="flex flex-col w-full max-w-[300px] justify-center">
                     <div className="text-base tracking-wider text-neutral-800">
                         Location
                     </div>
-                    <input type='text' className="justify-center items-start px-5 py-3 mt-5 text-base tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none w-full md:w-auto" placeholder="i.e. jhon_e,abc@example.com" />
+                    <input type='text' className="justify-center items-start px-5 py-3 mt-3.5 text-base tracking-wider rounded-xl border border-solid outline-none bg-zinc-300 border-stone-300 text-neutral-400 w-full max-md:max-w-full focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300]" placeholder="i.e. jhon_e,abc@example.com" />
                 </div>
-                <div className="justify-center self-end px-12 py-2.5 text-xl leading-5 text-white bg-violet-800 rounded-2xl max-md:px-5 cursor-pointer mt-5 md:mt-0">
+                <div className="flex justify-center self-end px-12 py-3.5 text-xl leading-5 text-white bg-violet-800 hover:bg-[#FA5300] rounded-2xl max-md:px-5 cursor-pointer mt-5 md:mt-0">
                     Search People
                 </div>
             </div>
