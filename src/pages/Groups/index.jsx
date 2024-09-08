@@ -7,8 +7,6 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 export default function Groups() {
-
-    const text = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.';
     const Navigate = useNavigate();
 
     const [open, setOpen] = useState(false)
@@ -87,7 +85,7 @@ export default function Groups() {
                     </div>
                 ))
             }
-            <div className="self-center mt-14 text-base font-medium text-zinc-600 max-md:mt-10">
+            {/* <div className="self-center mt-14 text-base font-medium text-zinc-600 max-md:mt-10">
                 Show More
             </div>
             <img
@@ -95,7 +93,7 @@ export default function Groups() {
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/921125f176c766753f5022d43c5fc218a48df3d917ea9d45a70550fa14d9058a?apiKey=cf358c329e0d49a792d02d32277323ef&"
                 className="self-center mt-2 mb-4 border-solid aspect-[8.33] border-[3px] rounded-xl border-zinc-600 stroke-[5px] stroke-zinc-600 w-[43px]"
             />
-
+ */}
             <React.Fragment>
                 <Dialog
                     open={open}
