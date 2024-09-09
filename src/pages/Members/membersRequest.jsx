@@ -97,10 +97,16 @@ export default function MembersRequests() {
                                         <div className="self-start text-xs text-violet-800">@{Item.friendDetails.firstName.toLowerCase().split(" ".slice(""))}</div>
                                     </div>
                                     <div className="flex gap-3.5 items-start self-stretch my-auto text-sm font-medium leading-none whitespace-nowrap">
-                                        <div onClick={() => { addFriend(Item.owner, Item.friendId) }} className="overflow-hidden hover:opacity-65 gap-3.5 self-stretch px-3.5 py-2.5 cursor-pointer text-white bg-violet-800 rounded-lg">
+                                        <div onClick={(e) => { 
+                                            e.stopPropagation();
+                                            addFriend(Item.owner, Item.friendId) 
+                                        }} className="overflow-hidden hover:opacity-65 gap-3.5 self-stretch px-3.5 py-2.5 cursor-pointer text-white bg-violet-800 rounded-lg">
                                             Accept
                                         </div>
-                                        <div onClick={() => { declineFriendRequest(Item.owner, Item.friendId) }} className="overflow-hidden cursor-pointer hover:opacity-65 gap-3.5 self-stretch px-3.5 py-2.5 rounded-lg bg-stone-300 text-zinc-500">
+                                        <div onClick={(e) => { 
+                                            e.stopPropagation();
+                                            declineFriendRequest(Item.owner, Item.friendId) 
+                                        }} className="overflow-hidden cursor-pointer hover:opacity-65 gap-3.5 self-stretch px-3.5 py-2.5 rounded-lg bg-stone-300 text-zinc-500">
                                             Decline
                                         </div>
                                     </div>

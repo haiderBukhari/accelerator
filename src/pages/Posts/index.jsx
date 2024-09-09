@@ -7,6 +7,7 @@ import { failedToast } from "../../utils/toastNotifications";
 import professionalPicture from '../../assets/professionalPicture.jpeg'
 import { formatDistanceToNow } from 'date-fns';
 import { useNavigate } from "react-router-dom";
+import { Heart } from 'lucide-react';
 
 export default function Posts() {
     const Navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function Posts() {
     const [fetched, setFetched] = useState(false);
     const [fetchAgain, setFetchAgain] = useState(false);
     const token = useSelector(state => state.profile.jwt);
+    const id = useSelector(state => state.profile.id);
 
     const timeElapsed = (dateString) => {
         const date = new Date(dateString);
@@ -35,6 +37,21 @@ export default function Posts() {
             return failedToast(err.response.data.error);
         });
     }
+
+    async function handleLike(id) {
+        await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/post`, {
+            id: id
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
     useEffect(() => {
         getPosts();
     }, [fetchAgain])
@@ -76,10 +93,10 @@ export default function Posts() {
                 </div>
             }
             {
-                data?.map((Item) => (
+                data?.map((Item, index) => (
                     <div key={Item.text ?? ''} className="flex flex-col px-5 md:px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400  max-md:max-w-full">
                         <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
-                            <div onClick={()=>{Navigate(`/dashboard/profile/${Item._id}`)}} className="flex gap-2 md:gap-4 cursor-pointer">
+                            <div onClick={() => { Navigate(`/dashboard/profile/${Item._id}`) }} className="flex gap-2 md:gap-4 cursor-pointer">
                                 <img
                                     loading="lazy"
                                     src={Item.userInfo.profilePicture ? Item.userInfo.profilePicture : professionalPicture}
@@ -98,24 +115,24 @@ export default function Posts() {
                                 className="shrink-0 my-auto aspect-square w-[20px] md:w-[25px]"
                             />
                         </div>
-                        
+
                         {
                             Item.text && <div className="self-start mt-6 text-base text-[#2A2A2A] max-md:max-w-full">
                                 {Item.text}
                             </div>
                         }
                         <div className="mt-6 w-full border border-solid border-neutral-400 overflow-hidden rounded-xl">
-                        {
-                            Item.imageUrl && <img
-                                loading="lazy"
-                                src={Item.imageUrl}
-                                className="w-full h-full md:max-h-[300px] max-h-[120px]"
+                            {
+                                Item.imageUrl && <img
+                                    loading="lazy"
+                                    src={Item.imageUrl}
+                                    className="w-full h-full md:max-h-[300px] max-h-[120px]"
                                 // style={{ aspectRatio: '1.63' }}
-                            />
-                        }
-                        {
-                            Item.videoUrl && <video className="mt-6" src={Item.videoUrl} controls />
-                        }
+                                />
+                            }
+                            {
+                                Item.videoUrl && <video className="mt-6" src={Item.videoUrl} controls />
+                            }
                         </div>
                         <div className="flex gap-5 justify-between px-px mt-6 w-full text-sm max-md:flex-wrap max-md:max-w-full">
                             <div className="flex w-full flex-col justify-center text-neutral-400 max-md:max-w-full">
@@ -124,12 +141,32 @@ export default function Posts() {
                                 </button>
                             </div>
                             <div className="flex max-w-[150px] md:max-w-[200px] justify-between w-full my-auto whitespace-nowrap text-neutral-400">
-                                <img
-                                    loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/057f6797c1a65234653a3b14b6904c6026c5676f9bba3f9afe3213ffb0ea12d6?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="shrink-0 aspect-square w-[25px]"
-                                />
-                                <div className="my-auto">{Item.likes}</div>
+                                {
+                                    Item.likeBy?.includes(id) ? <Heart onClick={() => {
+                                        setData(
+                                            data.map((post) => {
+                                                if (post._id === Item._id) {
+                                                    post.likes -= 1;
+                                                    post.likeBy = post.likeBy.filter((like) => like !== id);
+                                                }
+                                                return post;
+                                            })
+                                        )
+                                        handleLike(Item._id)
+                                    }} className="cursor-pointer text-red-600" /> : <Heart onClick={() => {
+                                        setData(
+                                            data.map((post) => {
+                                                if (post._id === Item._id) {
+                                                    post.likes += 1;
+                                                    post.likeBy.push(id);
+                                                }
+                                                return post;
+                                            })
+                                        )
+                                        handleLike(Item._id)
+                                    }} className="cursor-pointer" />
+                                }
+                                <div className="my-auto ml-[-10px]">{Item.likes}</div>
                                 <img
                                     loading="lazy"
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/81b3988206ae45b69d451692ab183825d130156ed8d4f79341e2ae1d2c11b2ce?apiKey=cf358c329e0d49a792d02d32277323ef&"
