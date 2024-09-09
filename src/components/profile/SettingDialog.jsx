@@ -6,6 +6,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import EditProfile from './EditProfile';
 import { CircularProgress } from '@mui/material';
+import NotificationSettings from './NotificationSetting';
+import { AppearanceSettings } from './Appearance';
+import { FeedbackSettings } from './Feedback';
 
 export default function SettingDialog({ open, setOpen }) {
     const [loading, setLoading] = React.useState(false);
@@ -62,7 +65,7 @@ export default function SettingDialog({ open, setOpen }) {
                                     />
                                     <div className="my-auto">Edit Profile</div>
                                 </div>
-                                <div className="flex gap-5 px-3 cursor-pointer hover:text-black mt-7 whitespace-nowrap">
+                                <div onClick={() => { setSelectedContent(3) }} className="flex gap-5 px-3 cursor-pointer hover:text-black mt-7 whitespace-nowrap">
                                     <img
                                         loading="lazy"
                                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/7539e379e610842937703fd2a7241d8573c557bb8002614fdc9ae897120ac117?"
@@ -70,7 +73,7 @@ export default function SettingDialog({ open, setOpen }) {
                                     />
                                     <div className="my-auto">Notifications</div>
                                 </div>
-                                <div className="flex gap-5 px-3 cursor-pointer hover:text-black mt-7">
+                                <div onClick={() => { setSelectedContent(4) }} className="flex gap-5 px-3 cursor-pointer hover:text-black mt-7">
                                     <img
                                         loading="lazy"
                                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/6d1ed8ad1a558aee4cc3fa462bdea2f769416110e414bb49d8af84c1cde9575f?"
@@ -78,7 +81,7 @@ export default function SettingDialog({ open, setOpen }) {
                                     />
                                     <div>Appearance & Sounds</div>
                                 </div>
-                                <div className="flex gap-5 px-3 cursor-pointer hover:text-black mt-7">
+                                <div onClick={()=>{setSelectedContent(5)}} className="flex gap-5 px-3 cursor-pointer hover:text-black mt-7">
                                     <img
                                         loading="lazy"
                                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/f794a07e758ad271661c0ba41f6e318af16842e9b2bc7776bd454b18dfa34ef3?"
@@ -106,6 +109,12 @@ export default function SettingDialog({ open, setOpen }) {
                         }
                         {
                             selectedContent === 2 && <EditProfile open={open} handleClose={handleSubComponentClose} loading={loading} setLoading={setLoading} clickedSave={clickedSave} setSelectedContent={setSelectedContent}/>
+                        }
+                        {
+                            selectedContent === 4 && <AppearanceSettings open={open} handleClose={handleSubComponentClose} loading={loading} setLoading={setLoading} clickedSave={clickedSave} setSelectedContent={setSelectedContent}/>
+                        }
+                        {
+                            selectedContent === 5 && <FeedbackSettings open={open} handleClose={handleSubComponentClose} loading={loading} setLoading={setLoading} clickedSave={clickedSave} setSelectedContent={setSelectedContent}/>
                         }
                     </DialogContentText>
                 </DialogContent>

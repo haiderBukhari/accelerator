@@ -6,12 +6,14 @@ import { useSelector } from "react-redux";
 import defaultPic from '../../assets/professionalPicture.jpeg'
 import { useParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
+import { Heart } from "lucide-react";
 
 export default function ProfilePage() {
     const [selected, setSelected] = useState(1);
     const Navigate = useNavigate();
     const [userData, setUserData] = useState({})
     const token = useSelector(state => state.profile.jwt);
+    const userId = useSelector(state => state.profile.id);
     const { id } = useParams();
     const [posts, setPosts] = useState([]);
     const [fetched, setFetched] = useState(false);
@@ -53,6 +55,20 @@ export default function ProfilePage() {
         getPosts();
     }, [id])
 
+    async function handleLike(id) {
+        await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/post`, {
+            id: id
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
     return (
         <div className="flex flex-col mx-3">
             <img
@@ -84,7 +100,7 @@ export default function ProfilePage() {
                                         {userData?.firstName} {" "} {userData?.lastName}
                                     </div>
                                     <div className="flex gap-5 mt-3.5 text-lg">
-                                        <div className="justify-center px-5 py-1.5 text-white bg-violet-800 rounded-md border border-solid border-neutral-400 max-md:px-5">
+                                        <div onClick={() => { Navigate('/dashboard/messages') }} className="justify-center px-5 py-1.5 text-white bg-violet-800 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer">
                                             Message
                                         </div>
                                     </div>
@@ -98,14 +114,11 @@ export default function ProfilePage() {
                     <div onClick={() => setSelected(1)} className={`justify-center px-5 py-2 ${selected === 1 ? 'bg-violet-800 text-zinc-100' : 'bg-stone-300 text-black'} rounded-xl cursor-pointer`}>
                         Profile
                     </div>
-                    {/* <div onClick={() => setSelected(2)} className={`justify-center px-5 py-2 ${selected === 2 ? 'bg-violet-800 text-zinc-100' : 'bg-stone-300 text-black'} rounded-xl cursor-pointer`}>
-                        Photos
-                    </div> */}
                 </div>
                 <div className="shrink-0 mt-5 h-px border border-solid bg-neutral-400 border-neutral-400 max-md:max-w-full" />
                 {
                     selected === 1 && <div className="my-10 max-md:max-w-full">
-                        <div className="flex gap-5 max-md:flex-col max-md:gap-0">
+                        <div className="flex gap-5 max-md:flex-col max-md:gap-0 flex-wrap md:flex-nowrap">
                             <div className="flex flex-col w-auto max-md:ml-0 max-md:w-full">
                                 <div className="flex flex-col grow max-md:mt-5">
                                     <div className="flex flex-col px-5 py-9 text-base font-medium rounded-3xl border border-solid bg-neutral-200 border-neutral-400 text-neutral-500">
@@ -177,13 +190,33 @@ export default function ProfilePage() {
                                                         Write a comment
                                                     </button>
                                                 </div>
-                                                <div className="flex max-w-[200px] justify-between w-full my-auto whitespace-nowrap text-neutral-400">
-                                                    <img
-                                                        loading="lazy"
-                                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/057f6797c1a65234653a3b14b6904c6026c5676f9bba3f9afe3213ffb0ea12d6?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                        className="shrink-0 aspect-square w-[25px]"
-                                                    />
-                                                    <div className="my-auto">{Item.likes}</div>
+                                                <div className="flex max-w-[150px] md:max-w-[200px] justify-between w-full my-auto whitespace-nowrap text-neutral-400">
+                                                    {
+                                                        Item.likeBy?.includes(id) ? <Heart onClick={() => {
+                                                            setPosts(
+                                                                posts.map((post) => {
+                                                                    if (post._id === Item._id) {
+                                                                        post.likes -= 1;
+                                                                        post.likeBy = post.likeBy.filter((like) => like !== userId);
+                                                                    }
+                                                                    return post;
+                                                                })
+                                                            )
+                                                            handleLike(Item._id)
+                                                        }} className="cursor-pointer text-red-600" /> : <Heart onClick={() => {
+                                                            setPosts(
+                                                                posts.map((post) => {
+                                                                    if (post._id === Item._id) {
+                                                                        post.likes += 1;
+                                                                        post.likeBy.push(userId);
+                                                                    }
+                                                                    return post;
+                                                                })
+                                                            )
+                                                            handleLike(Item._id)
+                                                        }} className="cursor-pointer" />
+                                                    }
+                                                    <div className="my-auto ml-[-10px]">{Item.likes}</div>
                                                     <img
                                                         loading="lazy"
                                                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/81b3988206ae45b69d451692ab183825d130156ed8d4f79341e2ae1d2c11b2ce?apiKey=cf358c329e0d49a792d02d32277323ef&"

@@ -9,6 +9,8 @@ export default function Messages() {
     const Navigate = useNavigate();
     const token = useSelector(state => state.profile.jwt);
     const [userList, setUserList] = useState([])
+    const [tempUserList, setTempUserList] = useState([])
+    
     
     async function getFriends() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/chat/friends`, {
@@ -18,6 +20,7 @@ export default function Messages() {
             },
         }).then((Item) => {
             setUserList(Item.data);
+            setTempUserList(Item.data);
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
@@ -32,7 +35,15 @@ export default function Messages() {
                 <div className="flex flex-col max-md:ml-0 max-md:w-full w-full max-w-[100%] lg:max-w-[45%] xl:max-w-[30%] bg-[#F1F1F1] max-md:bg-[transparent]">
                     <div className="flex flex-col grow px-5 lg:px-6 md:pt-11 pb-20 w-full text-base bg-[#F1F1F1] md:bg-transparent max-md:px-5 max-md:mt-10 max-md:max-w-full h-full">
                         <div className="flex gap-5 items-start px-5 py-3 rounded-xl border border-solid bg-neutral-200 border-stone-300 text-neutral-500 max-md:pr-5">
-                            <input className="flex-auto my-auto bg-transparent outline-none text-zinc-800" type='text' placeholder="Search Friends" />
+                            <input onChange={(e)=>{
+                                const data = tempUserList.filter((name) => {
+                                    if(name.firstName.toLowerCase().includes(e.target.value) || name.lastName.toLowerCase().includes(e.target.value)){
+                                        return name;
+                                    }
+                                })
+                                console.log(data)
+                                setUserList(data)
+                            }} className="flex-auto my-auto bg-transparent outline-none text-zinc-800" type='text' placeholder="Search Friends" />
                             <img
                                 loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/7e30962ab32bdd75648fa143798e896d0b14004c96254bf8aa5f3aa42c5e9269?apiKey=cf358c329e0d49a792d02d32277323ef&"

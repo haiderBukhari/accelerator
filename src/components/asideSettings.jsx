@@ -67,9 +67,10 @@ export default function AsideSettings() {
                         <div className='bg-red-500 absolute top-[-10px] max-md:top-[0px] right-[-3px] rounded-full flex justify-center items-center h-7 w-7 font-bold text-white text-center'>{unreadNotifications}</div>
                     </div>
                     <img
+                        onClick={() => { setOpen(!open) }} 
                         loading="lazy"
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/44bac1ef3fcf5c5c8e6360efc056bd45ccc33e5414f6fdcb3d5a1a4d354909b9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                        className="shrink-0 aspect-square w-[35px] xl:w-[45px]"
+                        className="shrink-0 aspect-square w-[35px] xl:w-[45px] cursor-pointer"
                     />
                 </div>
                 <div onClick={() => { setOpen(!open) }} className="flex gap-2 xl:gap-4 text-base font-medium rounded-lg xl:rounded-2xl border border-solid bg-neutral-200 border-neutral-400 text-zinc-800 cursor-pointer w-full max-w-[70%]">
