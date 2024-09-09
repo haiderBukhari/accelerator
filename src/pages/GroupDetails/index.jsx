@@ -5,7 +5,10 @@ import defaultPic from '../../assets/professionalPicture.jpeg'
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { formatDistanceToNow } from "date-fns";
-import { failedToast } from "../../utils/toastNotifications";
+import { failedToast, successToast } from "../../utils/toastNotifications";
+import { ChevronLeft, ThumbsUp } from 'lucide-react';
+import CreateFolderDialog from "../../components/groups/createFolder";
+import CreateFolderImageDialog from "../../components/groups/uploadImage";
 
 export default function GroupsDetails() {
     const [selected, setSelected] = useState(1);
@@ -13,14 +16,106 @@ export default function GroupsDetails() {
     const [searchParams] = useSearchParams();
     const id = searchParams.get("id");
     const [userData, setUserData] = useState({})
+    const [userData1, setUserData1] = useState({})
     const token = useSelector(state => state.profile.jwt);
+    const userId = useSelector(state => state.profile.id);
     const [posts, setPosts] = useState([]);
     const [fetched, setFetched] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [open1, setOpen1] = useState(false);
+    const [groupFolders, setGroupFolders] = useState([])
+    const [displayFolder, setDisplayFolder] = useState(true)
+    const [folderId, setFolderId] = useState("")
+    const [folderImages, setFolderImage] = useState([])
+    const [fetchAgain, setFetchAgain] = useState(false);
+    const [joinedUsers, setJoinedUsers] = useState([])
+    const [pendingUsers, setPendingUsers] = useState([])
 
     const timeElapsed = (dateString) => {
         const date = new Date(dateString);
         return formatDistanceToNow(date, { addSuffix: true });
     };
+
+    async function getGroupUsersData() {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/allusers?groupId=${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setJoinedUsers(Item.data.joinedUsers)
+            setPendingUsers(Item.data.pendingUsers)
+            // setUserData(Item.data.user);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+    const getGroupsFolders = async () => {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/groups-folders?groupId=${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setGroupFolders(Item.data.folders);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+    useEffect(() => {
+        if (fetchAgain) {
+            getGroupsFolders();
+            if (folderId) {
+                getFolderImages(folderId);
+            }
+            setFetchAgain(false);
+        }
+    }, [fetchAgain])
+
+    const getFolderImages = async (id) => {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/groups-folders/images?folderId=${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setFolderImage(Item.data.folders);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+    async function getUserData() {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/userData`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setUserData1(Item.data.user);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+    const handleGroupJoin = async () => {
+        await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/groups`, {
+            id: id
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            successToast(Item.data.message)
+            setUserData(Item.data.group)
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
     async function getGroupData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/${id}`, {
             headers: {
@@ -50,8 +145,11 @@ export default function GroupsDetails() {
         });
     }
     useEffect(() => {
+        getUserData();
         getGroupData();
         getPosts();
+        getGroupsFolders();
+        getGroupUsersData()
     }, [id])
 
 
@@ -78,13 +176,22 @@ export default function GroupsDetails() {
                                 <div className="text-3xl font-bold text-neutral-700 w-full ">
                                     {userData?.name}
                                 </div>
-                                <div className="flex gap-5 mt-3.5 text-lg">
+                                <div className="flex gap-5 mt-3.5 text-lg items-center">
+                                    {
+                                        !userData1.isAdmin && <ThumbsUp className="cursor-pointer" />
+                                    }
                                     <div className="justify-center px-2.5 py-1.5 font-medium text-violet-800 rounded-md border border-violet-800 border-solid bg-blue-700 bg-opacity-20">
                                         {userData?.likes} Likes
                                     </div>
-                                    <div className="justify-center px-5 py-1.5 text-white bg-violet-800 rounded-md border border-solid border-neutral-400 max-md:px-5">
-                                        Join Now
-                                    </div>
+                                    {
+                                        !userData1?.isAdmin && (!userData?.joinedUsers?.includes(userId) && !userData?.pendingUsers?.includes(userId)) ? <div onClick={handleGroupJoin} className="justify-center px-5 py-1.5 text-white bg-violet-800 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer ">
+                                            Join Now
+                                        </div> : !userData1?.isAdmin && (userData?.joinedUsers?.includes(userId)) ? <div onClick={handleGroupJoin} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer ">
+                                            Leave Group
+                                        </div> : !userData1?.isAdmin && (userData?.pendingUsers?.includes(userId)) && <div onClick={handleGroupJoin} className="justify-center px-5 py-1.5 text-white bg-green-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer ">
+                                            Request Sent To Admin
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -175,7 +282,7 @@ export default function GroupsDetails() {
                                         }
                                         <div className="flex gap-5 justify-between px-px mt-6 w-full text-sm max-md:flex-wrap max-md:max-w-full">
                                             <div className="flex w-full flex-col justify-center text-neutral-400 max-md:max-w-full">
-                                                <button onClick={() => { setOpen(!open) }} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full hidden md:block">
+                                                <button onClick={() => { setOpen1(!open1) }} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full hidden md:block">
                                                     Write a comment
                                                 </button>
                                             </div>
@@ -207,295 +314,139 @@ export default function GroupsDetails() {
                     </div>
                 }
                 {
-                    selected === 2 && <div className="my-10 flex flex-col px-5 pt-8 text-xl rounded-3xl border border-solid bg-neutral-200 border-neutral-400 text-neutral-700">
-                        <div className="font-semibold max-md:max-w-full">Photos</div>
-                        <div className="mt-4 text-base font-medium text-neutral-500 max-md:max-w-full">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting
-                            industry. Lorem Ipsum has been the industrys standard dummy text ever
-                            since the 1500s.
+                    selected === 2 && displayFolder && <div className="my-10 flex flex-col px-5 pt-8 text-xl rounded-3xl border border-solid bg-neutral-200 border-neutral-400 text-neutral-700">
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <div className="font-semibold max-md:max-w-full">Folder</div>
+                                <div className="mt-4 text-base font-medium text-neutral-500 max-md:max-w-full">
+                                    Folders Created by the members present in this Groups.
+                                </div>
+                            </div>
+                            {
+                                userData.joinedUsers.includes(userId) && <div onClick={() => { setOpen(true) }} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer w-[180px] text-center">
+                                    Create Folder
+                                </div>
+                            }
                         </div>
                         <div className="flex gap-2.5 self-center mt-9 max-md:flex-wrap">
-                            <div className="flex flex-col pb-2">
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="self-center border-2 border-solid aspect-square border-neutral-400 w-[150px]"
-                                />
-                                <div className="mt-4">Folder Name</div>
-                            </div>
-                            <div className="flex flex-col pb-2">
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="self-center border-2 border-solid aspect-square border-neutral-400 w-[150px]"
-                                />
-                                <div className="mt-4">Folder Name</div>
-                            </div>
-                            <div className="flex flex-col pb-2">
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="self-center border-2 border-solid aspect-square border-neutral-400 w-[150px]"
-                                />
-                                <div className="mt-4">Folder Name</div>
-                            </div>
-                            <div className="flex flex-col pb-2">
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="self-center border-2 border-solid aspect-square border-neutral-400 w-[150px]"
-                                />
-                                <div className="mt-4">Folder Name</div>
-                            </div>
-                            <div className="flex flex-col pb-2">
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="self-center border-2 border-solid aspect-square border-neutral-400 w-[150px]"
-                                />
-                                <div className="mt-4">Folder Name</div>
-                            </div>
-                            <div className="flex flex-col pb-2">
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="self-center border-2 border-solid aspect-square border-neutral-400 w-[150px]"
-                                />
-                                <div className="mt-4">Folder Name</div>
-                            </div>
-                            <div className="flex flex-col pb-2">
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/fa58ea6d6999584203c0c2ae67702ef95d85ff84971ce1671e636186ac447ad9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="self-center border-2 border-solid aspect-square border-neutral-400 w-[150px]"
-                                />
-                                <div className="mt-4">Folder Name</div>
-                            </div>
+                            {
+                                groupFolders?.map((Item) => (
+                                    <div onClick={() => { setDisplayFolder(false); setFolderId(Item._id); getFolderImages(Item._id) }} key={Item.folderImage} className="flex flex-col justify-center items-center my-4 w-[150px] cursor-pointer">
+                                        <img
+                                            loading="lazy"
+                                            style={{ border: "1px solid #000" }}
+                                            src={Item.folderImage}
+                                            className="self-center border-2 border-solid aspect-square border-neutral-400 w-[150px]"
+                                        />
+                                        <div className="mt-1">{Item.name}</div>
+                                    </div>
+                                ))
+                            }
                         </div>
-                        <img
-                            loading="lazy"
-                            srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/c105853b8eaf0871077678e7a53c25ade5c92ff5e4c22abf82903a1375818311?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/c105853b8eaf0871077678e7a53c25ade5c92ff5e4c22abf82903a1375818311?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/c105853b8eaf0871077678e7a53c25ade5c92ff5e4c22abf82903a1375818311?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/c105853b8eaf0871077678e7a53c25ade5c92ff5e4c22abf82903a1375818311?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/c105853b8eaf0871077678e7a53c25ade5c92ff5e4c22abf82903a1375818311?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/c105853b8eaf0871077678e7a53c25ade5c92ff5e4c22abf82903a1375818311?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/c105853b8eaf0871077678e7a53c25ade5c92ff5e4c22abf82903a1375818311?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/c105853b8eaf0871077678e7a53c25ade5c92ff5e4c22abf82903a1375818311?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                            className="mt-2.5 max-w-full border-2 border-solid aspect-[1.08] border-neutral-400 w-[150px]"
-                        />
+                    </div>
+                }
+                {
+                    selected === 2 && !displayFolder && <div className="my-10 flex flex-col px-5 pt-8 text-xl rounded-3xl border border-solid bg-neutral-200 border-neutral-400 text-neutral-700">
+                        <div className="mb-5 text-md cursor-pointer flex items-center" onClick={() => { setDisplayFolder(true) }}>
+                            <ChevronLeft />
+                            Go Back
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <div className="font-semibold max-md:max-w-full">Photos</div>
+                                <div className="mt-4 text-base font-medium text-neutral-500 max-md:max-w-full">
+                                    Photos uploading by the members present in this Groups.
+                                </div>
+                            </div>
+                            {
+                                userData.joinedUsers.includes(userId) && <div onClick={() => { setOpen1(true) }} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer w-[180px] text-center">
+                                    Upload Image
+                                </div>
+                            }
+                        </div>
+                        <div className="flex gap-2.5 self-center mt-9 max-md:flex-wrap">
+                            {
+                                folderImages?.map((Item) => (
+                                    <div key={Item.image} className="flex flex-col justify-center items-center my-4 w-[150px] cursor-pointer">
+                                        <img
+                                            loading="lazy"
+                                            style={{ border: "1px solid #000" }}
+                                            src={Item.image}
+                                            className="self-center border-2 border-solid aspect-square border-neutral-400 w-[150px]"
+                                        />
+                                    </div>
+                                ))
+                            }
+                        </div>
                     </div>
                 }
                 {
                     selected === 3 && <div className="my-10 flex flex-col flex-wrap content-start">
                         <div className="px-5 w-full max-md:max-w-full">
-                            <div className="flex gap-2 mt-4 max-md:flex-col max-md:gap-0">
-                                <div className="flex flex-col max-md:ml-0 max-md:w-full">
-                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
-                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
-                                            <img
-                                                loading="lazy"
-                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
-                                            />
-                                            <div className="flex flex-col my-auto">
-                                                <div className="text-lg text-neutral-900">Name Here</div>
-                                                <div className="mt-3 text-xs text-neutral-500">
-                                                    Member Since: 23-Dec-23024
+                            {
+                                userData1.isAdmin && <>
+                                    <h1 className="text-2xl font-semibold">Pending Users</h1>
+                                    <div className="flex gap-2 mt-4 max-md:flex-col max-md:gap-0 flex-wrap">
+                                        {
+                                            pendingUsers?.map((Item) => (
+                                                <div onClick={() => { Navigate(`/dashboard/profile/${Item._id}`) }} key={Item._id} className="flex flex-col max-md:ml-0 max-md:w-full cursor-pointer">
+                                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
+                                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
+                                                            <img
+                                                                loading="lazy"
+                                                                src={Item.profilePicture ? Item.profilePicture : defaultPic}
+                                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
+                                                            />
+                                                            <div className="flex flex-col my-auto">
+                                                                <div className="text-lg text-neutral-900">{Item.name}</div>
+                                                                {/* <div className="mt-3 text-xs text-neutral-500">
+                                                                    Member Since: 23-Dec-23024
+                                                                </div> */}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            ))
+                                        }
+                                    </div>
+                                    {
+                                        !pendingUsers.length && <div className="text-center">
+                                            <h1>There are no pending Users in this Group</h1>
+                                        </div>
+                                    }
+                                </>
+                            }
+                            <h1 className="text-2xl font-semibold mt-10">Joined Users</h1>
+                            <div className="flex gap-2 mt-4 max-md:flex-col max-md:gap-0 flex-wrap">
+                                {
+                                    joinedUsers?.map((Item) => (
+                                        <div onClick={() => { Navigate(`/dashboard/profile/${Item._id}`) }} key={Item._id} className="flex flex-col max-md:ml-0 max-md:w-full cursor-pointer">
+                                            <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
+                                                <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
+                                                    <img
+                                                        loading="lazy"
+                                                        src={Item.profilePicture ? Item.profilePicture : defaultPic}
+                                                        className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
+                                                    />
+                                                    <div className="flex flex-col my-auto">
+                                                        <div className="text-lg text-neutral-900">{Item.name}</div>
+                                                        {/* <div className="mt-3 text-xs text-neutral-500">
+                                                            Member Since: 23-Dec-23024
+                                                        </div> */}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col ml-2 max-md:ml-0 max-md:w-full">
-                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
-                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
-                                            <img
-                                                loading="lazy"
-                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
-                                            />
-                                            <div className="flex flex-col my-auto">
-                                                <div className="text-lg text-neutral-900">Name Here</div>
-                                                <div className="mt-3 text-xs text-neutral-500">
-                                                    Member Since: 23-Dec-23024
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col ml-2 max-md:ml-0 max-md:w-full">
-                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
-                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
-                                            <img
-                                                loading="lazy"
-                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
-                                            />
-                                            <div className="flex flex-col my-auto">
-                                                <div className="text-lg text-neutral-900">Name Here</div>
-                                                <div className="mt-3 text-xs text-neutral-500">
-                                                    Member Since: 23-Dec-23024
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col ml-2 max-md:ml-0 max-md:w-full">
-                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
-                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
-                                            <img
-                                                loading="lazy"
-                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
-                                            />
-                                            <div className="flex flex-col my-auto">
-                                                <div className="text-lg text-neutral-900">Name Here</div>
-                                                <div className="mt-3 text-xs text-neutral-500">
-                                                    Member Since: 23-Dec-23024
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
+                                    ))
+                                }
                             </div>
-                        </div>
-                        <div className="px-5 w-full max-md:max-w-full">
-                            <div className="flex gap-2 mt-4 max-md:flex-col max-md:gap-0">
-                                <div className="flex flex-col max-md:ml-0 max-md:w-full">
-                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
-                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
-                                            <img
-                                                loading="lazy"
-                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
-                                            />
-                                            <div className="flex flex-col my-auto">
-                                                <div className="text-lg text-neutral-900">Name Here</div>
-                                                <div className="mt-3 text-xs text-neutral-500">
-                                                    Member Since: 23-Dec-23024
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            {
+                                !joinedUsers.length && <div className="text-center">
+                                    <h1>There are no joined Users in this Group</h1>
                                 </div>
-                                <div className="flex flex-col ml-2 max-md:ml-0 max-md:w-full">
-                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
-                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
-                                            <img
-                                                loading="lazy"
-                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
-                                            />
-                                            <div className="flex flex-col my-auto">
-                                                <div className="text-lg text-neutral-900">Name Here</div>
-                                                <div className="mt-3 text-xs text-neutral-500">
-                                                    Member Since: 23-Dec-23024
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col ml-2 max-md:ml-0 max-md:w-full">
-                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
-                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
-                                            <img
-                                                loading="lazy"
-                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
-                                            />
-                                            <div className="flex flex-col my-auto">
-                                                <div className="text-lg text-neutral-900">Name Here</div>
-                                                <div className="mt-3 text-xs text-neutral-500">
-                                                    Member Since: 23-Dec-23024
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col ml-2 max-md:ml-0 max-md:w-full">
-                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
-                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
-                                            <img
-                                                loading="lazy"
-                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
-                                            />
-                                            <div className="flex flex-col my-auto">
-                                                <div className="text-lg text-neutral-900">Name Here</div>
-                                                <div className="mt-3 text-xs text-neutral-500">
-                                                    Member Since: 23-Dec-23024
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="px-5 w-full max-md:max-w-full">
-                            <div className="flex gap-2 mt-4 max-md:flex-col max-md:gap-0">
-                                <div className="flex flex-col max-md:ml-0 max-md:w-full">
-                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
-                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
-                                            <img
-                                                loading="lazy"
-                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
-                                            />
-                                            <div className="flex flex-col my-auto">
-                                                <div className="text-lg text-neutral-900">Name Here</div>
-                                                <div className="mt-3 text-xs text-neutral-500">
-                                                    Member Since: 23-Dec-23024
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col ml-2 max-md:ml-0 max-md:w-full">
-                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
-                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
-                                            <img
-                                                loading="lazy"
-                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
-                                            />
-                                            <div className="flex flex-col my-auto">
-                                                <div className="text-lg text-neutral-900">Name Here</div>
-                                                <div className="mt-3 text-xs text-neutral-500">
-                                                    Member Since: 23-Dec-23024
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col ml-2 max-md:ml-0 max-md:w-full">
-                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
-                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
-                                            <img
-                                                loading="lazy"
-                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
-                                            />
-                                            <div className="flex flex-col my-auto">
-                                                <div className="text-lg text-neutral-900">Name Here</div>
-                                                <div className="mt-3 text-xs text-neutral-500">
-                                                    Member Since: 23-Dec-23024
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col ml-2 max-md:ml-0 max-md:w-full">
-                                    <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
-                                        <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
-                                            <img
-                                                loading="lazy"
-                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/675f973d3a3564101e029115f635a48c85981322c9ebe0bab8b2b4d94a6bdb51?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 border-solid aspect-square border-[3px] border-neutral-400 w-[75px]"
-                                            />
-                                            <div className="flex flex-col my-auto">
-                                                <div className="text-lg text-neutral-900">Name Here</div>
-                                                <div className="mt-3 text-xs text-neutral-500">
-                                                    Member Since: 23-Dec-23024
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 }
@@ -563,6 +514,9 @@ export default function GroupsDetails() {
                     </>
                 }
             </div>
+            <CreateFolderDialog open={open} setOpen={setOpen} groupId={id} setFetchAgain={setFetchAgain} />
+            <CreateFolderImageDialog open={open1} setOpen={setOpen1} folderId={folderId} setFetchAgain={setFetchAgain} />
+            {/* <CreateFolderDialog open={open} setOpen={setOpen} groupId={id} /> */}
         </div>
     );
 }

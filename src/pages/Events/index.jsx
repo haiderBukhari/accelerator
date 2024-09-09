@@ -12,6 +12,7 @@ export default function Events() {
     const [eventsData, setEventsData] = useState([]);
     const [details, setDetails] = useState({})
     const [open, setOpen] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     async function getUserData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/userData`, {
@@ -30,6 +31,7 @@ export default function Events() {
     }, [])
 
     async function getNewEvents() {
+        setLoading(true)
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/events`, {
             headers: {
                 'Content-Type': 'application/json',
@@ -37,7 +39,9 @@ export default function Events() {
             },
         }).then((Item) => {
             setEventsData(Item.data.events);
+            setLoading(Item.data.events.length ? true : false)
         }).catch((err) => {
+            setLoading(false)
             return failedToast(err.response.data.error);
         });
     }
@@ -60,23 +64,16 @@ export default function Events() {
                     </button>
                 }
             </div>
-            <div className="flex gap-5 w-full max-md:flex-wrap max-md:max-w-full mb-10">
+            <div className="flex items-center gap-5 w-full max-md:flex-wrap max-md:max-w-full mb-5">
                 <div className="flex-auto self-start mt-5 text-xl text-zinc-500">
                     Click The Event To See Their Details.
                 </div>
                 <div className="flex gap-5 justify-between">
-                    <div className="flex gap-5 justify-between">
-                        <img
-                            loading="lazy"
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/6cc554df695616b71dd24e06a5ac3b0ececb2631a199787a554f1ebdab0ce1d7?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                            className="shrink-0 w-10 aspect-square"
-                        />
-                        <img
-                            loading="lazy"
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/80ba1a97898f4901cbe0ef2248f2f8c5cd258774958a32136bf19be70d6dfe5f?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                            className="shrink-0 w-10 aspect-square"
-                        />
-                    </div>
+                    <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/6cc554df695616b71dd24e06a5ac3b0ececb2631a199787a554f1ebdab0ce1d7?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                        className="shrink-0 w-10 aspect-square"
+                    />
                 </div>
             </div>
             <div className="flex flex-col px-7 py-7 mt-9 w-full text-lg rounded-2xl border border-solid bg-neutral-200 border-neutral-400 max-md:px-5 max-md:max-w-full">
@@ -105,7 +102,7 @@ export default function Events() {
                                     <div className="my-auto text-neutral-500 pr-20">{Item.attendingPeoples.length}</div>
                                     <div className="flex gap-5 justify-between text-violet-800 max-md:flex-wrap max-md:max-w-full">
                                         <div className="text-neutral-500 pr-7">{Item.eventType}</div>
-                                        <div onClick={()=>{setDetails(Item); setOpen(!open)}} className="my-auto font-bold cursor-pointer">See Details</div>
+                                        <div onClick={() => { setDetails(Item); setOpen(!open) }} className="my-auto font-bold cursor-pointer">See Details</div>
                                     </div>
                                 </div>
                             </div>
@@ -115,8 +112,15 @@ export default function Events() {
                         </div>
                     ))
                 }
+
             </div>
-            <ViewEvent open={open} setOpen={setOpen} details={details}/>
+            {
+                !loading && eventsData.length === 0 && <div className="text-center mt-10 text-2xl">No New Event Yet</div>
+            }
+            {
+                loading && <div className="text-center mt-10 text-2xl">Loading...</div>
+            }
+            <ViewEvent open={open} setOpen={setOpen} details={details} />
         </div>
     );
 }

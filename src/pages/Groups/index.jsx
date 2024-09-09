@@ -8,12 +8,25 @@ import { useSelector } from "react-redux";
 
 export default function Groups() {
     const Navigate = useNavigate();
+    const [userData, setUserData] = useState({});
 
     const [open, setOpen] = useState(false)
     const [submit, setSubmit] = useState(false)
     const [data, setData] = useState([])
     const token = useSelector(state => state.profile.jwt);
 
+    async function getUserData() {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/userData`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setUserData(Item.data.user);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
     async function getAllGroupData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/groups`, {
             headers: {
@@ -28,6 +41,7 @@ export default function Groups() {
         });
     }
     useEffect(() => {
+        getUserData();
         getAllGroupData();
     }, [open])
 
@@ -37,19 +51,20 @@ export default function Groups() {
                 <div className="w-full text-xl lg:text-2xl font-semibold text-zinc-500 max-md:max-w-full">
                     Groups{" "}
                 </div>
-
-                <button
-                    onClick={() => { setOpen(!open) }}
-                    className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-violet-800 border border-transparent hover:bg-violet-700 focus:outline-none focus:ring-offset-2 focus:ring-violet-700 rounded-2xl w-[200px]"
-                >
-                    Add New Group
-                </button>
+                {
+                    userData.isAdmin && <button
+                        onClick={() => { setOpen(!open) }}
+                        className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-violet-800 border border-transparent hover:bg-violet-700 focus:outline-none focus:ring-offset-2 focus:ring-violet-700 rounded-2xl w-[200px]"
+                    >
+                        Add New Group
+                    </button>
+                }
             </div>
             {
                 data?.map((item, i) => (
                     <div key={i} className="px-5 2xl:px-7 py-5 mt-5 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:px-3 max-md:py-3 max-md:max-w-full">
                         <div className="flex gap-5 max-md:flex-row max-md:gap-0 justify-between max-2xl:block max-md:flex">
-                            <div className="flex flex-col max-md:ml-0 max-md:w-full">
+                            <div onClick={() => { Navigate(`/dashboard/details/groups?id=${item._id}`) }} className="flex flex-col max-md:ml-0 max-md:w-full cursor-pointer">
                                 <div className="flex grow gap-4 max-md:gap-2 max-md:mt-0 max-md:items-center">
                                     <img
                                         loading="lazy"
@@ -76,8 +91,8 @@ export default function Groups() {
                                         />
                                         <div className="my-auto">{item.likes}</div>
                                     </div>
-                                    <div onClick={() => { Navigate(`/dashboard/details/groups?id=${item._id}`) }} className="flex justify-center px-5 py-1 text-base xl:text-lg text-white bg-violet-800 rounded-xl border border-solid w-full max-w-[130px] xl:max-w-[130px] border-neutral-400 max-md:px-3 max-md:py-2 max-md:max-w-[80px] max-md:text-xs cursor-pointer">
-                                        Join Now
+                                    <div onClick={() => { Navigate(`/dashboard/details/groups?id=${item._id}`) }} className="flex justify-center px-5 py-1 text-base xl:text-lg text-white bg-violet-800 rounded-xl border border-solid w-full max-w-[130px] xl:max-w-[150px] border-neutral-400 max-md:px-3 max-md:py-2 max-md:max-w-[80px] max-md:text-xs cursor-pointer">
+                                        Check Details
                                     </div>
                                 </div>
                             </div>
@@ -97,7 +112,7 @@ export default function Groups() {
             <React.Fragment>
                 <Dialog
                     open={open}
-                    onClose={()=>{setOpen(false)}}
+                    onClose={() => { setOpen(false) }}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                     PaperProps={{
@@ -113,21 +128,21 @@ export default function Groups() {
                         <div className='mx-3 my-2' style={{ borderBottom: "2px solid #ccc" }}></div>
                     </DialogTitle>
                     <DialogContent>
-                        <DialogContentText id="alert-dialog-description" sx={{width: "300px"}}>
+                        <DialogContentText id="alert-dialog-description" sx={{ width: "300px" }}>
                             {open && <CreateGroup open={open} setOpen={setOpen} submit={submit} setSubmit={setSubmit} />}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                    <div className='w-[290px] md:w-[400px] mb-3'>
-                        <div className='mx-3 my-2 mb-5' style={{ borderBottom: "2px solid #ccc" }}></div>
-                        <div className='mx-4'>
-                            <div className="flex w-full justify-between">
-                                <button onClick={()=>{setOpen(!open)}} className='w-[140px] px-10 py-2 rounded-xl text-center text-black bg-[#CCCCCC]'>Cancel</button>
-                                <button onClick={()=>{setSubmit(!submit)}} className='w-[140px] px-10 py-2 rounded-xl text-center text-white bg-[#4C1DBE]'>Save</button>
+                        <div className='w-[290px] md:w-[400px] mb-3'>
+                            <div className='mx-3 my-2 mb-5' style={{ borderBottom: "2px solid #ccc" }}></div>
+                            <div className='mx-4'>
+                                <div className="flex w-full justify-between">
+                                    <button onClick={() => { setOpen(!open) }} className='w-[140px] px-10 py-2 rounded-xl text-center text-black bg-[#CCCCCC]'>Cancel</button>
+                                    <button onClick={() => { setSubmit(!submit) }} className='w-[140px] px-10 py-2 rounded-xl text-center text-white bg-[#4C1DBE]'>Save</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </DialogActions>
+                    </DialogActions>
                 </Dialog>
             </React.Fragment>
         </div>

@@ -1,14 +1,37 @@
 import { Link, useLocation } from "react-router-dom";
 import { LogOut, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import {  successToast } from "../utils/toastNotifications";
-import { useDispatch } from "react-redux";
+import { failedToast, successToast } from "../utils/toastNotifications";
+import { useDispatch, useSelector } from "react-redux";
 import { removeUserDetails } from "../features/profile";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
     const Location = useLocation();
     const Navigate = useNavigate();
     const dispatch = useDispatch();
+    const [joinedGroups, setJoinedGroups] = useState([]);
+    const token = useSelector(state => state.profile.jwt);
+
+    async function getGroupUsersData() {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/joined-groups`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setJoinedGroups(Item.data)
+            // setUserData(Item.data.user);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+    useEffect(() => {
+        getGroupUsersData();
+    }, [])
+
     const hyperLinks = [
         {
             text: "Home",
@@ -45,9 +68,9 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
         <div
             style={{ zIndex: 10 }}
             className={`flex-col py-5 w-full bg-neutral-200 max-w-[290px] md:max-w-[250px] lg:max-w-[240px]  max-md:h-full ${location.pathname === "/home"
-                    ? "flex"
-                    : `${navbarOpen ? "fixed overflow-auto top-0 left-0" : "hidden md:flex"
-                    } `
+                ? "flex"
+                : `${navbarOpen ? "fixed overflow-auto top-0 left-0" : "hidden md:flex"
+                } `
                 }`}
         >
             <div className="flex flex-col items-start pl-9 md:pl-5 lg:pl-9 w-full text-2xl font-bold whitespace-nowrap text-zinc-500">
@@ -79,8 +102,8 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                                 )}
                             <div
                                 className={`flex gap-2.5 pr-5 ml-8 md:ml-5 ${Location.pathname === hyperLink.link
-                                        ? "text-violet-800"
-                                        : "text-neutral-500 w-18.5"
+                                    ? "text-violet-800"
+                                    : "text-neutral-500 w-18.5"
                                     }`}
                             >
                                 <img
@@ -88,17 +111,23 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                                     src={hyperLink.icon}
                                     className="shrink-0 aspect-square w-[20px]"
                                 />
-                                <Link to={hyperLink.link} className="text-sm">
-                                    {hyperLink.text}
-                                </Link>
+                                {
+                                    hyperLink.text === 'Messages' ?
+                                        <a href={hyperLink.link} className="text-sm">
+                                            {hyperLink.text}
+                                        </a> :
+                                        <Link to={hyperLink.link} className="text-sm">
+                                            {hyperLink.text}
+                                        </Link>
+                                }
                             </div>
                         </div>
                     ))}
                     <div className="flex cursor-pointer items-center h-[35px] my-1">
-                        <div onClick={()=>{ dispatch(removeUserDetails()); Navigate('/'); successToast("Successfully Loged out")}}
+                        <div onClick={() => { dispatch(removeUserDetails()); Navigate('/'); successToast("Successfully Loged out") }}
                             className={`flex gap-2.5 pr-5 ml-8 md:ml-5 text-neutral-500 w-18.5 `}
                         >
-                            <LogOut className="w-[20px]"/>
+                            <LogOut className="w-[20px]" />
                             <p className="text-sm">
                                 LogOut
                             </p>
@@ -112,120 +141,41 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                 <div className="mt-5 text-lg font-semibold text-zinc-500">
                     Your Groups
                 </div>
-                <div className="flex gap-5 justify-between mt-6">
-                    <div className="flex flex-col justify-center">
-                        <div className="flex gap-3">
-                            <div className="flex overflow-hidden relative flex-col justify-center items-center border-2 border-solid aspect-square border-neutral-400 w-[59px]">
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="object-cover absolute inset-0 size-full"
-                                />
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/4677522fa7d0223d897b2057a59c811ad78cc88d6419a738c238bf8c22b5dac2?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="w-full border-2 border-solid aspect-square border-neutral-400"
-                                />
-                            </div>
-                            <div className="flex flex-col my-auto">
-                                <div className="text-sm font-semibold text-zinc-800">
-                                    Ideation Station
+                {
+                    joinedGroups.map((Item, index) => (
+                        <div key={Item.groupImage}>
+                            <div className="flex gap-5 justify-between mt-6">
+                                <div className="flex flex-col justify-center">
+                                    <div className="flex gap-3">
+                                        <div className="flex overflow-hidden relative flex-col justify-center items-center border-2 border-solid aspect-square border-neutral-400 w-[59px]">
+                                            <img
+                                                loading="lazy"
+                                                src={Item.groupImage}
+                                                className="object-cover absolute inset-0 size-full"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col my-auto">
+                                            <div className="text-sm font-semibold text-zinc-800">
+                                                {Item.name}
+                                            </div>
+                                            <div className="mt-1.5 text-xs text-ellipsis text-zinc-600">
+                                            {Item.talksAbout}
+                                                <br />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="mt-1.5 text-xs text-ellipsis text-zinc-600">
-                                    The hub of groundbreaking ideas and concepts.
-                                    <br />
-                                </div>
+                                <div className="shrink-0 my-auto w-1 h-4" />
                             </div>
+                            {
+                                joinedGroups.length !== index + 1 && <>
+                                    <div className="z-10 shrink-0 mt-2.5 max-w-full p-0 border-solid bg-neutral-400 w-[311px]" />
+                                    <div className="shrink-0 max-w-full h-px border border-solid bg-neutral-400 border-neutral-400 w-[311px]" />
+                                </>
+                            }
                         </div>
-                    </div>
-                    <div className="shrink-0 my-auto w-1 h-4" />
-                </div>
-                <div className="z-10 shrink-0 mt-2.5 max-w-full p-0 border-solid bg-neutral-400 w-[311px]" />
-                <div className="shrink-0 max-w-full h-px border border-solid bg-neutral-400 border-neutral-400 w-[311px]" />
-                <div className="flex gap-5 justify-between mt-3">
-                    <div className="flex flex-col justify-center">
-                        <div className="flex gap-3">
-                            <div className="flex overflow-hidden relative flex-col justify-center items-center border-2 border-solid aspect-square border-neutral-400 w-[59px]">
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="object-cover absolute inset-0 size-full"
-                                />
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/13c5486537e351ed03d6fb1f99cd7b7d2a7608dd7679e4b3c2343d8a3e3c3c32?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="w-full border-2 border-solid aspect-square border-neutral-400"
-                                />
-                            </div>
-                            <div className="flex flex-col my-auto">
-                                <div className="text-sm font-semibold text-zinc-800">
-                                    Build Masters
-                                </div>
-                                <div className="mt-1.5 text-xs text-ellipsis text-zinc-600">
-                                    Mastering the art of seamless software construction.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="shrink-0 my-auto w-1 h-4" />
-                </div>
-                <div className="mt-2 shrink-0 max-w-full h-px border border-solid bg-neutral-400 border-neutral-400 w-[311px]" />
-                <div className="flex gap-5 justify-between mt-3">
-                    <div className="flex flex-col justify-center">
-                        <div className="flex gap-3">
-                            <div className="flex overflow-hidden relative flex-col justify-center items-center border-2 border-solid aspect-square border-neutral-400 w-[59px]">
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="object-cover absolute inset-0 size-full"
-                                />
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/0e5f995540e72d5a50e0559797afd14bdab8a2edb02b8704d17ef3f7e94bc51c?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="w-full border-2 border-solid aspect-square border-neutral-400"
-                                />
-                            </div>
-                            <div className="flex flex-col my-auto">
-                                <div className="text-sm font-semibold text-zinc-800">
-                                    Concept Creators
-                                </div>
-                                <div className="text-xs text-ellipsis text-zinc-600">
-                                    Transforming thoughts into impactful concepts.
-                                    <br />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="shrink-0 my-auto w-1 h-[15px]" />
-                </div>
-                <div className="mt-2 shrink-0 max-w-full h-px border border-solid bg-neutral-400 border-neutral-400 w-[311px]" />
-                <div className="flex gap-5 justify-between mt-3">
-                    <div className="flex flex-col justify-center">
-                        <div className="flex gap-3">
-                            <div className="flex overflow-hidden relative flex-col justify-center items-center border-2 border-solid aspect-square border-neutral-400 w-[59px]">
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="object-cover absolute inset-0 size-full"
-                                />
-                                <img
-                                    loading="lazy"
-                                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/46f2ff31d2f5dd7419f908c1c5f8294fa02c42fabc150f69b2121b29aea93b7e?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="w-full border-2 border-solid aspect-square border-neutral-400"
-                                />
-                            </div>
-                            <div className="flex flex-col my-auto">
-                                <div className="text-sm font-semibold text-zinc-800">
-                                    Deploy Doyens
-                                </div>
-                                <div className="text-xs text-ellipsis text-zinc-600">
-                                    Experts in deploying flawless applications.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="shrink-0 my-auto w-1 h-[15px]" />
-                </div>
+                    ))
+                }
             </div>
         </div>
     );
