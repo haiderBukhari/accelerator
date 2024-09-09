@@ -14,6 +14,7 @@ export default function Groups() {
     const [submit, setSubmit] = useState(false)
     const [data, setData] = useState([])
     const token = useSelector(state => state.profile.jwt);
+    const userId = useSelector(state => state.profile.id);
 
     async function getUserData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/userData`, {
@@ -49,7 +50,7 @@ export default function Groups() {
         <div className="flex flex-col px-5 max-w-[99%] ">
             <div className="flex justify-between items-center max-md:mt-10 mt-14 ">
                 <div className="w-full text-xl lg:text-2xl font-semibold text-zinc-500 max-md:max-w-full">
-                    Groups{" "}
+                    New Groups{" "}
                 </div>
                 {
                     userData.isAdmin && <button
@@ -62,41 +63,92 @@ export default function Groups() {
             </div>
             {
                 data?.map((item, i) => (
-                    <div key={i} className="px-5 2xl:px-7 py-5 mt-5 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:px-3 max-md:py-3 max-md:max-w-full">
-                        <div className="flex gap-5 max-md:flex-row max-md:gap-0 justify-between max-2xl:block max-md:flex">
-                            <div onClick={() => { Navigate(`/dashboard/details/groups?id=${item._id}`) }} className="flex flex-col max-md:ml-0 max-md:w-full cursor-pointer">
-                                <div className="flex grow gap-4 max-md:gap-2 max-md:mt-0 max-md:items-center">
-                                    <img
-                                        loading="lazy"
-                                        src={item.groupImage}
-                                        className="shrink-0 aspect-square h-[40px] w-[40px] md:h-[50px] md:w-[50px] border-4 rounded-xl border-violet-800 border-solid"
-                                    />
-                                    <div className="flex flex-col py-1 my-auto max-md:my-0">
-                                        <div className="text-base max-md:text-sm font-medium text-zinc-800">
-                                            {item.name}
+                    <div key={i} >
+                        {
+                            !item.joinedUsers.includes(userId) && <div className="px-5 2xl:px-7 py-5 mt-5 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:px-3 max-md:py-3 max-md:max-w-full">
+                                <div className="flex gap-5 max-md:flex-row max-md:gap-0 justify-between max-2xl:block max-md:flex">
+                                    <div onClick={() => { Navigate(`/dashboard/details/groups?id=${item._id}`) }} className="flex flex-col max-md:ml-0 max-md:w-full cursor-pointer">
+                                        <div className="flex grow gap-4 max-md:gap-2 max-md:mt-0 max-md:items-center">
+                                            <img
+                                                loading="lazy"
+                                                src={item.groupImage}
+                                                className="shrink-0 aspect-square h-[40px] w-[40px] md:h-[50px] md:w-[50px] border-4 rounded-xl border-violet-800 border-solid"
+                                            />
+                                            <div className="flex flex-col py-1 my-auto max-md:my-0">
+                                                <div className="text-base max-md:text-sm font-medium text-zinc-800">
+                                                    {item.name}
+                                                </div>
+                                                <div className="text-xs text-ellipsis text-neutral-500 max-md:hidden">
+                                                    {item.description > 60 ? item.description.slice(0, 60) + '...' : item.description}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="text-xs text-ellipsis text-neutral-500 max-md:hidden">
-                                            {item.description > 60 ? item.description.slice(0, 60) + '...' : item.description}
+                                    </div>
+                                    <div className="flex flex-col ml-2 lg:ml-3 xl:ml-5 max-md:ml-0 max-md:w-full">
+                                        <div className="flex justify-end 2xl:justify-between self-stretch my-auto max-md:my-auto">
+                                            <div className="flex gap-2.5 justify-between text-sm text-violet-800 whitespace-nowrap mr-4 xl:mr-7 max-md:gap-1.5 max-md:mr-5">
+                                                <img
+                                                    loading="lazy"
+                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/cbf9f452b2ad0d9bc2072c788e3cdac85906c6c3a63ab0a7ec8669c8d70dc7de?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                                    className="shrink-0 aspect-square w-[25px] max-md:w-[15px]"
+                                                />
+                                                <div className="my-auto">{item.likes}</div>
+                                            </div>
+                                            <div onClick={() => { Navigate(`/dashboard/details/groups?id=${item._id}`) }} className="flex justify-center px-5 py-1 text-base xl:text-lg text-white bg-violet-800 rounded-xl border border-solid w-full max-w-[130px] xl:max-w-[150px] border-neutral-400 max-md:px-3 max-md:py-2 max-md:max-w-[80px] max-md:text-xs cursor-pointer">
+                                                Check Details
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col ml-2 lg:ml-3 xl:ml-5 max-md:ml-0 max-md:w-full">
-                                <div className="flex justify-end 2xl:justify-between self-stretch my-auto max-md:my-auto">
-                                    <div className="flex gap-2.5 justify-between text-sm text-violet-800 whitespace-nowrap mr-4 xl:mr-7 max-md:gap-1.5 max-md:mr-5">
-                                        <img
-                                            loading="lazy"
-                                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/cbf9f452b2ad0d9bc2072c788e3cdac85906c6c3a63ab0a7ec8669c8d70dc7de?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                            className="shrink-0 aspect-square w-[25px] max-md:w-[15px]"
-                                        />
-                                        <div className="my-auto">{item.likes}</div>
+                        }
+                    </div>
+                ))
+            }
+            <div className="w-full text-xl lg:text-2xl font-semibold text-zinc-500 max-md:max-w-full mt-10">
+                Joined Groups{" "}
+            </div>
+            {
+                data?.map((item, i) => (
+                    <div key={i} >
+                        {
+                            item.joinedUsers.includes(userId) && <div className="px-5 2xl:px-7 py-5 mt-5 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:px-3 max-md:py-3 max-md:max-w-full">
+                                <div className="flex gap-5 max-md:flex-row max-md:gap-0 justify-between max-2xl:block max-md:flex">
+                                    <div onClick={() => { Navigate(`/dashboard/details/groups?id=${item._id}`) }} className="flex flex-col max-md:ml-0 max-md:w-full cursor-pointer">
+                                        <div className="flex grow gap-4 max-md:gap-2 max-md:mt-0 max-md:items-center">
+                                            <img
+                                                loading="lazy"
+                                                src={item.groupImage}
+                                                className="shrink-0 aspect-square h-[40px] w-[40px] md:h-[50px] md:w-[50px] border-4 rounded-xl border-violet-800 border-solid"
+                                            />
+                                            <div className="flex flex-col py-1 my-auto max-md:my-0">
+                                                <div className="text-base max-md:text-sm font-medium text-zinc-800">
+                                                    {item.name}
+                                                </div>
+                                                <div className="text-xs text-ellipsis text-neutral-500 max-md:hidden">
+                                                    {item.description > 60 ? item.description.slice(0, 60) + '...' : item.description}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div onClick={() => { Navigate(`/dashboard/details/groups?id=${item._id}`) }} className="flex justify-center px-5 py-1 text-base xl:text-lg text-white bg-violet-800 rounded-xl border border-solid w-full max-w-[130px] xl:max-w-[150px] border-neutral-400 max-md:px-3 max-md:py-2 max-md:max-w-[80px] max-md:text-xs cursor-pointer">
-                                        Check Details
+                                    <div className="flex flex-col ml-2 lg:ml-3 xl:ml-5 max-md:ml-0 max-md:w-full">
+                                        <div className="flex justify-end 2xl:justify-between self-stretch my-auto max-md:my-auto">
+                                            <div className="flex gap-2.5 justify-between text-sm text-violet-800 whitespace-nowrap mr-4 xl:mr-7 max-md:gap-1.5 max-md:mr-5">
+                                                <img
+                                                    loading="lazy"
+                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/cbf9f452b2ad0d9bc2072c788e3cdac85906c6c3a63ab0a7ec8669c8d70dc7de?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                                    className="shrink-0 aspect-square w-[25px] max-md:w-[15px]"
+                                                />
+                                                <div className="my-auto">{item.likes}</div>
+                                            </div>
+                                            <div onClick={() => { Navigate(`/dashboard/details/groups?id=${item._id}`) }} className="flex justify-center px-5 py-1 text-base xl:text-lg text-white bg-violet-800 rounded-xl border border-solid w-full max-w-[130px] xl:max-w-[150px] border-neutral-400 max-md:px-3 max-md:py-2 max-md:max-w-[80px] max-md:text-xs cursor-pointer">
+                                                Check Details
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 ))
             }

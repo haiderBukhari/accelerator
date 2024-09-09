@@ -9,6 +9,8 @@ import { failedToast, successToast } from "../../utils/toastNotifications";
 import { ChevronLeft, ThumbsUp } from 'lucide-react';
 import CreateFolderDialog from "../../components/groups/createFolder";
 import CreateFolderImageDialog from "../../components/groups/uploadImage";
+import CreatePostDialog from "../../components/CreatePost";
+import { Heart } from 'lucide-react';
 
 export default function GroupsDetails() {
     const [selected, setSelected] = useState(1);
@@ -30,6 +32,8 @@ export default function GroupsDetails() {
     const [fetchAgain, setFetchAgain] = useState(false);
     const [joinedUsers, setJoinedUsers] = useState([])
     const [pendingUsers, setPendingUsers] = useState([])
+    const [createPost, setCreatePost] = useState(false);
+    const [data, setData] = useState([])
 
     const timeElapsed = (dateString) => {
         const date = new Date(dateString);
@@ -130,20 +134,19 @@ export default function GroupsDetails() {
     }
 
     async function getPosts() {
-        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/post/individual?id=${id}`, {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/post?groupId=${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
         }).then((Item) => {
-            setFetched(Item.data.length == 0 ? true : false)
-            console.log(Item.data)
             setPosts(Item.data);
+            setFetched(Item.data.length ? false : true)
         }).catch((err) => {
-            setFetched(true)
             return failedToast(err.response.data.error);
         });
     }
+
     useEffect(() => {
         getUserData();
         getGroupData();
@@ -152,7 +155,19 @@ export default function GroupsDetails() {
         getGroupUsersData()
     }, [id])
 
-
+    async function handleLike(id) {
+        await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/post`, {
+            id: id
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
 
     return (
         <div className="flex flex-col mx-3">
@@ -162,36 +177,39 @@ export default function GroupsDetails() {
                 className="w-full max-w-auto mt-7"
             />
             <div className="flex z-10 flex-col pr-6 pl-16 mt-0 relative w-full max-md:px-5 max-md:max-w-full">
-                <div className={`max-w-full w-auto absolute ${selected === 1 ? 'top-[-18%]' : selected === 2 ? 'top-[-14%]' : selected === 3 ? 'top-[-14%]' : 'top-[-6%]'}`}>
-                    <div className="flex gap-5 max-md:flex-col max-md:gap-0 w-full">
-                        <div className="flex flex-col w-full max-md:ml-0 max-md:w-full max-w-[229px]">
-                            <img
-                                loading="lazy"
-                                src={userData?.groupImage}
-                                className="w-full rounded-full border-4 border-violet-800 border-solid aspect-square max-md:mt-7"
-                            />
-                        </div>
-                        <div className="flex flex-col ml-5 w-full max-md:ml-0 max-md:w-full">
-                            <div className="flex flex-col grow mt-36 max-md:mt-10 w-full">
-                                <div className="text-3xl font-bold text-neutral-700 w-full ">
-                                    {userData?.name}
-                                </div>
-                                <div className="flex gap-5 mt-3.5 text-lg items-center">
-                                    {
-                                        !userData1.isAdmin && <ThumbsUp className="cursor-pointer" />
-                                    }
-                                    <div className="justify-center px-2.5 py-1.5 font-medium text-violet-800 rounded-md border border-violet-800 border-solid bg-blue-700 bg-opacity-20">
-                                        {userData?.likes} Likes
+                <div className="relative">
+
+                    <div style={{ top: "-90px", left: "0", transform: "translate(0, -10%" }} className="max-w-full w-[580px] absolute">
+                        <div className="flex gap-5 max-md:flex-col max-md:gap-0 w-full">
+                            <div className="flex flex-col w-full max-md:ml-0 max-md:w-full max-w-[229px]">
+                                <img
+                                    loading="lazy"
+                                    src={userData?.groupImage}
+                                    className="w-full rounded-full border-4 border-violet-800 border-solid aspect-square max-md:mt-7"
+                                />
+                            </div>
+                            <div className="flex flex-col ml-5 w-full max-md:ml-0 max-md:w-full">
+                                <div className="flex flex-col grow mt-36 max-md:mt-10 w-full">
+                                    <div className="text-3xl font-bold text-neutral-700 w-full ">
+                                        {userData?.name}
                                     </div>
-                                    {
-                                        !userData1?.isAdmin && (!userData?.joinedUsers?.includes(userId) && !userData?.pendingUsers?.includes(userId)) ? <div onClick={handleGroupJoin} className="justify-center px-5 py-1.5 text-white bg-violet-800 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer ">
-                                            Join Now
-                                        </div> : !userData1?.isAdmin && (userData?.joinedUsers?.includes(userId)) ? <div onClick={handleGroupJoin} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer ">
-                                            Leave Group
-                                        </div> : !userData1?.isAdmin && (userData?.pendingUsers?.includes(userId)) && <div onClick={handleGroupJoin} className="justify-center px-5 py-1.5 text-white bg-green-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer ">
-                                            Request Sent To Admin
+                                    <div className="flex gap-5 mt-3.5 text-lg items-center">
+                                        {
+                                            !userData1.isAdmin && <ThumbsUp className="cursor-pointer" />
+                                        }
+                                        <div className="justify-center px-2.5 py-1.5 font-medium text-violet-800 rounded-md border border-violet-800 border-solid bg-blue-700 bg-opacity-20">
+                                            {userData?.likes} Likes
                                         </div>
-                                    }
+                                        {
+                                            !userData1?.isAdmin && (!userData?.joinedUsers?.includes(userId) && !userData?.pendingUsers?.includes(userId)) ? <div onClick={handleGroupJoin} className="justify-center px-5 py-1.5 text-white bg-violet-800 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer ">
+                                                Join Now
+                                            </div> : !userData1?.isAdmin && (userData?.joinedUsers?.includes(userId)) ? <div onClick={handleGroupJoin} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer ">
+                                                Leave Group
+                                            </div> : !userData1?.isAdmin && (userData?.pendingUsers?.includes(userId)) && <div onClick={handleGroupJoin} className="justify-center px-5 py-1.5 text-white bg-green-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer ">
+                                                Request Sent To Admin
+                                            </div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -215,6 +233,7 @@ export default function GroupsDetails() {
                 <div className="shrink-0 mt-5 h-px border border-solid bg-neutral-400 border-neutral-400 max-md:max-w-full" />
                 {
                     selected === 1 && <div className="my-10 max-md:max-w-full">
+
                         <div className="flex gap-5 max-md:flex-col max-md:gap-0 w-full">
                             <div className="flex flex-col max-md:ml-0 max-w-full md:max-w-[300px] w-full">
                                 <div className="flex flex-col grow max-md:mt-5">
@@ -236,80 +255,136 @@ export default function GroupsDetails() {
                                     </div>
                                 </div>
                             </div>
-                            {
-                                fetched && <div className="flex flex-col px-6 pt-5 pb-7 mt-8 w-full rounded-3xl text-2xl text-center max-md:pl-5 max-md:max-w-full">
-                                    No New Posts Yet
-                                </div>
-                            }
-                            {
-                                posts?.map((Item) => (
-                                    <div key={Item.text ?? ''} className="flex flex-col px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pl-5 max-md:max-w-full">
-                                        <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
-                                            <div className="flex gap-4">
-                                                <img
-                                                    loading="lazy"
-                                                    src={userData?.profilePicture || defaultPic}
-                                                    className="shrink-0 border-4 border-violet-800 border-solid aspect-square w-[60px]"
-                                                />
-                                                <div className="flex flex-col py-1 my-auto">
-                                                    <div className="text-base font-medium text-zinc-800">
-                                                        {userData.firstName} {userData.lastName}
-                                                    </div>
-                                                    <div className="mt-2 text-xs text-neutral-500">{timeElapsed(Item.createdAt)}</div>
-                                                </div>
-                                            </div>
+                            <div className="flex flex-col px-6 w-full rounded-3xl text-2xl text-center max-md:pl-5 max-md:max-w-full">
+                                {
+                                    userData?.joinedUsers?.includes(userId) && <div onClick={() => { setCreatePost(!createPost) }} className="flex flex-col md:flex-row gap-5 justify-between pl-5 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:flex-wrap max-md:max-w-full h-[200px] max-md:h-[170px] md:h-auto">
+                                        <div className="flex gap-4 max-md:mt-5 my-auto text-base font-medium text-zinc-500">
                                             <img
                                                 loading="lazy"
-                                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/17fb2d504a4a46adf611331825b24e3490f3ff0a7aa1ff0f0783d4da246b0be9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                className="shrink-0 my-auto aspect-square w-[25px]"
+                                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                                className="shrink-0 w-10 border-4 rounded-xl border-violet-800 border-solid aspect-square hidden md:block"
                                             />
+                                            <div className="flex-auto my-auto cursor-pointer bg-opacity-80 text-[#8A8A8A]">Let’s make something new!</div>
                                         </div>
-                                        {
-                                            Item.text && <div className="self-start mt-6 text-base text-zinc-800 max-md:max-w-full">
-                                                {Item.text}
-                                            </div>
-                                        }
-                                        {
-                                            Item.imageUrl && <img
-                                                loading="lazy"
-                                                src={Item.imageUrl}
-                                                className="self-center mt-6 w-full border border-solid border-neutral-400 max-w-[784px] h-auto max-md:max-w-full"
-                                                style={{ aspectRatio: '2.63' }}
-                                            />
-                                        }
-                                        {
-                                            Item.videoUrl && <video className="mt-6" src={Item.videoUrl} controls />
-                                        }
-                                        <div className="flex gap-5 justify-between px-px mt-6 w-full text-sm max-md:flex-wrap max-md:max-w-full">
-                                            <div className="flex w-full flex-col justify-center text-neutral-400 max-md:max-w-full">
-                                                <button onClick={() => { setOpen1(!open1) }} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full hidden md:block">
-                                                    Write a comment
-                                                </button>
-                                            </div>
-                                            <div className="flex max-w-[200px] justify-between w-full my-auto whitespace-nowrap text-neutral-400">
+                                        <div className="flex flex-col justify-center self-end md:self-auto m-0 h-auto p-0 w-full max-w-[160px] max-md:max-w-[150px] py-2 md:py-4 mb-3 mr-2 md:mr-0 md:mb-0 bg-[#4C1DBE] rounded-xl md:rounded-3xl border border-solid border-[#AAAAAA]">
+                                            <div className="flex gap-0.5 justify-between px-4">
                                                 <img
                                                     loading="lazy"
-                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/057f6797c1a65234653a3b14b6904c6026c5676f9bba3f9afe3213ffb0ea12d6?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                    className="shrink-0 aspect-square w-[25px]"
+                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/5c6a5bfa10bfc829411928f0545a1d2f4e7be548a242a2f03a64730f289bb110?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                                    className="shrink-0 aspect-square w-[20px]"
                                                 />
-                                                <div className="my-auto">{Item.likes}</div>
                                                 <img
                                                     loading="lazy"
-                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/81b3988206ae45b69d451692ab183825d130156ed8d4f79341e2ae1d2c11b2ce?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                    className="shrink-0 aspect-square w-[25px]"
+                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/9928e221ff81dcf989ef8b7146178be0ddd02598d4bac98b3ccafb8a5bc31b37?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                                    className="shrink-0 aspect-square w-[20px]"
                                                 />
-                                                <div className="my-auto">{Item.comments}</div>
                                                 <img
                                                     loading="lazy"
-                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/cc32947d0dc0dffaf5b54937d22a080004ed72c715c0b2d4d6a6def7314ff0f6?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                    className="shrink-0 aspect-square w-[25px]"
+                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/99a946cab8c72acff3b6467ffde7e90e4ede4b672a22273cb1a6a2a56cc84de5?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                                    className="shrink-0 aspect-square w-[20px]"
                                                 />
-                                                <div className="my-auto">{Item.shares}</div>
                                             </div>
                                         </div>
                                     </div>
-                                ))
-                            }
+                                }
+                                {
+                                    fetched && <div className="flex flex-col px-6 pt-5 pb-7 mt-8 w-full rounded-3xl text-2xl text-center max-md:pl-5 max-md:max-w-full">
+                                        No New Posts Yet
+                                    </div>
+                                }
+                                {
+                                    posts?.map((Item, index) => (
+                                        <div key={Item.text ?? ''} className="flex flex-col px-5 md:px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400  max-md:max-w-full">
+                                            <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
+                                                <div onClick={() => { Navigate(`/dashboard/profile/${Item.userInfo._id}`) }} className="flex gap-2 md:gap-4 cursor-pointer">
+                                                    <img
+                                                        loading="lazy"
+                                                        src={Item.userInfo.profilePicture ? Item.userInfo.profilePicture : defaultPic}
+                                                        className="shrink-0 border-4 border-violet-800 border-solid aspect-square w-[45px] max-md:h-[45px] md:w-[60px] rounded-xl"
+                                                    />
+                                                    <div className="flex flex-col py-1 my-auto">
+                                                        <div className="text-sm md:text-base font-medium text-zinc-800">
+                                                            {Item.userInfo.firstName} {Item.userInfo.lastName}
+                                                        </div>
+                                                        <div className="mt-0 md:mt-2 text-xs text-neutral-500">{timeElapsed(Item.createdAt)}</div>
+                                                    </div>
+                                                </div>
+                                                <img
+                                                    loading="lazy"
+                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/17fb2d504a4a46adf611331825b24e3490f3ff0a7aa1ff0f0783d4da246b0be9?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                                    className="shrink-0 my-auto aspect-square w-[20px] md:w-[25px]"
+                                                />
+                                            </div>
+
+                                            {
+                                                Item.text && <div className="self-start mt-6 text-base text-[#2A2A2A] max-md:max-w-full">
+                                                    {Item.text}
+                                                </div>
+                                            }
+                                            <div className="mt-6 w-full border border-solid border-neutral-400 overflow-hidden rounded-xl">
+                                                {
+                                                    Item.imageUrl && <img
+                                                        loading="lazy"
+                                                        src={Item.imageUrl}
+                                                        className="w-full h-full md:max-h-[300px] max-h-[120px]"
+                                                    // style={{ aspectRatio: '1.63' }}
+                                                    />
+                                                }
+                                                {
+                                                    Item.videoUrl && <video className="mt-6" src={Item.videoUrl} controls />
+                                                }
+                                            </div>
+                                            <div className="flex gap-5 justify-between px-px mt-6 w-full text-sm max-md:flex-wrap max-md:max-w-full">
+                                                <div className="flex w-full flex-col justify-center text-neutral-400 max-md:max-w-full">
+                                                    <button onClick={() => { setOpen(!open) }} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full hidden md:block">
+                                                        Write a comment
+                                                    </button>
+                                                </div>
+                                                <div className="flex max-w-[150px] md:max-w-[200px] justify-between w-full my-auto whitespace-nowrap text-neutral-400">
+                                                    {
+                                                        Item.likeBy?.includes(userId) ? <Heart onClick={() => {
+                                                            setPosts(
+                                                                posts.map((post) => {
+                                                                    if (post._id === Item._id) {
+                                                                        post.likes -= 1;
+                                                                        post.likeBy = post.likeBy.filter((like) => like !== userId);
+                                                                    }
+                                                                    return post;
+                                                                })
+                                                            )
+                                                            handleLike(Item._id)
+                                                        }} className="cursor-pointer text-red-600" /> : <Heart onClick={() => {
+                                                            setPosts(
+                                                                posts.map((post) => {
+                                                                    if (post._id === Item._id) {
+                                                                        post.likes += 1;
+                                                                        post.likeBy.push(userId);
+                                                                    }
+                                                                    return post;
+                                                                })
+                                                            )
+                                                            handleLike(Item._id)
+                                                        }} className="cursor-pointer" />
+                                                    }
+                                                    <div className="my-auto ml-[-10px]">{Item.likes}</div>
+                                                    <img
+                                                        loading="lazy"
+                                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/81b3988206ae45b69d451692ab183825d130156ed8d4f79341e2ae1d2c11b2ce?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                                        className="shrink-0 aspect-square w-[25px]"
+                                                    />
+                                                    <div className="my-auto">{Item.comments}</div>
+                                                    <img
+                                                        loading="lazy"
+                                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/cc32947d0dc0dffaf5b54937d22a080004ed72c715c0b2d4d6a6def7314ff0f6?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                                        className="shrink-0 aspect-square w-[25px]"
+                                                    />
+                                                    <div className="my-auto">{Item.shares}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         </div>
                     </div>
                 }
@@ -516,6 +591,7 @@ export default function GroupsDetails() {
             </div>
             <CreateFolderDialog open={open} setOpen={setOpen} groupId={id} setFetchAgain={setFetchAgain} />
             <CreateFolderImageDialog open={open1} setOpen={setOpen1} folderId={folderId} setFetchAgain={setFetchAgain} />
+            <CreatePostDialog open={createPost} setOpen={setCreatePost} fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} groupPost={true} groupId={id} />
             {/* <CreateFolderDialog open={open} setOpen={setOpen} groupId={id} /> */}
         </div>
     );

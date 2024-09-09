@@ -143,7 +143,7 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                 </div>
                 {
                     joinedGroups.map((Item, index) => (
-                        <div key={Item.groupImage}>
+                        <div className="cursor-pointer" onClick={() => { Navigate(`/dashboard/details/groups?id=${Item._id}`) }} key={Item.groupImage}>
                             <div className="flex gap-5 justify-between mt-6">
                                 <div className="flex flex-col justify-center">
                                     <div className="flex gap-3">

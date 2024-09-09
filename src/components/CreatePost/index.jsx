@@ -14,7 +14,7 @@ import { failedToast, successToast } from '../../utils/toastNotifications';
 import { CircularProgress } from '@mui/material';
 import { useSelector } from 'react-redux';
 
-export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAgain }) {
+export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAgain, groupPost, groupId }) {
     const fileInputRef = React.useRef(null);
     const [uploadType, setUploadType] = React.useState(null);
     const [file, setFile] = React.useState(null)
@@ -60,6 +60,9 @@ export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAg
             formData.append('text', text);
             formData.append('isImage', uploadType === 'image' ? 'true' : 'false');
             formData.append('isVideo', uploadType !== 'image' ? 'true' : 'false');
+            formData.append('groupPost', groupPost);
+            formData.append('groupId', groupId);
+
             try {
                 await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/post/upload`, formData, {
                     headers: {
@@ -81,7 +84,9 @@ export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAg
             }
             try {
                 await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/post`, {
-                    text: text
+                    text: text,
+                    groupPost: groupPost,
+                    groupId: groupId
                 }, {
                     headers: {
                         'Content-Type': 'application/json',
