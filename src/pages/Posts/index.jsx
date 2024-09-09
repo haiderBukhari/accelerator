@@ -96,7 +96,7 @@ export default function Posts() {
                 data?.map((Item, index) => (
                     <div key={Item.text ?? ''} className="flex flex-col px-5 md:px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400  max-md:max-w-full">
                         <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
-                            <div onClick={() => { Navigate(`/dashboard/profile/${Item._id}`) }} className="flex gap-2 md:gap-4 cursor-pointer">
+                            <div onClick={() => { Navigate(`/dashboard/profile/${Item.owner}`) }} className="flex gap-2 md:gap-4 cursor-pointer">
                                 <img
                                     loading="lazy"
                                     src={Item.userInfo.profilePicture ? Item.userInfo.profilePicture : professionalPicture}

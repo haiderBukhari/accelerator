@@ -119,7 +119,7 @@ export default function ProfilePage() {
                 {
                     selected === 1 && <div className="my-10 max-md:max-w-full">
                         <div className="flex gap-5 max-md:flex-col max-md:gap-0 flex-wrap md:flex-nowrap">
-                            <div className="flex flex-col w-auto max-md:ml-0 max-md:w-full">
+                            <div className="flex flex-col max-md:ml-0 max-w-full md:max-w-[300px] w-full">
                                 <div className="flex flex-col grow max-md:mt-5">
                                     <div className="flex flex-col px-5 py-9 text-base font-medium rounded-3xl border border-solid bg-neutral-200 border-neutral-400 text-neutral-500">
                                         <div className="text-xl font-semibold text-neutral-700">

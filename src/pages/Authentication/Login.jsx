@@ -36,7 +36,7 @@ const Login = () => {
                 Navigate(`/recovery-email?id=${Item.data.id}`);
             }else{
                 successToast("Successfully LogedIn")
-                Navigate('/home')
+                Navigate('/dashboard/course')
             }
         }).catch((err)=>{
             return failedToast(err.response.data.error);

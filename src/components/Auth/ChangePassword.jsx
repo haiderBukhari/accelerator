@@ -31,7 +31,7 @@ const ChangePassword = () => {
           }
         )
         .then((Item) => {
-          Navigate(`/home`);
+          Navigate(`/dashboard/course`);
           dispatch(addUserDetails({
             jwt: Item.data.token,
             firstName: Item.data.firstName,
