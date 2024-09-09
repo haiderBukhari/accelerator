@@ -6,9 +6,11 @@ import { failedToast } from '../utils/toastNotifications';
 import axios from 'axios';
 import ViewEvent from '../pages/Events/viewEvent';
 import defaultPerson from '../assets/professionalPicture.jpeg'
+import NotificationsDialog from './profile/NotificationsDialog';
 
 export default function AsideSettings() {
     const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
     const [open1, setOpen1] = useState(false);
     const firstName = useSelector(state => state.profile.firstName);
     const lastName = useSelector(state => state.profile.lastName);
@@ -16,6 +18,22 @@ export default function AsideSettings() {
     const token = useSelector(state => state.profile.jwt);
     const [eventsData, setEventsData] = useState([]);
     const [details, setDetails] = useState({})
+    const [notifications, setNotifications] = useState([])
+    const [unreadNotifications, setUnReadNotifications] = useState(0)
+
+    async function getNotifications() {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/notification`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setUnReadNotifications(Item.data.unreadNotifications)
+            setNotifications(Item.data.notifications)
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
 
     async function getNewEvents() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/events`, {
@@ -29,7 +47,9 @@ export default function AsideSettings() {
             return failedToast(err.response.data.error);
         });
     }
+
     useEffect(() => {
+        getNotifications();
         getNewEvents();
     }, [])
 
@@ -38,11 +58,14 @@ export default function AsideSettings() {
         <div className="hidden flex-col px-4 xl:px-9 py-10 w-full bg-neutral-200 max-w-[300px] xl:max-w-[450px] lg:flex">
             <div className="flex gap-5">
                 <div className="flex gap-2 w-full max-w-[30%] justify-between">
-                    <img
-                        loading="lazy"
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/547142d9a722297aa5375ffeec2ac51228e396ace65520fe4c323cc9dc9cdc56?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                        className="shrink-0 aspect-square w-[35px] xl:w-[45px]"
-                    />
+                    <div onClick={()=>{setOpen2(!open2)}} className='relative cursor-pointer'>
+                        <img
+                            loading="lazy"
+                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/547142d9a722297aa5375ffeec2ac51228e396ace65520fe4c323cc9dc9cdc56?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                            className="shrink-0 aspect-square w-[35px] xl:w-[45px]"
+                        />
+                        <div className='bg-red-500 absolute top-[-10px] max-md:top-[0px] right-[-3px] rounded-full flex justify-center items-center h-7 w-7 font-bold text-white text-center'>{unreadNotifications}</div>
+                    </div>
                     <img
                         loading="lazy"
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/44bac1ef3fcf5c5c8e6360efc056bd45ccc33e5414f6fdcb3d5a1a4d354909b9?apiKey=cf358c329e0d49a792d02d32277323ef&"
@@ -85,14 +108,15 @@ export default function AsideSettings() {
                         <div className="relative mt-3.5 text-sm xl:text-base">
                             {Item.description}
                         </div>
-                        <div onClick={()=>{setDetails(Item); setOpen1(!open1)}} className="relative justify-center self-start px-8 py-1.5 mt-3 text-base font-medium leading-4 bg-violet-800 rounded-lg cursor-pointer">
+                        <div onClick={() => { setDetails(Item); setOpen1(!open1) }} className="relative justify-center self-start px-8 py-1.5 mt-3 text-base font-medium leading-4 bg-violet-800 rounded-lg cursor-pointer">
                             RSVP Now
                         </div>
                     </div>
                 ))
             }
             <SettingDialog open={open} setOpen={setOpen} />
-            <ViewEvent open={open1} setOpen={setOpen1} details={details}/>
+            <NotificationsDialog open={open2} setOpen={setOpen2} notifications={notifications} />
+            <ViewEvent open={open1} setOpen={setOpen1} details={details} />
         </div>
     );
 }

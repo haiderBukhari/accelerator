@@ -112,7 +112,9 @@ export default function Members() {
                             <div className="w-full grid  grid-cols-2 mx-auto items-start max-xl:grid-cols-1">
                                 {
                                     data?.map((Item, Index) => (
-                                        <div onClick={()=>{Navigate(`/dashboard/profile/${Item._id}`)}} key={Item.firstName} className={`flex flex-col w-full cursor-pointer mb-5 max-md:ml-0 gap-5 max-xl:ml-0 max-xl:mr-0 max-md:mb-0 ${Index % 2 != 0 ? 'ml-4' : 'mr-4'}`}>
+                                        <div onClick={()=>{
+                                            Navigate(`/dashboard/profile/${Item._id}`)
+                                        }} key={Item.firstName} className={`flex flex-col w-full cursor-pointer mb-5 max-md:ml-0 gap-5 max-xl:ml-0 max-xl:mr-0 max-md:mb-0 ${Index % 2 != 0 ? 'ml-4' : 'mr-4'}`}>
                                             <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
                                                 <div className="flex flex-row md:flex-col justify-between px-4 py-5 w-full rounded-2xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5 max-md:flex-col max-md:min-h-[200px]">
                                                     <div className="flex gap-4 justify-start leading-[95%]">
@@ -130,20 +132,15 @@ export default function Members() {
                                                             <div className="text-lg tracking-wider text-neutral-800">
                                                                 {Item.firstName} {Item.lastName}
                                                             </div>
-                                                            {/* <div className="flex gap-1 mt-1.5 text-base tracking-wider text-neutral-500">
-                                                                <img
-                                                                    loading="lazy"
-                                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/e45fecabc39e1c9254fb3584535e2d938fb9709899cd2dda93932871e6bfac82?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                                    className="shrink-0 w-5 aspect-square"
-                                                                />
-                                                                <div className="my-auto">Paris, France</div>
-                                                            </div> */}
                                                         </div>
                                                     </div>
                                                     <div className="mt-3.5 text-base tracking-wider leading-4 text-zinc-500 hidden md:block">
                                                         {Item.aboutMe}
                                                     </div>
-                                                    <div onClick={() => { setData([]); setPage(1); addFriend(Item._id) }} className="md:mt-3 justify-center self-end px-8 py-2 text-base leading-4 text-white bg-violet-800 cursor-pointer rounded-xl max-md:px-5 hover:bg-[#FA5300]">
+                                                    <div onClick={(e) => { 
+                                                        e.stopPropagation()
+                                                        setData([]); setPage(1); addFriend(Item._id)
+                                                        }} className="md:mt-3 justify-center self-end px-8 py-2 text-base leading-4 text-white bg-violet-800 cursor-pointer rounded-xl max-md:px-5 hover:bg-[#FA5300]">
                                                         Add Friend
                                                     </div>
                                                 </div>
