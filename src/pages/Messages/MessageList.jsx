@@ -94,9 +94,9 @@ export default function Messages() {
 
     return (
         <div className="w-full">
-            <div className="flex max-md:flex-col max-md:gap-0 h-full w-full">
+            <div className="flex max-md:flex-col max-md:gap-0 h-full w-full min-h-[100vh]">
                 <div className="flex-col w-6/12 max-md:ml-0 max-md:w-full hidden md:flex">
-                    <div className="flex flex-col grow px-6 pt-11 pb-20 w-full text-base bg-stone-300 max-md:px-5 max-md:mt-10 max-md:max-w-full">
+                    <div className="flex flex-col grow px-6 pt-11 pb-20 w-full text-base bg-[#F1F1F1] max-md:px-5 max-md:mt-10 max-md:max-w-full">
                         <div className="flex gap-5 items-start px-5 py-3 rounded-xl border border-solid bg-neutral-200 border-stone-300 text-neutral-500 max-md:pr-5">
                             <input onChange={(e) => {
                                 const filteredList = userList.filter((Item) => Item.firstName.toLowerCase().includes(e.target.value.toLowerCase()) || Item.lastName.toLowerCase().includes(e.target.value.toLowerCase()))
@@ -130,14 +130,14 @@ export default function Messages() {
                                 </>
                             ))
                         }
-                        <div style={{ height: '2px' }} className="self-center mt-10 w-60 bg-neutral-400"></div>
-                        <div className="self-center font-bold text-neutral-400">End</div>
+                        <div style={{ height: '2px' }} className="self-center mt-10 w-60 bg-neutral-400 hidden"></div>
+                        <div className="self-center font-bold text-neutral-400 hidden">End</div>
                     </div>
                 </div>
-                <div className="flex flex-col w-full">
-                    <div className="flex flex-col max-md:max-w-full">
+                <div className="flex flex-col w-full ">
+                    <div className="flex flex-col max-md:max-w-full justify-between">
                         <div className="">
-                            <div className="flex gap-5 justify-between px-12 py-6 w-full bg-[#E0E0E0] rounded-2xl md:rounded-none max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                            <div className="flex gap-5 justify-between px-12 py-6 w-full bg-[#F1F1F1] rounded-2xl md:rounded-none max-md:flex-wrap max-md:px-5 max-md:max-w-full">
                                 <div className="flex gap-5 text-lg">
                                     <img
                                         loading="lazy"
@@ -183,9 +183,9 @@ export default function Messages() {
                                 }
                             </div>
                         </ScrollToBottom>
-                        <div className="flex gap-5 self-center pt-5 md:pt-20 md:max-md:flex-wrap max-md:mt-10 w-full px-5 pb-10 bg-transparent">
-                            <div className="flex flex-auto gap-5 justify-between py-3.5 rounded-xl border border-solid bg-[#CCCCCC] border-stone-300 md:max-md:flex-wrap w-full pr-10 pl-5">
-                                <input value={message} onChange={(e) => { setMessage(e.target.value) }} className="my-auto text-lg text-neutral-500 w-full bg-[#CCCCCC] outline-none" type="text" name="" id="" placeholder="Type Here" />
+                        <div className="flex gap-5 self-center pt-5 md:pt-20 md:max-md:flex-wrap max-md:mt-10 w-full px-5 pb-5 bg-transparent">
+                            <div className="flex flex-auto gap-5 justify-between py-3.5 rounded-xl border border-solid bg-[#e9e9e9] border-stone-300 md:max-md:flex-wrap w-full pr-10 pl-5">
+                                <input value={message} onChange={(e) => { setMessage(e.target.value) }} className="my-auto text-lg text-neutral-500 w-full bg-[#e9e9e9] outline-none" type="text" name="" id="" placeholder="Type Here" />
                                 <div className="flex gap-2.5 justify-between">
                                     <img
                                         loading="lazy"

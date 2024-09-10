@@ -72,8 +72,8 @@ export default function Messages() {
                                 </>
                             ))
                         }
-                        <div style={{ height: '2px' }} className="self-center mt-10 mb-2 w-60 bg-neutral-400"></div>
-                        <div className="self-center font-bold text-neutral-400">End</div>
+                        <div style={{ height: '2px' }} className="self-center mt-10 mb-2 w-60 bg-neutral-400 hidden"></div>
+                        <div className="self-center font-bold text-neutral-400 hidden">End</div>
                     </div>
                 </div>
                 <div className="flex-col ml-5 max-md:ml-0 max-md:w-full max-lg:hidden flex w-full max-w-[70%] lg:max-w-[55%] xl:max-w-[70%]">

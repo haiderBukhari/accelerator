@@ -90,11 +90,11 @@ export default function Groups() {
                                                 <img
                                                     loading="lazy"
                                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/cbf9f452b2ad0d9bc2072c788e3cdac85906c6c3a63ab0a7ec8669c8d70dc7de?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                    className="shrink-0 aspect-square w-[25px] max-md:w-[15px]"
+                                                    className="shrink-0 aspect-square w-[25px] max-md:w-[15px] cursor-pointer"
                                                 />
                                                 <div className="my-auto">{item.likes}</div>
                                             </div>
-                                            <div onClick={() => { Navigate(`/dashboard/details/groups?id=${item._id}`) }} className="flex justify-center px-5 py-1 text-base xl:text-lg text-white bg-violet-800 rounded-xl border border-solid w-full max-w-[130px] xl:max-w-[150px] border-neutral-400 max-md:px-3 max-md:py-2 max-md:max-w-[80px] max-md:text-xs cursor-pointer">
+                                            <div onClick={() => { Navigate(`/dashboard/details/groups?id=${item._id}`) }} className="flex justify-center px-5 py-1 text-base xl:text-lg text-white bg-violet-800 rounded-xl w-full max-w-[130px] xl:max-w-[150px] border-neutral-400 max-md:px-3 max-md:py-2 max-md:max-w-[80px] max-md:text-xs cursor-pointer hover:bg-[#FA5300]">
                                                 Check Details
                                             </div>
                                         </div>

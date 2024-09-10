@@ -58,7 +58,7 @@ export default function Posts() {
 
     return (
         <div className="flex flex-col w-full max-w-[100%] px-5 mx-auto mt-5">
-            <div onClick={() => { setCreatePost(!createPost) }} className="flex flex-col md:flex-row gap-5 justify-between pl-5 mt-10 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:flex-wrap max-md:max-w-full h-[200px] max-md:h-[170px] md:h-auto">
+            <div onClick={() => { setCreatePost(!createPost) }} className="flex flex-col md:flex-row gap-5 justify-between pl-5 mt-10 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:flex-wrap max-md:max-w-full h-[200px] max-md:h-[170px] md:h-auto cursor-pointer">
                 <div className="flex gap-4 max-md:mt-5 my-auto text-base font-medium text-zinc-500">
                     <img
                         loading="lazy"
@@ -67,7 +67,7 @@ export default function Posts() {
                     />
                     <div className="flex-auto my-auto cursor-pointer bg-opacity-80 text-[#8A8A8A]">Let’s make something new!</div>
                 </div>
-                <div className="flex flex-col justify-center self-end md:self-auto m-0 h-auto p-0 w-full max-w-[160px] max-md:max-w-[150px] py-2 md:py-4 mb-3 mr-2 md:mr-0 md:mb-0 bg-[#4C1DBE] rounded-xl md:rounded-3xl border border-solid border-[#AAAAAA]">
+                <div className="flex flex-col justify-center self-end md:self-auto m-0 h-auto p-0 w-full max-w-[100px] py-2 md:py-4 mb-3 mr-2 md:mr-0 md:mb-0 bg-[#4C1DBE] rounded-xl md:rounded-3xl border border-solid border-[#AAAAAA]">
                     <div className="flex gap-0.5 justify-between px-4">
                         <img
                             loading="lazy"
@@ -82,7 +82,7 @@ export default function Posts() {
                         <img
                             loading="lazy"
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/99a946cab8c72acff3b6467ffde7e90e4ede4b672a22273cb1a6a2a56cc84de5?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                            className="shrink-0 aspect-square w-[20px]"
+                            className="shrink-0 aspect-square w-[20px] hidden"
                         />
                     </div>
                 </div>
@@ -112,7 +112,7 @@ export default function Posts() {
                             <img
                                 loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/17fb2d504a4a46adf611331825b24e3490f3ff0a7aa1ff0f0783d4da246b0be9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                className="shrink-0 my-auto aspect-square w-[20px] md:w-[25px]"
+                                className="shrink-0 my-auto aspect-square w-[20px] md:w-[25px] cursor-pointer"
                             />
                         </div>
 
@@ -126,7 +126,7 @@ export default function Posts() {
                                 Item.imageUrl && <img
                                     loading="lazy"
                                     src={Item.imageUrl}
-                                    className="w-full h-full md:max-h-[300px] max-h-[120px]"
+                                    className="w-full 3xl:max-h-[300px] h-auto max-md:max-h-[120px] "
                                 // style={{ aspectRatio: '1.63' }}
                                 />
                             }
@@ -170,13 +170,13 @@ export default function Posts() {
                                 <img
                                     loading="lazy"
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/81b3988206ae45b69d451692ab183825d130156ed8d4f79341e2ae1d2c11b2ce?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="shrink-0 aspect-square w-[25px]"
+                                    className="shrink-0 aspect-square w-[25px] cursor-pointer"
                                 />
                                 <div className="my-auto">{Item.comments}</div>
                                 <img
                                     loading="lazy"
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/cc32947d0dc0dffaf5b54937d22a080004ed72c715c0b2d4d6a6def7314ff0f6?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                    className="shrink-0 aspect-square w-[25px]"
+                                    className="shrink-0 aspect-square w-[25px] cursor-pointer"
                                 />
                                 <div className="my-auto">{Item.shares}</div>
                             </div>

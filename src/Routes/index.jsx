@@ -39,7 +39,7 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
   return (
     <div>
       {!currentLocation && (
-        <div className={`max-md:bg-[#f2f2f2] ${blueBgColor}`}>
+        <div className={`max-md:bg-[#f2f2f2] hidden ${blueBgColor}`}>
           <div className="flex justify-between items-center pt-4 px-5 w-full text-base font-medium text-zinc-800 max-md:flex-wrap max-md:max-w-full">
             <p className="hidden md:block">Search on  The App Accelerator </p>
             <img

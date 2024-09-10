@@ -117,13 +117,13 @@ export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAg
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        <div className="flex flex-col w-[300px] md:w-[460px] mx-auto">
+                        <div className="flex flex-col w-full mx-auto">
                             <div className="w-full">
                                 <textarea
                                     style={{ border: "2px solid #ccc" }}
                                     onChange={(e) => { setText(e.target.value) }}
                                     value={text}
-                                    className="outline-none rounded-md text-black px-3 py-4 text-md max-w-[460px] w-full resize-none"
+                                    className="outline-none rounded-md text-black px-3 py-4 text-md w-full resize-none max-md:h-[150px]"
                                     rows={10}
                                 ></textarea>
                             </div>
@@ -138,7 +138,7 @@ export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAg
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <div className='w-full flex justify-between ml-4 items-center'>
+                    <div className='w-full flex justify-between ml-0 px-4 items-center'>
                         <div className='flex rounded-2xl w-full'>
                             {
                                 !file ? <>
@@ -158,9 +158,9 @@ export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAg
                                 </>
                             }
                         </div>
-                        <div className="flex flex-col justify-center max-w-[135px] w-full">
-                            <div className="flex justify-center items-center px-4 py-4 w-full bg-violet-800 rounded-xl border border-solid border-stone-300 cursor-pointer hover:bg-opacity-70">
-                                <p onClick={handleSubmit} className="text-white font-semibold text-md inline text-lg">Post <MoveRight className="text-white inline ml-2 w-[20px]" /></p>
+                        <div className="flex flex-col justify-center max-w-[100px] w-full">
+                            <div className="flex justify-center items-center px-1 py-2 w-full bg-violet-800 rounded-xl border border-solid border-stone-300 cursor-pointer hover:bg-opacity-70 max-w-[100px] hover:bg-[#FA5300]">
+                                <p onClick={handleSubmit} className="text-white font-semibold text-md text-lg flex items-center">Post <MoveRight className="text-white inline ml-2 w-[20px]" /></p>
                             </div>
                         </div>
                     </div>

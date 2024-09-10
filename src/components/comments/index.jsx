@@ -144,7 +144,7 @@ export default function CommentsDialog({ open, setOpen }) {
                         <div className="flex-auto my-auto text-sm text-neutral-500">
                             Write a commment
                         </div>
-                        <div className="flex gap-5">
+                        <div className="flex gap-5 hidden">
                             <img
                                 loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/6a603fbb697e90781961ee95ea21b20e9b84bfc250653dd1126f05f3fd91e8ae?apiKey=cf358c329e0d49a792d02d32277323ef&"
