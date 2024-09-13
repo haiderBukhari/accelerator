@@ -21,6 +21,7 @@ import CreateModule from "../pages/Courses/createModule";
 import CreateEvent from "../pages/Events/createEvents";
 import MembersRequests from "../pages/Members/membersRequest";
 import ProfilePage from "../pages/profilePage";
+import Payment from "../pages/Payment";
 
 const Index = ({ navbarOpen, setNavbarOpen }) => {
   const location = useLocation();
@@ -64,6 +65,7 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
         </div>
       )}
       <Routes>
+        <Route path="/payment" element={!token ? <Payment /> : <Navigate to ="/dashboard/home"/>} />
         <Route path="/" element={!token ? <Login /> : <Navigate to ="/dashboard/home"/>} />
         <Route path="/login" element={!token ? <Login /> : <Navigate to ="/dashboard/home"/>} />
         <Route path="/register" element={!token ? <Register /> : <Navigate to ="/dashboard/home"/>} />

@@ -118,7 +118,7 @@ export default function Events() {
                 !loading && eventsData.length === 0 && <div className="text-center mt-10 text-2xl">No New Event Yet</div>
             }
             {
-                loading && <div className="text-center mt-10 text-2xl">Loading...</div>
+                loading && eventsData.length===0 && <div className="text-center mt-10 text-2xl">Loading...</div>
             }
             <ViewEvent open={open} setOpen={setOpen} details={details} />
         </div>
