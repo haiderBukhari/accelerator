@@ -65,8 +65,8 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
         </div>
       )}
       <Routes>
-        <Route path="/payment" element={!token ? <Payment /> : <Navigate to ="/dashboard/home"/>} />
         <Route path="/" element={!token ? <Login /> : <Navigate to ="/dashboard/home"/>} />
+        <Route path="/payment" element={!token ? <Payment /> : <Navigate to ="/dashboard/home"/>} />
         <Route path="/login" element={!token ? <Login /> : <Navigate to ="/dashboard/home"/>} />
         <Route path="/register" element={!token ? <Register /> : <Navigate to ="/dashboard/home"/>} />
         <Route path="/recovery-email" element={!token ? <RecoveryEmail /> : <Navigate to ="/dashboard/home"/>} />

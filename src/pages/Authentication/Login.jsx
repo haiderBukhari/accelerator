@@ -25,14 +25,15 @@ const Login = () => {
             }
         }).then((Item) => {
             if (!Item.data.recoveryEmail) {
-                successToast("Please Select Payment Plan")
+                successToast("Successfully LogedIn")
                 Navigate(`/recovery-email?id=${Item.data.id}`);
             } else {
-                successToast("Successfully LogedIn")
                 if(!Item.data.isSubscriber){
+                    successToast("Please Select Payment Plan")
                     Navigate(`/payment?id=${Item.data.id}`)
                     return;
                 }
+                successToast("Successfully LogedIn")
                 dispatch(addUserDetails({
                     jwt: Item.data.token,
                     firstName: Item.data.firstName,
@@ -40,7 +41,6 @@ const Login = () => {
                     profilePicture: Item.data.profilePicture,
                     id: Item.data.id
                 }))
-                successToast("Successfully LogedIn")
                 Navigate('/dashboard/course')
             }
         }).catch((err) => {
