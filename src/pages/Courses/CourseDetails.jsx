@@ -132,7 +132,7 @@ export default function CourseDetails() {
                                                         {AsideItems.name}
                                                     </div>
                                                     <div className="mt-2.5 text-base whitespace-nowrap text-ellipsis text-neutral-500 max-md:max-w-full">
-                                                        {text.length > 30 ? text.slice(0, 30) + '...' : text}
+                                                        {AsideItems.descriptionShort > 30 ? AsideItems.descriptionShort.slice(0, 30) + '...' : AsideItems.descriptionShort}
                                                     </div>
                                                 </div>
                                             </div>
