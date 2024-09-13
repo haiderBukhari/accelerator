@@ -2,15 +2,35 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { failedToast } from "../../utils/toastNotifications";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 export default function CourseDetails() {
     const text = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.';
 
+    const Navigate = useNavigate();
     const token = useSelector(state => state.profile.jwt);
     const { id } = useParams(); // Access path parameter
     const [data, setData] = useState({})
     const [asideData, setAsideData] = useState([])
+    const [userData, setUserData] = useState({});
+
+
+    async function getUserData() {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/userData`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setUserData(Item.data.user);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+    useEffect(() => {
+        getUserData();
+    }, [])
 
     const getModuleDetails = async () => {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/courses/modules/${id}`, {
@@ -27,7 +47,7 @@ export default function CourseDetails() {
 
     useEffect(() => {
         getModuleDetails();
-    }, []);
+    }, [id]);
 
     useEffect(() => {
         if (data.courseId) {
@@ -36,13 +56,13 @@ export default function CourseDetails() {
     }, [data]);
 
     const getCourses = async () => {
-        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/courses?id=${data.courseId}`, {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/courses/modules?id=${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
         }).then((res) => {
-            setAsideData(res.data.courses[0].modules)
+            setAsideData(res.data.module)
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
@@ -84,7 +104,16 @@ export default function CourseDetails() {
                         </div>
                     </div>
                     <div className="flex flex-col ml-5 w-[400px] max-md:ml-0 max-md:w-full">
+                        {
+                            userData.isAdmin && <button
+                                onClick={() => { Navigate(`/dashboard/video?id=${id}`) }}
+                                className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-violet-800 border border-transparent hover:bg-violet-700 focus:outline-none focus:ring-offset-2 focus:ring-violet-700 rounded-2xl w-[200px] mb-5 mx-auto"
+                            >
+                                Trip in video
+                            </button>
+                        }
                         <div className="flex flex-col items-start py-8 pl-10 w-[400px] rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:mt-7 ">
+
                             <div className="text-xl font-bold text-neutral-700 max-md:max-w-full">
                                 Other Sessions In This Module
                             </div>
@@ -92,7 +121,7 @@ export default function CourseDetails() {
                                 asideData?.map((AsideItems) => {
                                     if (AsideItems.id !== id) {
                                         return (
-                                            <div key={AsideItems.id} className="flex gap-5 mt-10 max-md:flex-wrap max-md:mt-10">
+                                            <div onClick={() => { Navigate(`/dashboard/course/details/${AsideItems._id}`) }} key={AsideItems.id} className="flex gap-5 mt-10 max-md:flex-wrap max-md:mt-10 cursor-pointer">
                                                 <img
                                                     loading="lazy"
                                                     src={AsideItems.imageLink}
