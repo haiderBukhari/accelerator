@@ -21,22 +21,52 @@ export default function Posts() {
     const profilePicture = useSelector(state => state.profile.profilePicture);
     const [selectedPostId, setSelectedPostId] = useState('')
     const [isOnlySavedPost, setIsOnlySavedPost] = useState(false)
+    const [loading, setLoading] = useState(true);
+    let [currentPage, setCurrentPage] = useState(1)
 
     const timeElapsed = (dateString) => {
         const date = new Date(dateString);
         return formatDistanceToNow(date, { addSuffix: true });
     };
 
-    async function getPosts() {
-        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/post?isOnlySavedPost=${isOnlySavedPost}`, {
+    const handleScroll = () => {
+        if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+            if((data.length%10<=9 && data.length%10!==0)){
+                return;
+            }else{
+                const nextPage= currentPage + 1;
+                setCurrentPage(nextPage)
+                getPosts(nextPage);
+            }
+        }
+    };
+
+    // Add scroll event listener
+    useEffect(() => {
+        if(!loading){
+            window.addEventListener('scroll', handleScroll);
+            return () => window.removeEventListener('scroll', handleScroll); // Cleanup on unmount
+        }
+    }, [loading]);
+
+
+    async function getPosts(nextPage) {
+        setLoading(true)
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/post?isOnlySavedPost=${isOnlySavedPost}&currentPage=${nextPage}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
         }).then((Item) => {
-            setData(Item.data);
+            setLoading(false)
+            if(data.length){
+                setData([...data, ...Item.data])
+            }else{
+                setData(Item.data)
+            }
             setFetched(Item.data.length ? false : true)
         }).catch((err) => {
+            setLoading(false)
             return failedToast(err.response.data.error);
         });
     }
@@ -71,7 +101,8 @@ export default function Posts() {
     }
 
     useEffect(() => {
-        getPosts();
+        setCurrentPage(1)
+        getPosts(1);
     }, [fetchAgain, isOnlySavedPost])
 
     return (
@@ -121,7 +152,7 @@ export default function Posts() {
             }
             {
                 data?.map((Item, index) => (
-                    <div key={Item.text ?? ''} className="flex flex-col px-5 md:px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400  max-md:max-w-full">
+                    <div key={Item._id ?? ''} className="flex flex-col px-5 md:px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400  max-md:max-w-full">
                         <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                             <div onClick={() => { Navigate(`/dashboard/profile/${Item.owner}`) }} className="flex gap-2 md:gap-4 cursor-pointer">
                                 <img
