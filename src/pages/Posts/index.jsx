@@ -7,7 +7,7 @@ import { failedToast } from "../../utils/toastNotifications";
 import professionalPicture from '../../assets/professionalPicture.jpeg'
 import { formatDistanceToNow } from 'date-fns';
 import { useNavigate } from "react-router-dom";
-import { Heart } from 'lucide-react';
+import { Bookmark, Heart } from 'lucide-react';
 
 export default function Posts() {
     const Navigate = useNavigate();
@@ -18,7 +18,9 @@ export default function Posts() {
     const [fetchAgain, setFetchAgain] = useState(false);
     const token = useSelector(state => state.profile.jwt);
     const id = useSelector(state => state.profile.id);
+    const profilePicture = useSelector(state => state.profile.profilePicture);
     const [selectedPostId, setSelectedPostId] = useState('')
+    const [isOnlySavedPost, setIsOnlySavedPost] = useState(false)
 
     const timeElapsed = (dateString) => {
         const date = new Date(dateString);
@@ -26,7 +28,7 @@ export default function Posts() {
     };
 
     async function getPosts() {
-        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/post`, {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/post?isOnlySavedPost=${isOnlySavedPost}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -53,9 +55,24 @@ export default function Posts() {
         });
     }
 
+
+    async function handleSave(id) {
+        await axios.put(`${import.meta.env.VITE_APP_BACKEND_URL}/post`, {
+            id: id
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
     useEffect(() => {
         getPosts();
-    }, [fetchAgain])
+    }, [fetchAgain, isOnlySavedPost])
 
     return (
         <div className="flex flex-col w-full max-w-[100%] px-5 mx-auto mt-5">
@@ -63,7 +80,7 @@ export default function Posts() {
                 <div className="flex gap-4 max-md:mt-5 my-auto text-base font-medium text-zinc-500">
                     <img
                         loading="lazy"
-                        srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/ae4eca671092c10d5cda8097c5ea429b8029a4513c2f357df2aa4e28d2db4dd1?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                        src={profilePicture ? profilePicture : professionalPicture}
                         className="shrink-0 w-10 border-4 rounded-xl border-violet-800 border-solid aspect-square hidden md:block"
                     />
                     <div className="flex-auto my-auto cursor-pointer bg-opacity-80 text-[#8A8A8A]">Let’s make something new!</div>
@@ -88,8 +105,17 @@ export default function Posts() {
                     </div>
                 </div>
             </div>
+            <div className="mt-6 flex justify-end items-center">
+                <h1 className="mr-4">Filter By</h1>
+                <select onChange={(e)=>{
+                    setIsOnlySavedPost(e.target.value ==='saved')
+                }} className="justify-center text-start items-start py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 hidden md:block outline-none px-3" name="" id="">
+                    <option value="all">All Posts</option>
+                    <option value="saved">Saved Posts</option>
+                </select>
+            </div>
             {
-                fetched && <div className="flex flex-col px-6 pt-5 pb-7 mt-8 w-full rounded-3xl text-2xl text-center max-md:pl-5 max-md:max-w-full">
+                fetched && <div className="flex flex-col px-6 pt-5 pb-7 mt-3 w-full rounded-3xl text-2xl text-center max-md:pl-5 max-md:max-w-full">
                     No New Posts Yet
                 </div>
             }
@@ -110,11 +136,34 @@ export default function Posts() {
                                     <div className="mt-0 md:mt-2 text-xs text-neutral-500">{timeElapsed(Item.createdAt)}</div>
                                 </div>
                             </div>
-                            <img
-                                loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/17fb2d504a4a46adf611331825b24e3490f3ff0a7aa1ff0f0783d4da246b0be9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                className="shrink-0 my-auto aspect-square w-[20px] md:w-[25px] cursor-pointer"
-                            />
+                            {
+                                Item.savedBy?.includes(id) ? <Bookmark
+                                    onClick={() => {
+                                        setData(
+                                            data.map((post) => {
+                                                if (post._id === Item._id) {
+                                                    post.savedBy = post.savedBy.filter((like) => like !== id);
+                                                }
+                                                return post;
+                                            })
+                                        )
+                                        handleSave(Item._id)
+                                    }}
+                                    className="cursor-pointer text-black" /> :
+                                    <Bookmark onClick={() => {
+                                        setData(
+                                            data.map((post) => {
+                                                if (post._id === Item._id) {
+                                                    console.log(post)
+                                                    post.savedBy.push(id);
+                                                }
+                                                return post;
+                                            })
+                                        )
+                                        handleSave(Item._id)
+                                    }}
+                                    className="cursor-pointer text-gray-500" />
+                            }
                         </div>
 
                         {
