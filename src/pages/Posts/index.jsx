@@ -139,6 +139,7 @@ export default function Posts() {
             <div className="mt-6 flex justify-end items-center">
                 <h1 className="mr-4">Filter By</h1>
                 <select onChange={(e)=>{
+                    setData([])
                     setIsOnlySavedPost(e.target.value ==='saved')
                 }} className="justify-center text-start items-start py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 hidden md:block outline-none px-3" name="" id="">
                     <option value="all">All Posts</option>
