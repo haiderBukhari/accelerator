@@ -120,6 +120,38 @@ export default function GroupsDetails() {
         });
     }
 
+    const togleGroup = async () => {
+        await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/joined-groups`, {
+            groupId: id
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            successToast("Group Privacy Changed")
+            getGroupData();
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+    
+    const joinGroup = async (userId) => {
+        await axios.put(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/joined-groups`, {
+            groupId: id,
+            userId: userId
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            getGroupUsersData();
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
     async function getGroupData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/${id}`, {
             headers: {
@@ -197,7 +229,7 @@ export default function GroupsDetails() {
                                         {
                                             !userData1.isAdmin && <ThumbsUp className="cursor-pointer" />
                                         }
-                                        <div className="justify-center px-2.5 py-1.5 font-medium text-violet-800 rounded-md border border-violet-800 border-solid bg-blue-700 bg-opacity-20">
+                                        <div className="justify-center px-2.5 py-1.5 font-medium text-violet-800 rounded-md border border-violet-800 border-solid bg-blue-700 bg-opacity-20 w-[100px]">
                                             {userData?.likes} Likes
                                         </div>
                                         {
@@ -205,7 +237,7 @@ export default function GroupsDetails() {
                                                 Join Now
                                             </div> : !userData1?.isAdmin && (userData?.joinedUsers?.includes(userId)) ? <div onClick={handleGroupJoin} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer ">
                                                 Leave Group
-                                            </div> : !userData1?.isAdmin && (userData?.pendingUsers?.includes(userId)) && <div onClick={handleGroupJoin} className="justify-center px-5 py-1.5 text-white bg-green-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer ">
+                                            </div> : !userData1?.isAdmin && (userData?.pendingUsers?.includes(userId)) && <div onClick={handleGroupJoin} className="justify-center px-5 py-1.5 text-white bg-green-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer">
                                                 Request Sent To Admin
                                             </div>
                                         }
@@ -252,6 +284,10 @@ export default function GroupsDetails() {
                                         <div className="mt-2 text-zinc-500">
                                             {userData?.description || 'NA'}
                                         </div>
+                                        <div onClick={togleGroup} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer my-4 w-[180px]">
+                                    {userData?.isPrivate ? 'Change to Public' : 'Change to Private'}                
+                                </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -464,7 +500,11 @@ export default function GroupsDetails() {
                                     <div className="flex gap-2 mt-4 max-md:flex-col max-md:gap-0 flex-wrap">
                                         {
                                             pendingUsers?.map((Item) => (
-                                                <div onClick={() => { Navigate(`/dashboard/profile/${Item._id}`) }} key={Item._id} className="flex flex-col max-md:ml-0 max-md:w-full cursor-pointer">
+                                                <div onClick={() => { Navigate(`/dashboard/profile/${Item._id}`) }} key={Item._id} className="flex flex-col max-md:ml-0 max-md:w-full cursor-pointer relative my-10">
+                                                    <div onClick={(e)=>{
+                                                        joinGroup(Item._id)
+                                                        e.stopPropagation();
+                                                    }} className="w-[100px] px-5 py-1.5 text-white bg-green-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer absolute top-[-20px] right-[-20px]">Approve</div>
                                                     <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
                                                         <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
                                                             <img

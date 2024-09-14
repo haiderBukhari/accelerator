@@ -11,7 +11,8 @@ const CreateGroup = ({ open, setOpen, submit, setSubmit }) => {
         contactNumber: '',
         email: '',
         talksAbout: '',
-        description: ''
+        description: '',
+        isPrivate: false
     });
     const [tempUserData, setTempUserData] = useState({});
     const [profilePhoto, setProfilePhoto] = useState(null);
@@ -28,7 +29,8 @@ const CreateGroup = ({ open, setOpen, submit, setSubmit }) => {
             contactNumber: '',
             email: '',
             talksAbout: '',
-            description: ''
+            description: '',
+            isPrivate: false
         });
     }
 
@@ -48,6 +50,7 @@ const CreateGroup = ({ open, setOpen, submit, setSubmit }) => {
         formData.append('email', userData.email);
         formData.append('talksAbout', userData.talksAbout);
         formData.append('description', userData.description);
+        formData.append('isPrivate', userData.isPrivate);
         try {
             await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/groups`, formData, {
                 headers: {
@@ -94,7 +97,7 @@ const CreateGroup = ({ open, setOpen, submit, setSubmit }) => {
                 className="hidden"
                 ref={fileInputRef}
             />
-            <div className='w-[80%] mt-5'>
+            <div className='w-full mt-5'>
                 <div className="flex flex-col text-base font-medium tracking-wider leading-4 max-w-[361px] text-neutral-800">
                     <div className="w-full font-semibold">Group Name</div>
                     <input onChange={(event) => { setUserData({ ...userData, name: event.target.value }) }} value={userData?.name ?? ""} style={{ border: "1px solid #AAAAAA" }} type="text" name="" id="" className="justify-center items-start px-5 py-2 mt-3 w-full text-base tracking-wider rounded-xl border border-solid outline-none text-black bg-zinc-300 border-stone-300" placeholder='i.e. jhon' />
@@ -106,6 +109,12 @@ const CreateGroup = ({ open, setOpen, submit, setSubmit }) => {
                     <textarea onChange={(event) => { setUserData({ ...userData, talksAbout: event.target.value }) }} value={userData?.talksAbout ?? ""} rows={4} style={{ border: "1px solid #AAAAAA" }} className="justify-center items-start px-5 py-2 mt-3 w-full text-base tracking-wider rounded-xl border border-solid outline-none text-black bg-zinc-300 border-stone-300" placeholder='Type here' name="" id=""></textarea>
                     <div className="mt-5 w-full font-semibold">Description</div>
                     <textarea onChange={(event) => { setUserData({ ...userData, description: event.target.value }) }} value={userData?.description ?? ""} rows={4} style={{ border: "1px solid #AAAAAA" }} className="justify-center items-start px-5 py-2 mt-3 w-full text-base tracking-wider rounded-xl border border-solid outline-none text-black bg-zinc-300 border-stone-300" placeholder='Type here' name="" id=""></textarea>
+                    <div className="mt-5 w-full font-semibold">Group Type</div>
+                    {/* <textarea  placeholder='Type here' name="" id=""></textarea> */}
+                    <select onChange={(event) => { setUserData({ ...userData, isPrivate: event.target.value == "true" ? true: false }); }} rows={4} style={{ border: "1px solid #AAAAAA" }} className="justify-center items-start px-5 py-2 mt-3 w-full text-base tracking-wider rounded-xl border border-solid outline-none text-black bg-zinc-300 border-stone-300" name="" id="">
+                        <option value={"false"}>Public</option>
+                        <option value={"true"}>Private</option>
+                    </select>
                 </div>
             </div>
         </div>

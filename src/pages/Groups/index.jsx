@@ -173,7 +173,7 @@ export default function Groups() {
                         }
                     }}
                 >
-                    <DialogTitle id="alert-dialog-title">
+                    <DialogTitle id="alert-dialog-title" className="w-full">
                         <p className='font-semibold'>
                             {"Create Group"}
                         </p>
