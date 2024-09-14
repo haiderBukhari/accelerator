@@ -18,6 +18,7 @@ export default function Posts() {
     const [fetchAgain, setFetchAgain] = useState(false);
     const token = useSelector(state => state.profile.jwt);
     const id = useSelector(state => state.profile.id);
+    const [selectedPostId, setSelectedPostId] = useState('')
 
     const timeElapsed = (dateString) => {
         const date = new Date(dateString);
@@ -136,11 +137,11 @@ export default function Posts() {
                         </div>
                         <div className="flex gap-5 justify-between px-px mt-6 w-full text-sm max-md:flex-wrap max-md:max-w-full">
                             <div className="flex w-full flex-col justify-center text-neutral-400 max-md:max-w-full">
-                                <button onClick={() => { setOpen(!open) }} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full hidden md:block">
+                                <button onClick={() => { setSelectedPostId(Item._id); setOpen(!open) }} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 hidden md:block outline-none w-full">
                                     Write a comment
                                 </button>
                             </div>
-                            <div className="flex max-w-[150px] md:max-w-[200px] justify-between w-full my-auto whitespace-nowrap text-neutral-400">
+                            <div className="flex max-w-[100px] md:max-w-[140px] justify-between w-full my-auto whitespace-nowrap text-neutral-400">
                                 {
                                     Item.likeBy?.includes(id) ? <Heart onClick={() => {
                                         setData(
@@ -168,23 +169,22 @@ export default function Posts() {
                                 }
                                 <div className="my-auto ml-[-10px]">{Item.likes}</div>
                                 <img
+                                    onClick={() => { setSelectedPostId(Item._id); setOpen(!open) }}
                                     loading="lazy"
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/81b3988206ae45b69d451692ab183825d130156ed8d4f79341e2ae1d2c11b2ce?apiKey=cf358c329e0d49a792d02d32277323ef&"
                                     className="shrink-0 aspect-square w-[25px] cursor-pointer"
                                 />
-                                <div className="my-auto">{Item.comments}</div>
                                 <img
                                     loading="lazy"
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/cc32947d0dc0dffaf5b54937d22a080004ed72c715c0b2d4d6a6def7314ff0f6?apiKey=cf358c329e0d49a792d02d32277323ef&"
                                     className="shrink-0 aspect-square w-[25px] cursor-pointer"
                                 />
-                                <div className="my-auto">{Item.shares}</div>
                             </div>
                         </div>
                     </div>
                 ))
             }
-            <CommentsDialog open={open} setOpen={setOpen} />
+            <CommentsDialog open={open} setOpen={setOpen} selectedPostId={selectedPostId} setSelectedPostId={setSelectedPostId} />
             <CreatePostDialog open={createPost} setOpen={setCreatePost} fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
         </div>
     );
