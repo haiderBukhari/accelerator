@@ -26,3 +26,16 @@
 ::-webkit-scrollbar-thumb:hover{
   background: rgb(91 33 182/ 0.8);
 }
+
+
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+    width: 100%;
+    max-width: 600px;
+}
+
+@media (max-width:767px){
+  .MuiDialogTitle-root+.css-ypiqx9-MuiDialogContent-root,
+   .css-bdhsul-MuiTypography-root-MuiDialogTitle-root {
+    padding: 20px 15px;
+}
+}

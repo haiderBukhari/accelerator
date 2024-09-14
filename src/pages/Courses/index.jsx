@@ -89,7 +89,7 @@ export default function Courses() {
                     <div key={Item.name}>
                         <div className="flex flex-row justify-between w-full items-center hover:opacity-80 cursor-pointer">
                             <div className="w-full">
-                                <div className="mt-14 text-3xl font-bold text-violet-800 max-md:mt-10 max-md:max-w-full">
+                                <div className="mt-8 text-3xl font-bold text-violet-800 max-md:mt-10 max-md:max-w-full">
                                     {Item.name}
                                 </div>
                                 {
@@ -104,29 +104,29 @@ export default function Courses() {
                         {
                             Item.modules.map((ItemDetails) => (
                                 <div key={ItemDetails.id}>
-                                    <div className="flex gap-5 justify-between items-center px-px mt-6 w-full max-md:flex-wrap max-md:max-w-full">
+                                    <div className="flex gap-5 justify-between items-center mt-6 w-full max-lg:flex-wrap max-lg:max-w-full">
                                         <div className="self-stretch w-full">
-                                            <div className="flex w-full items-center gap-5 max-md:flex-col max-md:gap-0">
-                                                <div className="flex items-center flex-col w-[28%] max-md:ml-0 max-md:w-full">
+                                            <div className="flex w-full items-center gap-5 max-lg:flex-col max-md:gap-0">
+                                                <div className="flex items-center flex-col max-lg:ml-0 max-lg:w-full">
                                                     <img
                                                         loading="lazy"
                                                         src={ItemDetails.imageLink}
-                                                        className="grow shrink-0 max-w-full border-solid aspect-[1.49] border-[3px] border-neutral-400 w-[150px] max-md:mt-5"
+                                                        className="grow shrink-0 w-full min-w-[150px] object-cover max-w-[160px] border-solid aspect-[1.49] border-[3px] border-neutral-400  max-md:mt-5 rounded-xl max-lg:object-cover max-lg:max-w-[600px]"
                                                     />
                                                 </div>
                                                 <div className="flex flex-col ml-1 w-full max-md:ml-0 max-md:w-full">
                                                     <div className="flex flex-col self-stretch my-auto max-md:mt-9 max-md:max-w-full">
-                                                        <div className="text-lg font-semibold text-zinc-600 max-md:max-w-full">
+                                                        <div className="text-lg font-semibold text-zinc-600 max-md:max-w-full max-w-[500px]">
                                                             {ItemDetails.name}
                                                         </div>
-                                                        <div className="mt-1 text-sm text-neutral-500 max-md:max-w-full">
+                                                        <div className="mt-1 text-base max-md:text-sm text-neutral-500 max-md:max-w-full max-w-[700px] line-clamp-3">
                                                             {ItemDetails.descriptionShort}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex w-6/12 md:w-2/12 items-center gap-5 self-stretch my-auto text-base">
+                                        <div className="flex w-full max-w-[130px] items-center gap-5 self-stretch my-auto text-base">
                                             <div className="flex gap-2.5 text-neutral-500">
                                                 <img
                                                     loading="lazy"
@@ -140,10 +140,10 @@ export default function Courses() {
                                             onClick={() => { Navigate(`/dashboard/course/details/${ItemDetails.id}`) }}
                                             loading="lazy"
                                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/f7c99789c18d7823e75d0ea2e0789fa546a117a0f4744c541ab08390c619b505?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                            className="shrink-0 self-stretch my-auto aspect-[1.25] w-[75px] cursor-pointer"
+                                            className="shrink-0 self-stretch my-auto aspect-[1.25] w-full max-w-[60px] max-md:max-w-[50px] cursor-pointer"
                                         />
                                     </div>
-                                    <div className="shrink-0 self-center mt-7 h-[1px] border border-solid bg-neutral-400 border-neutral-400 max-w-[80%] w-full mx-auto" />
+                                    <div className="shrink-0 self-center mt-7 h-[1px] border border-solid border-[#AAAAAA] max-w-[90%] w-full mx-auto" />
                                 </div>
                             ))
                         }

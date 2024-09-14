@@ -74,11 +74,11 @@ export default function MembersRequests() {
             <div>
                 <div className='flex justify-center flex-wrap mt-5'>
                     {
-                        loading && <div className='w-full'>
+                        loading && <div className='w-full '>
                             <p className='text-center'>Loading...</p>
                         </div>
                     }
-                    {(!loading && !data.length) && <div className='w-full'>
+                    {(!loading && !data.length) && <div className='w-full min-h-[calc(100vh-252px)] flex items-center justify-center'>
                         <p className='text-center'>No New request Yet...</p>
                     </div>}
                     {

@@ -79,7 +79,7 @@ const Login = () => {
                     <input onChange={(e) => { setPassword(e.target.value) }} value={password} type={`${showPassword ? 'text' : 'password'}`} className="justify-center items-start px-6 py-2 mt-2 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black max-md:px-5 max-md:max-w-full outline-none focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300]" placeholder="Type Here" />
                     <div className="flex gap-3.5 justify-end self-start mt-6 text-base tracking-wider text-black">
                         <input onChange={() => setShowPassword(!showPassword)} className="shrink-0 w-5 h-5 rounded-md border border-solid border-stone-300 bg-black outline-none" type='checkbox' />
-                        <div className="flex-auto my-auto">Show Password</div>
+                        <div className="flex-auto my-auto leading-[20px]">Show Password</div>
                     </div>
                     <div className="flex gap-5 justify-between mt-9 leading-[105%] max-md:flex-wrap max-md:max-w-full">
                         <div onClick={onSubmit} className=" justify-center px-12 py-2 text-white whitespace-nowrap bg-violet-800 rounded-2xl max-md:px-9 cursor-pointer text-lg hover:text-white hover:bg-[#FA5300] transition-colors duration-300">

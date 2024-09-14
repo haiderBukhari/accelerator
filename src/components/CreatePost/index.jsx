@@ -123,7 +123,7 @@ export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAg
                                     style={{ border: "2px solid #ccc" }}
                                     onChange={(e) => { setText(e.target.value) }}
                                     value={text}
-                                    className="outline-none rounded-md text-black px-3 py-4 text-md w-full resize-none max-md:h-[150px]"
+                                    className="outline-none rounded-md text-black px-3 py-4 text-md w-full resize-none max-md:h-[150px] md:min-w-[450px]"
                                     rows={10}
                                 ></textarea>
                             </div>
@@ -171,4 +171,5 @@ export default function CreatePostDialog({ open, setOpen, fetchAgain, setFetchAg
             </Dialog>
         </React.Fragment>
     );
+    
 }
