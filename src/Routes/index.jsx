@@ -24,6 +24,7 @@ import ProfilePage from "../pages/profilePage";
 import Payment from "../pages/Payment";
 import TripVideo from "../pages/Courses/TripVideo";
 import CreateQuiz from "../pages/Courses/createQuiz";
+import { Quiz } from "../pages/Courses/Quiz";
 
 const Index = ({ navbarOpen, setNavbarOpen }) => {
   const location = useLocation();
@@ -84,6 +85,7 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
         <Route path="/dashboard/course" element={token ? <Courses /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/modules" element={token ? <CreateModule /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/quiz" element={token ? <CreateQuiz /> : <Navigate to ="/login"/>} />
+        <Route path="/dashboard/quiz/attempt" element={token ? <Quiz /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/video" element={token ? <TripVideo /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/events" element={token ? <Events /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/events/create" element={token ? <CreateEvent /> : <Navigate to ="/login"/>} />

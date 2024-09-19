@@ -5,8 +5,6 @@ import { failedToast } from "../../utils/toastNotifications";
 import { useParams, useNavigate } from 'react-router-dom';
 
 export default function CourseDetails() {
-    const text = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.';
-
     const Navigate = useNavigate();
     const token = useSelector(state => state.profile.jwt);
     const { id } = useParams(); // Access path parameter

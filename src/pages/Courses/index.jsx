@@ -170,7 +170,7 @@ export default function Courses() {
                                             </div>
                                         </div>
                                         <img
-                                            onClick={() => { Navigate(`/dashboard/course/details/${ItemDetails1._id}`) }}
+                                            onClick={() => { Navigate(`/dashboard/quiz/attempt?id=${ItemDetails1._id}`) }}
                                             loading="lazy"
                                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/f7c99789c18d7823e75d0ea2e0789fa546a117a0f4744c541ab08390c619b505?apiKey=cf358c329e0d49a792d02d32277323ef&"
                                             className="shrink-0 self-stretch my-auto aspect-[1.25] w-full max-w-[60px] max-md:max-w-[50px] cursor-pointer"
