@@ -148,7 +148,7 @@ export default function Messages() {
                                         <div className="font-medium text-zinc-800">{userData?.firstName} {userData?.lastName}</div>
                                     </div>
                                 </div>
-                                <div className="flex gap-5 justify-between my-auto">
+                                {/* <div className="flex gap-5 justify-between my-auto">
                                     <img
                                         loading="lazy"
                                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/0875e08c910b2ca80c6353466fd26d849803614b91b12ed0f6c0755eb0f7f694?apiKey=cf358c329e0d49a792d02d32277323ef&"
@@ -160,7 +160,7 @@ export default function Messages() {
                                         className="shrink-0 aspect-square w-[25px] md:w-[35px]"
                                     />
                                     <div className="shrink-0 self-start h-[33px] w-[7px]" />
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <ScrollToBottom className={ROOT_CSS}>

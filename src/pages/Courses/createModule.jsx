@@ -91,7 +91,7 @@ export default function CreateModule() {
         <div className="flex flex-col px-5 pb-10 pt-3 bg-neutral-100 min-h-screen">
             <div className="flex flex-col px-5">
                 <div className="mt-14 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-w-full">
-                    Add New Module in Web Development Course
+                    Add New Module in {title} Course
                 </div>
                 <div className="mt-4 w-full text-base text-neutral-500 max-md:max-w-full">
                     Fill the given fields.

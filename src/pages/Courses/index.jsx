@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { failedToast } from "../../utils/toastNotifications";
 import CreateCourseDialog from "../../components/courses/createCourse";
-import { Trash2 } from 'lucide-react';
+import { BookOpenCheck, Trash2 } from 'lucide-react';
 
 export default function Courses() {
     const Navigate = useNavigate();
@@ -40,6 +40,7 @@ export default function Courses() {
             },
         }).then((res) => {
             setData(res.data.courses)
+            console.log(res.data.courses)
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
@@ -87,22 +88,24 @@ export default function Courses() {
             {
                 data?.map((Item) => (
                     <div key={Item.name}>
-                        <div className="flex flex-row justify-between w-full items-center hover:opacity-80 cursor-pointer">
+                        <div className="flex flex-row justify-between w-full items-center  cursor-pointer">
                             <div className="w-full">
                                 <div className="mt-8 text-3xl font-bold text-violet-800 max-md:mt-10 max-md:max-w-full">
                                     {Item.name}
                                 </div>
                                 {
                                     userData.isAdmin &&
-                                    <div className="w-full flex justify-between my-5">
-                                        <button onClick={() => { Navigate(`/dashboard/modules?title=${Item.name}`) }} className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl mx-auto">Add New Module</button>
+                                    <div className="w-full mx-auto flex justify-center items-center my-9">
+                                        <button onClick={() => { Navigate(`/dashboard/modules?title=${Item.name}`) }} className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl hover:opacity-80">Add New Module</button>
+
+                                        <button onClick={() => { Navigate(`/dashboard/quiz?title=${Item.name}`) }} className="inline-flex items-center justify-center px-6 py-2 text-sm ml-5 font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl hover:opacity-80">Add New Quiz</button>
                                     </div>
                                 }
                             </div>
-                            <Trash2 onClick={()=>{DeleteCourses(Item.id)}} className="text-red-900 text-5xl"/>
+                            <Trash2 onClick={() => { DeleteCourses(Item.id) }} className="text-red-900 text-5xl" />
                         </div>
                         {
-                            Item.modules.map((ItemDetails) => (
+                            Item.modules?.map((ItemDetails) => (
                                 <div key={ItemDetails.id}>
                                     <div className="flex gap-5 justify-between items-center mt-6 w-full max-lg:flex-wrap max-lg:max-w-full">
                                         <div className="self-stretch w-full">
@@ -138,6 +141,36 @@ export default function Courses() {
                                         </div>
                                         <img
                                             onClick={() => { Navigate(`/dashboard/course/details/${ItemDetails.id}`) }}
+                                            loading="lazy"
+                                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/f7c99789c18d7823e75d0ea2e0789fa546a117a0f4744c541ab08390c619b505?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                            className="shrink-0 self-stretch my-auto aspect-[1.25] w-full max-w-[60px] max-md:max-w-[50px] cursor-pointer"
+                                        />
+                                    </div>
+                                    <div className="shrink-0 self-center mt-7 h-[1px] border border-solid border-[#AAAAAA] max-w-[90%] w-full mx-auto" />
+                                </div>
+                            ))
+                        }
+                        {
+                            Item.quizzes?.map((ItemDetails1) => (
+                                <div key={ItemDetails1._id}>
+                                    <div className="flex gap-5 justify-between items-center mt-6 w-full max-lg:flex-wrap max-lg:max-w-full pl-2">
+                                        <div className="self-stretch w-full">
+                                            <div className="flex w-full items-center gap-5 max-lg:flex-col max-md:gap-0">
+                                                <div className="flex items-center flex-row max-lg:ml-0 max-lg:w-full">
+                                                <BookOpenCheck className="mr-3"/>
+                                                <h1 className="font-semibold">Quiz</h1>
+                                                </div>
+                                                <div className="flex flex-col ml-1 w-full max-md:ml-0 max-md:w-full">
+                                                    <div className="flex flex-col self-stretch my-auto max-md:mt-9 max-md:max-w-full">
+                                                        <div className="text-lg font-semibold text-zinc-600 max-md:max-w-full max-w-[500px]">
+                                                           {ItemDetails1.title}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <img
+                                            onClick={() => { Navigate(`/dashboard/course/details/${ItemDetails1._id}`) }}
                                             loading="lazy"
                                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/f7c99789c18d7823e75d0ea2e0789fa546a117a0f4744c541ab08390c619b505?apiKey=cf358c329e0d49a792d02d32277323ef&"
                                             className="shrink-0 self-stretch my-auto aspect-[1.25] w-full max-w-[60px] max-md:max-w-[50px] cursor-pointer"
