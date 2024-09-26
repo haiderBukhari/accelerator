@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LogOut, X } from "lucide-react";
+import { BookHeart, LogOut, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { failedToast, successToast } from "../utils/toastNotifications";
 import { useDispatch, useSelector } from "react-redux";
@@ -145,6 +145,7 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                             <div onClick={() => { Navigate('/personal-section'); }}
                                 className={`flex gap-2.5 pr-5 ml-8 md:ml-5 text-neutral-500 w-18.5 `}
                             >
+                                <BookHeart className="w-[20px]" />
                                 <p className="text-sm">
                                     Personal Section
                                 </p>
