@@ -100,7 +100,7 @@ const AsideMessages = () => {
 
     return (
         <div style={{ zIndex: 10 }} className="relative hidden md:block">
-            <div onClick={() => setMessagePopUpOpen(!messagePopUpOpen)} className={`justify-center fixed ${messagePopUpOpen ? 'bottom-[440px] h-[60px]' : 'bottom-0'} right-[20px] cursor-pointer items-start px-8 py-2 text-lg text-white bg-violet-800 w-[320px]`} style={{ borderTopLeftRadius: "20px", borderTopRightRadius: "20px" }}>
+            <div onClick={() => {setMessagePopUpOpen(!messagePopUpOpen); setMessageDetailsOpen(false)}} className={`justify-center fixed ${messagePopUpOpen ? 'bottom-[440px] h-[60px]' : 'bottom-0'} right-[20px] cursor-pointer items-start px-8 py-2 text-lg text-white bg-violet-800 w-[320px]`} style={{ borderTopLeftRadius: "20px", borderTopRightRadius: "20px" }}>
                 Messages
             </div>
             {

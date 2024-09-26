@@ -5,8 +5,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function NotificationsDialog({ open, setOpen, notifications }) {
+    const Navigate = useNavigate();
     const handleClose = () => {
         setOpen(false);
     };
@@ -35,7 +37,13 @@ export default function NotificationsDialog({ open, setOpen, notifications }) {
                         <div className="flex flex-col text-sm leading-4 w-full text-neutral-500">
                             {
                                 notifications.map((Item) => (
-                                    <div key={Item.message} className="flex gap-2 px-3 cursor-pointer hover:text-black">
+                                    <div onClick={()=>{
+                                        if(Item.message.includes('friend-request')){
+                                            Navigate('/dashboard/members/requests')
+                                        }else if(Item.message.includes('sent you a message')){
+                                            Navigate('/dashboard/messages')
+                                        }
+                                    }} key={Item.message} className="flex gap-2 px-3 cursor-pointer hover:text-black">
                                         <ArrowRight />
                                         <div className="my-auto">{Item.message}</div>
                                     </div>
