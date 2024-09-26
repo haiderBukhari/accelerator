@@ -9,7 +9,7 @@ import { useState } from 'react';
 function App() {
   const location = useLocation();
   const [navbarOpen, setNavbarOpen] = useState(false);
-  const currentLocation = location.pathname === '/dashboard/home' || location.pathname === '/dashboard/groups' || location.pathname.includes('/dashboard/messages') || location.pathname === '/dashboard/members' || location.pathname === '/dashboard/members/requests' || location.pathname === '/dashboard/events' || location.pathname === '/dashboard/course' || location.pathname === '/dashboard/modules'  || location.pathname === '/home' || location.pathname === '/dashboard/details/groups' || location.pathname === '/dashboard/events/create' || location.pathname.includes('dashboard/course/details') || location.pathname.includes('dashboard') || location.pathname.includes('dashboard/quiz/attempt');
+  const currentLocation = location.pathname === '/dashboard/home' || location.pathname === '/dashboard/groups' || location.pathname.includes('/dashboard/messages') || location.pathname === '/dashboard/members' || location.pathname === '/dashboard/members/requests' || location.pathname === '/dashboard/events' || location.pathname === '/dashboard/course' || location.pathname === '/dashboard/modules'  || location.pathname === '/home' || location.pathname === '/dashboard/details/groups' || location.pathname === '/dashboard/events/create' || location.pathname.includes('dashboard/course/details') || location.pathname.includes('dashboard') || location.pathname === '/personal-section'  || location.pathname.includes('dashboard/quiz/attempt');
   return (
       <div className='customContainer w-full 2xl:max-w-[2000px] mx-auto'>
             <div className={`${currentLocation && 'flex min-h-screen'} bg-[#f2f2f2] md:bg-transparent`}>

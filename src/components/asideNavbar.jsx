@@ -13,6 +13,21 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
     const dispatch = useDispatch();
     const [joinedGroups, setJoinedGroups] = useState([]);
     const token = useSelector(state => state.profile.jwt);
+    const [userData, setUserData] = useState({});
+
+
+    async function getUserData() {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/userData`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setUserData(Item.data.user);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
 
     async function getGroupUsersData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/joined-groups`, {
@@ -29,6 +44,7 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
     }
 
     useEffect(() => {
+        getUserData();
         getGroupUsersData();
     }, [])
 
@@ -123,6 +139,19 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                             </div>
                         </div>
                     ))}
+                    {
+                        userData.isAdmin &&
+                        <div className="flex cursor-pointer items-center h-[35px] my-1">
+                            <div onClick={() => { Navigate('/personal-section'); }}
+                                className={`flex gap-2.5 pr-5 ml-8 md:ml-5 text-neutral-500 w-18.5 `}
+                            >
+                                <p className="text-sm">
+                                    Personal Section
+                                </p>
+                            </div>
+                        </div>
+                    }
+
                     <div className="flex cursor-pointer items-center h-[35px] my-1">
                         <div onClick={() => { dispatch(removeUserDetails()); Navigate('/'); successToast("Successfully Loged out") }}
                             className={`flex gap-2.5 pr-5 ml-8 md:ml-5 text-neutral-500 w-18.5 `}
@@ -159,7 +188,7 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                                                 {Item.name}
                                             </div>
                                             <div className="mt-1.5 text-xs text-ellipsis text-zinc-600">
-                                            {Item.talksAbout}
+                                                {Item.talksAbout}
                                                 <br />
                                             </div>
                                         </div>
