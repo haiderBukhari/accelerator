@@ -41,7 +41,6 @@ export default function Messages() {
                                         return name;
                                     }
                                 })
-                                console.log(data)
                                 setUserList(data)
                             }} className="flex-auto my-auto bg-transparent outline-none text-zinc-800" type='text' placeholder="Search Friends" />
                             <img
