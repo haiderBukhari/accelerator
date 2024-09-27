@@ -127,63 +127,16 @@ export const AppearanceSettings = ({ open, handleClose, loading, setLoading, cli
                             Choose how your experience in Appreneur looks.
                         </div>
                         <div className="flex gap-3.5 mt-5 max-w-full text-lg tracking-wider leading-none text-neutral-800 w-[175px]">
-                            <input className="flex shrink-0 rounded-lg border border-solid bg-neutral-200 border-stone-300 h-[20px] w-[20px]" type="checkbox" name="" id="" />
+                            <input className="flex shrink-0 rounded-lg border border-solid bg-neutral-200 border-stone-300 h-[20px] w-[20px]" type="checkbox" checked name="" id="" />
                             <div className="grow shrink my-auto w-[129px]">Device Setting</div>
                         </div>
                         <div className="flex gap-3.5 mt-5 max-w-full text-lg tracking-wider leading-none text-neutral-800 w-[175px]">
-                        <input className="flex shrink-0 rounded-lg border border-solid bg-neutral-200 border-stone-300 h-[20px] w-[20px]" type="checkbox" name="" id="" />
-                        <div className="grow shrink my-auto w-[129px]">Dark Mode</div>
+                            <input className="flex shrink-0 rounded-lg border border-solid bg-neutral-200 border-stone-300 h-[20px] w-[20px]" type="checkbox" name="" id="" />
+                            <div className="grow shrink my-auto w-[129px]">Dark Mode</div>
                         </div>
                         <div className="flex gap-3.5 mt-5 max-w-full text-lg tracking-wider leading-none text-neutral-800 w-[175px]">
-                        <input className="flex shrink-0 rounded-lg border border-solid bg-neutral-200 border-stone-300 h-[20px] w-[20px]" type="checkbox" name="" id="" />
-                        <div className="grow shrink my-auto w-[129px]">Light Mode</div>
-                        </div>
-                        <div className="flex flex-col self-stretch mt-5 w-full text-lg font-bold leading-none text-violet-800 whitespace-nowrap rounded-none">
-                            <div className="flex flex-col justify-center items-start px-5 py-3.5 w-full rounded-2xl border border-solid bg-zinc-300 border-neutral-400">
-                                <div className="flex gap-5 items-center">
-                                    <img
-                                        loading="lazy"
-                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/f8a7f4999e30e14e88e1bdc9f06749c6b1de4cbbf7c9a5b2f59334a0632b1af3?placeholderIfAbsent=true&apiKey=cf358c329e0d49a792d02d32277323ef"
-                                        className="object-contain shrink-0 self-stretch my-auto w-6 aspect-square"
-                                    />
-                                    <div className="self-stretch my-auto">Sounds</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="self-stretch mt-5 text-xs tracking-wide leading-none text-neutral-800">
-                            Choose how your experience in Appreneur sounds on this device.
-                        </div>
-                        <div className="flex flex-col mt-5 w-full max-w-[430px]">
-                            <div className="flex gap-1 items-start w-full">
-                                <div className="text-lg font-bold text-neutral-800 w-[212px]">
-                                    Notifications
-                                </div>
-                                <div className="flex overflow-hidden flex-col justify-center items-start p-px bg-neutral-500 rounded-[31px] w-[52px]">
-                                    <div className="flex shrink-0 bg-white rounded-full h-[18px] w-[19px]" />
-                                </div>
-                            </div>
-                            <div className="text-xs text-neutral-800">
-                                When you receive a new notification in the app
-                            </div>
-                        </div>
-                        <div className="flex flex-col mt-5 w-full max-w-[430px]">
-                            <div className="flex gap-1 items-start w-full">
-                                <div className="text-lg font-bold text-neutral-800 w-[212px]">
-                                    Chat
-                                </div>
-                                <div className="flex overflow-hidden flex-col justify-center items-start p-px bg-neutral-500 rounded-[31px] w-[52px]">
-                                    <div className="flex shrink-0 bg-white rounded-full h-[18px] w-[19px]" />
-                                </div>
-                            </div>
-                            <div className="text-xs text-neutral-800">
-                                When you receive a new chat message
-                            </div>
-                        </div>
-                        <div className="flex flex-col mt-5 w-full max-w-[430px] text-neutral-800">
-                            <div className="gap-1 w-full text-lg font-bold whitespace-nowrap">
-                                System
-                            </div>
-                            <div className="text-xs">Confirmation messages and other alerts</div>
+                            <input className="flex shrink-0 rounded-lg border border-solid bg-neutral-200 border-stone-300 h-[20px] w-[20px]" type="checkbox" name="" id="" />
+                            <div className="grow shrink my-auto w-[129px]">Light Mode</div>
                         </div>
                     </div>
                 </div>

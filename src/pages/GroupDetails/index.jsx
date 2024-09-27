@@ -135,7 +135,7 @@ export default function GroupsDetails() {
             return failedToast(err.response.data.error);
         });
     }
-    
+
     const joinGroup = async (userId) => {
         await axios.put(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/joined-groups`, {
             groupId: id,
@@ -284,10 +284,11 @@ export default function GroupsDetails() {
                                         <div className="mt-2 text-zinc-500">
                                             {userData?.description || 'NA'}
                                         </div>
-                                        <div onClick={togleGroup} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer my-4 w-[180px]">
-                                    {userData?.isPrivate ? 'Change to Public' : 'Change to Private'}                
-                                </div>
-
+                                        {
+                                            userData1.isAdmin && <div onClick={togleGroup} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer my-4 w-[180px]">
+                                                {userData?.isPrivate ? 'Change to Public' : 'Change to Private'}
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -501,7 +502,7 @@ export default function GroupsDetails() {
                                         {
                                             pendingUsers?.map((Item) => (
                                                 <div onClick={() => { Navigate(`/dashboard/profile/${Item._id}`) }} key={Item._id} className="flex flex-col max-md:ml-0 max-md:w-full cursor-pointer relative my-10">
-                                                    <div onClick={(e)=>{
+                                                    <div onClick={(e) => {
                                                         joinGroup(Item._id)
                                                         e.stopPropagation();
                                                     }} className="w-[100px] px-5 py-1.5 text-white bg-green-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer absolute top-[-20px] right-[-20px]">Approve</div>

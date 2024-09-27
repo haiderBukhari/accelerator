@@ -79,6 +79,11 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
             link: "/dashboard/course",
             icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/69ee2651fa910b81e6536f5ef03e9c310ce37a97a8805c988adeb3f7401d07d3?apiKey=cf358c329e0d49a792d02d32277323ef&",
         },
+        {
+            text: "Leaderboard",
+            link: "/dashboard/leaderboard",
+            icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9dab5ce4cf73118bdb1f9345dedbf48125aeca7d659c66d8adfea466b40d9289?apiKey=cf358c329e0d49a792d02d32277323ef&",
+        },
     ];
     return (
         <div

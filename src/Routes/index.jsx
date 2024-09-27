@@ -26,6 +26,7 @@ import TripVideo from "../pages/Courses/TripVideo";
 import CreateQuiz from "../pages/Courses/createQuiz";
 import { Quiz } from "../pages/Courses/Quiz";
 import PersonalSection from "../pages/Personal-Section";
+import Leaderboard from "../pages/leaderboard";
 
 const Index = ({ navbarOpen, setNavbarOpen }) => {
   const location = useLocation();
@@ -83,6 +84,7 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
         <Route path="/dashboard/messages/:id" element={token ? <MessagesList /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/members" element={token ? <Members /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/members/requests" element={token ? <MembersRequests /> : <Navigate to ="/login"/>} />
+        <Route path="/dashboard/leaderboard" element={token ? <Leaderboard /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/course" element={token ? <Courses /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/modules" element={token ? <CreateModule /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/quiz" element={token ? <CreateQuiz /> : <Navigate to ="/login"/>} />
