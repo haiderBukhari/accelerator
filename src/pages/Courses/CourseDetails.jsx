@@ -57,6 +57,20 @@ export default function CourseDetails() {
         });
     }
 
+    const tripVideo = async (moduleId) => {
+        await axios.put(`${import.meta.env.VITE_APP_BACKEND_URL}/courses/modules/${moduleId}`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
+            setAsideData([]);
+            getCourses();
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
     useEffect(() => {
         getModuleDetails();
     }, [id]);
@@ -141,7 +155,14 @@ export default function CourseDetails() {
                                 asideData?.map((AsideItems) => {
                                     if (AsideItems.id !== id) {
                                         return (
-                                            <div onClick={() => { Navigate(`/dashboard/course/details/${AsideItems._id}`) }} key={AsideItems.id} className="flex gap-5 mt-10 max-md:flex-wrap max-md:mt-10 cursor-pointer">
+                                            <div onClick={() => { 
+                                                if(AsideItems.isTrip){
+                                                    Navigate(`/dashboard/course/details/${AsideItems._id}`)
+                                                }
+                                             }} key={AsideItems.id} className="flex gap-5 mt-10 max-md:flex-wrap max-md:mt-10 cursor-pointer relative">
+                                                {
+                                                    !AsideItems.isTrip && <button onClick={()=>{tripVideo(AsideItems._id)}} className="bg-red-700 cursor-pointer hover:opacity-90 rounded-md w-20 py-1 absolute top-[-20px] left-[-30px] z-10 text-white">Trip</button>
+                                                }
                                                 <img
                                                     loading="lazy"
                                                     src={AsideItems.imageLink}

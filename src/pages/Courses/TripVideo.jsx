@@ -57,6 +57,7 @@ export default function TripVideo() {
         formdata.append('descriptionLong', longdescription)
         formdata.append('file', pictureFile)
         formdata.append('file1', videoFile)
+        formdata.append('isTrip', id? false : true)
 
         await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/courses/modules`, formdata, {
             headers: {
