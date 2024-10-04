@@ -161,7 +161,7 @@ export default function CourseDetails() {
                                                 }
                                              }} key={AsideItems.id} className="flex gap-5 mt-10 max-md:flex-wrap max-md:mt-10 cursor-pointer relative">
                                                 {
-                                                    !AsideItems.isTrip && <button onClick={()=>{tripVideo(AsideItems._id)}} className="bg-red-700 cursor-pointer hover:opacity-90 rounded-md w-20 py-1 absolute top-[-20px] left-[-30px] z-10 text-white">Trip</button>
+                                                    userData.isAdmin && !AsideItems.isTrip && <button onClick={()=>{tripVideo(AsideItems._id)}} className="bg-red-700 cursor-pointer hover:opacity-90 rounded-md w-20 py-1 absolute top-[-20px] left-[-30px] z-10 text-white">Trip</button>
                                                 }
                                                 <img
                                                     loading="lazy"
