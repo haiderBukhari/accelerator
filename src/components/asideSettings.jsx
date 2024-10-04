@@ -7,6 +7,7 @@ import axios from 'axios';
 import ViewEvent from '../pages/Events/viewEvent';
 import defaultPerson from '../assets/professionalPicture.jpeg'
 import NotificationsDialog from './profile/NotificationsDialog';
+import { useNavigate } from 'react-router-dom';
 
 export default function AsideSettings() {
     const [open, setOpen] = useState(false);
@@ -16,10 +17,12 @@ export default function AsideSettings() {
     const lastName = useSelector(state => state.profile.lastName);
     const profilePicture = useSelector(state => state.profile.profilePicture);
     const token = useSelector(state => state.profile.jwt);
+    const userId = useSelector(state => state.profile.id);
     const [eventsData, setEventsData] = useState([]);
     const [details, setDetails] = useState({})
     const [notifications, setNotifications] = useState([])
     const [unreadNotifications, setUnReadNotifications] = useState(0)
+    const Navigate = useNavigate();
 
     async function getNotifications() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/notification`, {
@@ -73,15 +76,15 @@ export default function AsideSettings() {
                         className="shrink-0 aspect-square w-[35px] xl:w-[45px] cursor-pointer"
                     />
                 </div>
-                <div onClick={() => { setOpen(!open) }} className="flex gap-2 xl:gap-4 text-base font-medium rounded-lg xl:rounded-2xl border border-solid bg-neutral-200 border-neutral-400 text-zinc-800 cursor-pointer w-full max-w-[70%]">
+                <div onClick={()=>{Navigate(`/dashboard/profile/${userId}`)}} className="flex gap-2 xl:gap-4 text-base font-medium rounded-lg xl:rounded-2xl border border-solid bg-neutral-200 border-neutral-400 text-zinc-800 cursor-pointer w-full max-w-[70%]">
                     <img
                         loading="lazy"
                         src={profilePicture || defaultPerson}
                         className="shrink-0 border-2 border-violet-800 border-solid aspect-square w-[35px] h-[35px] xl:w-[45px] xl:h-[45px] rounded-lg object-cover"
                     />
-                    <div className="flex items-center gap-2 xl:gap-4 pr-3 my-auto max-lg:text-xs">
+                    <div  className="flex items-center gap-2 xl:gap-4 pr-3 my-auto max-lg:text-xs">
                         <p className='text-xs xl:text-sm'>{firstName} {lastName} </p>
-                        <ChevronDown />
+                        {/* <ChevronDown /> */}
                     </div>
                 </div>
             </div>

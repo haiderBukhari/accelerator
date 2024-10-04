@@ -1,17 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { failedToast } from "../../utils/toastNotifications";
+import { failedToast, successToast } from "../../utils/toastNotifications";
 import { useParams, useNavigate } from 'react-router-dom';
 
 export default function CourseDetails() {
     const Navigate = useNavigate();
     const token = useSelector(state => state.profile.jwt);
+    const userId = useSelector(state => state.profile.id);
     const { id } = useParams(); // Access path parameter
     const [data, setData] = useState({})
     const [asideData, setAsideData] = useState([])
     const [userData, setUserData] = useState({});
-
 
     async function getUserData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/userData`, {
@@ -37,6 +37,20 @@ export default function CourseDetails() {
                 'Authorization': `Bearer ${token}`
             },
         }).then((res) => {
+            setData(res.data.module);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+    const updatedModuleByMarkingDone = async () => {
+        await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/courses/modules/${id}`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((res) => {
+            successToast("Marked as Completed")
             setData(res.data.module);
         }).catch((err) => {
             return failedToast(err.response.data.error);
@@ -99,6 +113,14 @@ export default function CourseDetails() {
                             <div className="mt-5 text-base text-neutral-500 max-md:max-w-full">
                                 {data?.descriptionLong}
                             </div>
+                            {
+                                !data?.completedBy?.includes(userId) && <button
+                                    onClick={updatedModuleByMarkingDone}
+                                    className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 mt-5 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl w-[200px] mb-5"
+                                >
+                                    Mark as Completed
+                                </button>
+                            }
                         </div>
                     </div>
                     <div className="flex flex-col ml-5 w-[400px] max-md:ml-0 max-md:w-full">
