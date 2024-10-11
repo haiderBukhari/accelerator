@@ -152,6 +152,19 @@ export default function GroupsDetails() {
         });
     }
 
+    const removeFromGroup = async (userId) => {
+        await axios.delete(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/joined-groups?groupId=${id}&userId=${userId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
+            getGroupUsersData();
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
     async function getGroupData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/${id}`, {
             headers: {
@@ -496,7 +509,7 @@ export default function GroupsDetails() {
                     selected === 3 && <div className="my-10 flex flex-col flex-wrap content-start">
                         <div className="px-5 w-full max-md:max-w-full">
                             {
-                                userData1.isAdmin && <>
+                                (userData1.isAdmin || (userData1.isManager && userData?.joinedUsers?.includes(userId))) && <>
                                     <h1 className="text-2xl font-semibold">Pending Users</h1>
                                     <div className="flex gap-2 mt-4 max-md:flex-col max-md:gap-0 flex-wrap">
                                         {
@@ -515,9 +528,6 @@ export default function GroupsDetails() {
                                                             />
                                                             <div className="flex flex-col my-auto">
                                                                 <div className="text-lg text-neutral-900">{Item.name}</div>
-                                                                {/* <div className="mt-3 text-xs text-neutral-500">
-                                                                    Member Since: 23-Dec-23024
-                                                                </div> */}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -537,7 +547,13 @@ export default function GroupsDetails() {
                             <div className="flex gap-2 mt-4 max-md:flex-col max-md:gap-0 flex-wrap">
                                 {
                                     joinedUsers?.map((Item) => (
-                                        <div onClick={() => { Navigate(`/dashboard/profile/${Item._id}`) }} key={Item._id} className="flex flex-col max-md:ml-0 max-md:w-full cursor-pointer">
+                                        <div onClick={() => { Navigate(`/dashboard/profile/${Item._id}`) }} key={Item._id} className="flex flex-col max-md:ml-0 max-md:w-full cursor-pointer relative mt-5 mr-5">
+                                            {
+                                                (userData1.isAdmin || (userData1.isManager && userData?.joinedUsers?.includes(userId))) && <div onClick={(e) => {
+                                                    removeFromGroup(Item._id)
+                                                    e.stopPropagation();
+                                                }} className="w-[100px] px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer absolute top-[-20px] right-[-20px]">Restrict</div>
+                                            }
                                             <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
                                                 <div className="flex gap-5 justify-between p-5 rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5">
                                                     <img

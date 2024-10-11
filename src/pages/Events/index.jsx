@@ -56,7 +56,7 @@ export default function Events() {
                     Event Calendar
                 </div>
                 {
-                    userData.isAdmin && <button
+                    (userData.isAdmin || userData.isManager) && <button
                         onClick={() => Navigate('/dashboard/events/create')}
                         className="inline-flex items-center justify-center w-[170px] px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-violet-800 border border-transparent hover:bg-violet-700 focus:outline-none focus:ring-offset-2 focus:ring-violet-700 rounded-2xl"
                     >

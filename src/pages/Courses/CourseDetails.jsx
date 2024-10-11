@@ -139,7 +139,7 @@ export default function CourseDetails() {
                     </div>
                     <div className="flex flex-col ml-5 w-[400px] max-md:ml-0 max-md:w-full">
                         {
-                            userData.isAdmin && <button
+                            (userData.isAdmin) && <button
                                 onClick={() => { Navigate(`/dashboard/video?id=${id}`) }}
                                 className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-violet-800 border border-transparent hover:bg-violet-700 focus:outline-none focus:ring-offset-2 focus:ring-violet-700 rounded-2xl w-[200px] mb-5 mx-auto"
                             >
@@ -161,7 +161,7 @@ export default function CourseDetails() {
                                                 }
                                              }} key={AsideItems.id} className="flex gap-5 mt-10 max-md:flex-wrap max-md:mt-10 cursor-pointer relative">
                                                 {
-                                                    userData.isAdmin && !AsideItems.isTrip && <button onClick={()=>{tripVideo(AsideItems._id)}} className="bg-red-700 cursor-pointer hover:opacity-90 rounded-md w-20 py-1 absolute top-[-20px] left-[-30px] z-10 text-white">Trip</button>
+                                                    (userData.isAdmin || userData.isManager) && !AsideItems.isTrip && <button onClick={()=>{tripVideo(AsideItems._id)}} className="bg-red-700 cursor-pointer hover:opacity-90 rounded-md w-20 py-1 absolute top-[-20px] left-[-30px] z-10 text-white">Trip</button>
                                                 }
                                                 <img
                                                     loading="lazy"

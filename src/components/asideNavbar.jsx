@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { BookHeart, LogOut, X } from "lucide-react";
+import { BookHeart, LogOut, X, Crown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { failedToast, successToast } from "../utils/toastNotifications";
 import { useDispatch, useSelector } from "react-redux";
@@ -157,6 +157,19 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                             </div>
                         </div>
                     }
+                    {
+                        (userData.isAdmin) &&
+                        <div className="flex cursor-pointer items-center h-[35px] my-1">
+                            <div onClick={() => { Navigate('/moderator'); }}
+                                className={`flex gap-2.5 pr-5 ml-8 md:ml-5 text-neutral-500 w-18.5 `}
+                            >
+                                <Crown className="w-[20px]" />
+                                <p className="text-sm">
+                                    Moderators
+                                </p>
+                            </div>
+                        </div>
+                    }
 
                     <div className="flex cursor-pointer items-center h-[35px] my-1">
                         <div onClick={() => { dispatch(removeUserDetails()); Navigate('/'); successToast("Successfully Loged out") }}
@@ -204,8 +217,8 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                             </div>
                             {
                                 joinedGroups.length !== index + 1 && <>
-                                    <div className="z-10 shrink-0 mt-2.5 max-w-full p-0 border-solid bg-neutral-400 w-[311px]" />
-                                    <div className="shrink-0 max-w-full h-px border border-solid bg-neutral-400 border-neutral-400 w-[311px]" />
+                                    <div className="z-10 shrink-0 mt-2.5 max-w-full p-0 border-solid bg-neutral-400 w-full" />
+                                    <div className="shrink-0 max-w-full h-px border border-solid bg-neutral-400 border-neutral-400 w-full" />
                                 </>
                             }
                         </div>
