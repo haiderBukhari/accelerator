@@ -11,6 +11,7 @@ import CreateFolderDialog from "../../components/groups/createFolder";
 import CreateFolderImageDialog from "../../components/groups/uploadImage";
 import CreatePostDialog from "../../components/CreatePost";
 import { Heart } from 'lucide-react';
+import Courses from "../Courses";
 
 export default function GroupsDetails() {
     const [selected, setSelected] = useState(1);
@@ -448,7 +449,7 @@ export default function GroupsDetails() {
                                 </div>
                             </div>
                             {
-                                userData.joinedUsers.includes(userId) && <div onClick={() => { setOpen(true) }} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer w-[180px] text-center">
+                                (userData1.isAdmin || userData.joinedUsers.includes(userId)) && <div onClick={() => { setOpen(true) }} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer w-[180px] text-center">
                                     Create Folder
                                 </div>
                             }
@@ -584,65 +585,7 @@ export default function GroupsDetails() {
                 }
                 {
                     selected === 4 && <>
-                        <div className="my-10 text-2xl font-bold text-violet-800 max-md:mt-10 max-md:max-w-full">
-                            Mobile App Development
-                        </div>
-                        {
-                            new Array(10).fill(1).map((item) => (
-                                <div key={`${item}%487j`}>
-                                    <div className="flex gap-5 justify-between items-center px-px mt-6 w-full max-md:flex-wrap max-md:max-w-full">
-                                        <div className="self-stretch w-full">
-                                            <div className="flex w-full items-center gap-5 max-md:flex-col max-md:gap-0">
-                                                <div className="flex items-center flex-col w-[22%] max-md:ml-0 max-md:w-full">
-                                                    <img
-                                                        loading="lazy"
-                                                        srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/918e69b3a4d512ef551c645e245475e626022466eb963d244874a9f925313455?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/918e69b3a4d512ef551c645e245475e626022466eb963d244874a9f925313455?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/918e69b3a4d512ef551c645e245475e626022466eb963d244874a9f925313455?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/918e69b3a4d512ef551c645e245475e626022466eb963d244874a9f925313455?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/918e69b3a4d512ef551c645e245475e626022466eb963d244874a9f925313455?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/918e69b3a4d512ef551c645e245475e626022466eb963d244874a9f925313455?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/918e69b3a4d512ef551c645e245475e626022466eb963d244874a9f925313455?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/918e69b3a4d512ef551c645e245475e626022466eb963d244874a9f925313455?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                        className="grow shrink-0 max-w-full border-solid aspect-[1.49] border-[3px] border-neutral-400 w-[150px] max-md:mt-5"
-                                                    />
-                                                </div>
-                                                <div className="flex flex-col ml-1 w-full max-md:ml-0 max-md:w-full">
-                                                    <div className="flex flex-col self-stretch my-auto max-md:mt-9 max-md:max-w-full">
-                                                        <div className="text-lg font-semibold text-zinc-600 max-md:max-w-full">
-                                                            Module 01 : Intro
-                                                        </div>
-                                                        <div className="mt-1 text-sm text-neutral-500 max-md:max-w-full">
-                                                            Lorem Ipsum is simply dummy text of the printing and
-                                                            typesetting industry. Lorem Ipsum has been the industrys
-                                                            standard dummy text ever since the 1500s.
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex w-5/12 items-center gap-5 self-stretch my-auto text-base">
-                                            <div className="flex items-center gap-2.5 text-violet-800">
-                                                <img
-                                                    loading="lazy"
-                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/99de8a4805a38816bf21f6dc05e7c9f9b8e2ee99c22a05da867efaf55b45bc94?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                    className="shrink-0 w-6 aspect-square"
-                                                />
-                                                <div className="my-auto text-sm">12 Sessions</div>
-                                            </div>
-                                            <div className="flex gap-2.5 text-neutral-500">
-                                                <img
-                                                    loading="lazy"
-                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/0614512d2c2e5ed7dc6284c81281b6935599b48676637384b139251f7567543d?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                    className="shrink-0 w-6 aspect-square"
-                                                />
-                                                <div className="my-auto">35k Atendies</div>
-                                            </div>
-                                        </div>
-                                        <img
-                                            onClick={() => { Navigate('/dashboard/course/details') }}
-                                            loading="lazy"
-                                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/f7c99789c18d7823e75d0ea2e0789fa546a117a0f4744c541ab08390c619b505?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                            className="shrink-0 self-stretch my-auto aspect-[1.25] w-[75px] cursor-pointer"
-                                        />
-                                    </div>
-                                    <div className="shrink-0 self-center mt-7 h-[1px] border border-solid bg-neutral-400 border-neutral-400 max-w-[80%] w-full mx-auto" />
-                                </div>
-                            ))
-                        }
+                        <Courses groupId={id} />
                     </>
                 }
             </div>

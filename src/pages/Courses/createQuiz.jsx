@@ -26,9 +26,10 @@ export default function CreateQuiz() {
     }]);
     const [searchParams] = useSearchParams();
     const title = searchParams.get('title'); // Get the 'title' query parameter
+    const groupId = searchParams.get('groupId'); // Get the 'title' query parameter
 
     const getCourses = async () => {
-        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/courses`, {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/courses?${groupId && `groupId=${groupId}`}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -62,7 +63,6 @@ export default function CreateQuiz() {
         setQuestions(updatedQuestions);
     };
 
-    // Handle correct option checkbox
     const handleCorrectOptionChange = (qIndex, optionKey) => {
         const updatedQuestions = [...questions];
         Object.keys(updatedQuestions[qIndex].options).forEach(opt => {
@@ -72,7 +72,6 @@ export default function CreateQuiz() {
         setQuestions(updatedQuestions);
     };
 
-    // Add new question
     const addNewQuestion = () => {
         setQuestions([...questions, {
             qns: "",

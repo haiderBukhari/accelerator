@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { failedToast, successToast } from '../../utils/toastNotifications';
 
-export default function CreateCourseDialog({ open, setOpen }) {
+export default function CreateCourseDialog({ open, setOpen, groupId }) {
     const [courseTitle, setCourseTitle] = React.useState('')
     const token = useSelector(state=>state.profile.jwt);
 
@@ -17,7 +17,7 @@ export default function CreateCourseDialog({ open, setOpen }) {
     };
 
     const addCourse = async () => {
-        await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/courses`, {
+        await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/courses?groupId=${groupId}`, {
             title: courseTitle
         }, {
             headers: {

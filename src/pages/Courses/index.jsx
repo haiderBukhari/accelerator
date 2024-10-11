@@ -6,7 +6,7 @@ import { failedToast } from "../../utils/toastNotifications";
 import CreateCourseDialog from "../../components/courses/createCourse";
 import { BookOpenCheck, Trash2 } from 'lucide-react';
 
-export default function Courses() {
+export default function Courses({groupId}) {
     const Navigate = useNavigate();
     const [userData, setUserData] = useState({});
     const token = useSelector(state => state.profile.jwt);
@@ -33,7 +33,7 @@ export default function Courses() {
 
 
     const getCourses = async () => {
-        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/courses`, {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/courses?${groupId && `groupId=${groupId}`}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -64,10 +64,10 @@ export default function Courses() {
     }, [open, fetchAgain])
 
     return (
-        <div className="flex flex-col px-5 pb-10 pt-3 bg-neutral-100 min-h-screen">
-            <div className="flex justify-between">
+        <div className={`flex flex-col px-5 pb-10 ${!groupId ? 'bg-neutral-100' : 'pt-3'} min-h-screen`}>
+            <div className="flex justify-between items-center">
                 <div>
-                    <div className="mt-14 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-md:max-w-full">
+                    <div className="mt-10 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-md:max-w-full">
                         Course
                     </div>
                     <div className="mt-4 w-full text-xl text-zinc-500 max-md:max-w-full">
@@ -96,9 +96,9 @@ export default function Courses() {
                                 {
                                     userData.isAdmin &&
                                     <div className="w-full mx-auto flex justify-center items-center my-9">
-                                        <button onClick={() => { Navigate(`/dashboard/modules?title=${Item.name}`) }} className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl hover:opacity-80">Add New Module</button>
+                                        <button onClick={() => { Navigate(`/dashboard/modules?title=${Item.name}&groupId=${groupId}`) }} className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl hover:opacity-80">Add New Module</button>
 
-                                        <button onClick={() => { Navigate(`/dashboard/quiz?title=${Item.name}`) }} className="inline-flex items-center justify-center px-6 py-2 text-sm ml-5 font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl hover:opacity-80">Add New Quiz</button>
+                                        <button onClick={() => { Navigate(`/dashboard/quiz?title=${Item.name}&groupId=${groupId}`) }} className="inline-flex items-center justify-center px-6 py-2 text-sm ml-5 font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl hover:opacity-80">Add New Quiz</button>
                                     </div>
                                 }
                             </div>
@@ -183,15 +183,7 @@ export default function Courses() {
                     </div>
                 ))
             }
-            {/* <div className="mt-14 text-3xl font-bold text-violet-800 max-md:mt-10 max-md:max-w-full">
-                Mobile App Development
-            </div>
-            {
-                new Array(10).fill(1).map((item) => (
-                    
-                ))
-            } */}
-            <CreateCourseDialog open={open} setOpen={setOpen} />
+            <CreateCourseDialog open={open} setOpen={setOpen} groupId={groupId} />
         </div>
     );
 }
