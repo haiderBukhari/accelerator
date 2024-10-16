@@ -12,6 +12,7 @@ import CreateFolderImageDialog from "../../components/groups/uploadImage";
 import CreatePostDialog from "../../components/CreatePost";
 import { Heart } from 'lucide-react';
 import Courses from "../Courses";
+import CommentsDialog from "../../components/comments";
 
 export default function GroupsDetails() {
     const [selected, setSelected] = useState(1);
@@ -26,6 +27,8 @@ export default function GroupsDetails() {
     const [fetched, setFetched] = useState(false);
     const [open, setOpen] = useState(false);
     const [open1, setOpen1] = useState(false);
+    const [open2, setOpen2] = useState(false);
+    const [selectedPostId, setSelectedPostId] = useState('')
     const [groupFolders, setGroupFolders] = useState([])
     const [displayFolder, setDisplayFolder] = useState(true)
     const [folderId, setFolderId] = useState("")
@@ -387,7 +390,7 @@ export default function GroupsDetails() {
                                             </div>
                                             <div className="flex gap-5 justify-between px-px mt-6 w-full text-sm max-md:flex-wrap max-md:max-w-full">
                                                 <div className="flex w-full flex-col justify-center text-neutral-400 max-md:max-w-full">
-                                                    <button onClick={() => { setOpen(!open) }} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full hidden md:block">
+                                                    <button onClick={() => { setSelectedPostId(Item._id); setOpen2(!open2) }} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full hidden md:block">
                                                         Write a comment
                                                     </button>
                                                 </div>
@@ -592,6 +595,7 @@ export default function GroupsDetails() {
             <CreateFolderDialog open={open} setOpen={setOpen} groupId={id} setFetchAgain={setFetchAgain} />
             <CreateFolderImageDialog open={open1} setOpen={setOpen1} folderId={folderId} setFetchAgain={setFetchAgain} />
             <CreatePostDialog open={createPost} setOpen={setCreatePost} fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} groupPost={true} groupId={id} />
+            <CommentsDialog open={open2} setOpen={setOpen2} selectedPostId={selectedPostId} setSelectedPostId={setSelectedPostId} />
             {/* <CreateFolderDialog open={open} setOpen={setOpen} groupId={id} /> */}
         </div>
     );
