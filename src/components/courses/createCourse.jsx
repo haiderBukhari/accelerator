@@ -17,7 +17,7 @@ export default function CreateCourseDialog({ open, setOpen, groupId }) {
     };
 
     const addCourse = async () => {
-        await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/courses?groupId=${groupId}`, {
+        await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/courses?${groupId && `groupId=${groupId}`}`, {
             title: courseTitle
         }, {
             headers: {
