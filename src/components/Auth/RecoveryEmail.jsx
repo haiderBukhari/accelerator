@@ -13,6 +13,9 @@ const RecoveryEmail = () => {
   const id = searchParams.get("id");
   const Navigate = useNavigate();
   const onSubmit = () => {
+    if (email === "" || email.includes("@") === false || email.includes(".") === false) {
+      return failedToast("Please Enter Valid Email");
+    }
     if (id) {
       axios
         .patch(

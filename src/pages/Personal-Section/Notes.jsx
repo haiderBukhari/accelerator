@@ -36,6 +36,8 @@ const Notes = () => {
 
     const handleClose = () => {
         setOpen(false);
+        setNoteTitle('')
+        setNoteContent('')
     };
 
     const handleAddNote = async () => {

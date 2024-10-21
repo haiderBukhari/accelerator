@@ -12,7 +12,8 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
 
-    const onSubmit = () => {
+    const onSubmit = (e) => {
+        e.preventDefault()
         if (
             email === "" ||
             password === ""
@@ -59,7 +60,7 @@ const Login = () => {
                 srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/47a1c69ec7cc4e9f8ce4864f0877f50d6dd3d199366253aac9591bae9c934b0c?apiKey=cf358c329e0d49a792d02d32277323ef&"
                 className="w-full aspect-[2.33] max-w-[150px] mt-4 md:mt-10 mx-auto h-auto block md:hidden"
             />
-            <div className="min-h-[100vh] flex flex-col justify-center">
+            <form className="min-h-[100vh] flex flex-col justify-center">
                 <div className="flex flex-col px-14 py-5 mb-16 font-medium md:mx-auto mt-8 md:mt-10 rounded-[60px] md:rounded-2xl border border-solid shadow-lg bg-[#e2e2e2] border-stone-300 leading-[95%] max-w-full md:max-w-[504px] w-full max-md:px-5 min-h-[100%] md:min-h-auto">
                     <img
                         loading="lazy"
@@ -82,9 +83,9 @@ const Login = () => {
                         <div className="flex-auto my-auto leading-[20px]">Show Password</div>
                     </div>
                     <div className="flex gap-5 justify-between mt-9 leading-[105%] max-md:flex-wrap max-md:max-w-full">
-                        <div onClick={onSubmit} className=" justify-center px-12 py-2 text-white whitespace-nowrap bg-violet-800 rounded-2xl max-md:px-9 cursor-pointer text-lg hover:text-white hover:bg-[#FA5300] transition-colors duration-300">
+                        <button type="submit" onClick={onSubmit} className=" justify-center px-12 py-2 text-white whitespace-nowrap bg-violet-800 rounded-2xl max-md:px-9 cursor-pointer text-lg hover:text-white hover:bg-[#FA5300] transition-colors duration-300">
                             Login
-                        </div>
+                        </button>
                         <div onClick={forgotPassword} className="justify-center p-0.5 my-auto text-base md:text-xl text-[#0000FF] cursor-pointer hover:text-[#FA5300] transition-colors duration-300">
                             Forgot Password
                         </div>
@@ -121,7 +122,7 @@ const Login = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     )
 }

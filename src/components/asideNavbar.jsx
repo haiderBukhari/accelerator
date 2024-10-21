@@ -171,8 +171,8 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                         </div>
                     }
 
-                    <div className="flex cursor-pointer items-center h-[35px] my-1">
-                        <div onClick={() => { dispatch(removeUserDetails()); Navigate('/'); successToast("Successfully Loged out") }}
+                    {/* <div className="flex cursor-pointer items-center h-[35px] my-1">
+                        <div
                             className={`flex gap-2.5 pr-5 ml-8 md:ml-5 text-neutral-500 w-18.5 `}
                         >
                             <LogOut className="w-[20px]" />
@@ -180,7 +180,7 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                                 LogOut
                             </p>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="flex flex-col items-start pl-9 md:pl-5 mt-5 w-full">

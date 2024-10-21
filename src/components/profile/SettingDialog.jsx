@@ -9,11 +9,18 @@ import { CircularProgress } from '@mui/material';
 import NotificationSettings from './NotificationSetting';
 import { AppearanceSettings } from './Appearance';
 import { FeedbackSettings } from './Feedback';
+import { LogOut } from 'lucide-react';
+import { removeUserDetails } from '../../features/profile';
+import { successToast } from '../../utils/toastNotifications';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export default function SettingDialog({ open, setOpen }) {
     const [loading, setLoading] = React.useState(false);
     const [clickedSave, setClickedSave] = React.useState(false);
     const [selectedContent, setSelectedContent] = React.useState(-1);
+    const Navigate = useNavigate();
+    const dispatch = useDispatch();
     
     const handleClose = () => {
         setSelectedContent(-1)
@@ -97,13 +104,17 @@ export default function SettingDialog({ open, setOpen }) {
                                     />
                                     <div className="my-auto">Download The App</div>
                                 </div>
-                                <div className="flex gap-5 px-3 cursor-pointer hover:text-black mt-7">
+                                {/* <div className="flex gap-5 px-3 cursor-pointer hover:text-black mt-7">
                                     <img
                                         loading="lazy"
                                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/8d99d0758f6245e670a1d318928ec2b7eb005e78b4d7e0f74716dd96e96524e7?"
                                         className="shrink-0 aspect-square w-[20px]"
                                     />
                                     <div className="my-auto">Invite Friends</div>
+                                </div> */}
+                                <div onClick={() => { dispatch(removeUserDetails()); Navigate('/'); successToast("Successfully Loged out") }} className="flex gap-5 px-3 cursor-pointer hover:text-black mt-7">
+                                <LogOut  className="w-[20px]" />
+                                <div className="my-auto">LogOut</div>
                                 </div>
                             </div>
                         }

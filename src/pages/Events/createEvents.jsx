@@ -17,6 +17,15 @@ export default function CreateEvent() {
     const [eventsData, setEventsData] = useState([]);
 
     const submitEvent = async () => {
+        //check if start date is less than end date
+        if(!name || !description || !startDate || !endDate){
+            return failedToast("All fields are required");
+        }
+        
+        if (startDate > endDate) {
+            return failedToast("Unable to select end date prior to start date");
+        }
+        
         await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/events`, {
             name: name,
             description: description,

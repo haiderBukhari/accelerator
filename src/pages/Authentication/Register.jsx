@@ -14,8 +14,12 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
+  const [checkboxSelected, setCheckBoxSelected] = useState(false);
 
   const registerUser = () => {
+    if (email === "" || email.includes("@") === false || email.includes(".") === false) {
+      return failedToast("Please Enter Valid Email");
+    }
     if (
       fname === "" ||
       lname === "" ||
@@ -28,6 +32,9 @@ const Register = () => {
     }
     if (cpassword !== password) {
       return failedToast("Password doesnot matches");
+    }
+    if(!checkboxSelected){
+      return failedToast("Please verify the Terms and Conditions");
     }
     axios
       .post(
@@ -106,7 +113,7 @@ const Register = () => {
         onChange={(e) => setPhoneNumber(e.target.value)}
         value={phoneNumber}
         placeholder="i.e. (XX) XXX XXXXXXX"
-        type="text"
+        type="number"
         className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300] max-md:px-5 max-md:max-w-full"
       />
       <div className="mt-4 text-xl tracking-wider text-neutral-700 max-md:max-w-full">
@@ -139,6 +146,7 @@ const Register = () => {
       </div>
       <div className="flex gap-3.5 justify-end self-start mt-6 text-base tracking-wider text-black">
         <input
+          onClick={()=>{setCheckBoxSelected(!checkboxSelected)}}
           className="shrink-0 w-6 h-6 rounded-md border border-solid border-stone-300 bg-black outline-none"
           type="checkbox"
         />

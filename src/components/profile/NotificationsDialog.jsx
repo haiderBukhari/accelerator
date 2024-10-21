@@ -38,7 +38,7 @@ export default function NotificationsDialog({ open, setOpen, notifications }) {
                             {
                                 notifications.map((Item) => (
                                     <div onClick={()=>{
-                                        if(Item.message.includes('friend-request')){
+                                        if(Item.message.includes('friend request')){
                                             Navigate('/dashboard/members/requests')
                                         }else if(Item.message.includes('sent you a message')){
                                             Navigate('/dashboard/messages')

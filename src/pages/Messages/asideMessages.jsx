@@ -19,6 +19,7 @@ const AsideMessages = () => {
     const [message, setMessage] = useState('')
     const [isConnected, setIsConnected] = useState(socket.connected);
     const [userData, setUserData] = useState({})
+    const [isFetching, setIsFetching] = useState(true);
 
     const ROOT_CSS = css({
         height: 500,
@@ -26,15 +27,18 @@ const AsideMessages = () => {
     });
 
     async function getFriends() {
+        setIsFetching(true)
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/chat/friends`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
         }).then((Item) => {
+            setIsFetching(false)
             setUserList(Item.data);
             setTempUserList(Item.data);
         }).catch((err) => {
+            setIsFetching(false)
             return failedToast(err.response.data.error);
         });
     }
@@ -54,7 +58,7 @@ const AsideMessages = () => {
     }, [])
 
     useEffect(() => {
-        if(id){
+        if (id) {
             socket.on('recieve_message', getMessages)
         }
     }, [id])
@@ -91,7 +95,7 @@ const AsideMessages = () => {
     }
 
     useEffect(() => {
-        if (id!=='') {
+        if (id !== '') {
             getFriends();
             getUserInformation();
             getMessages();
@@ -100,23 +104,29 @@ const AsideMessages = () => {
 
     return (
         <div style={{ zIndex: 10 }} className="relative hidden md:block">
-            <div onClick={() => {setMessagePopUpOpen(!messagePopUpOpen); setMessageDetailsOpen(false)}} className={`justify-center fixed ${messagePopUpOpen ? 'bottom-[440px] h-[60px]' : 'bottom-0'} right-[20px] cursor-pointer items-start px-8 py-2 text-lg text-white bg-violet-800 w-[320px]`} style={{ borderTopLeftRadius: "20px", borderTopRightRadius: "20px" }}>
+            <div onClick={() => { setMessagePopUpOpen(!messagePopUpOpen); setMessageDetailsOpen(false) }} className={`justify-center fixed ${messagePopUpOpen ? 'bottom-[440px] h-[60px]' : 'bottom-0'} right-[20px] cursor-pointer items-start px-8 py-2 text-lg text-white bg-violet-800 w-[320px]`} style={{ borderTopLeftRadius: "20px", borderTopRightRadius: "20px" }}>
                 Messages
             </div>
             {
                 messagePopUpOpen && <>
                     <div className="flex flex-col px-2.5 pt-5 pb-14 text-sm bg-zinc-300 w-[320px] h-[450px] fixed bottom-0 right-[20px] overflow-auto">
                         <div style={{ zIndex: 100 }} className="flex gap-5 justify-between items-start px-4 py-2.5 rounded-xl border border-solid bg-neutral-200 border-stone-300 text-neutral-500">
-                            {userList.length && <input onChange={(e) => {
-                                const data = tempUserList.filter((name) => {
-                                    if (name.firstName.toLowerCase().includes(e.target.value) || name.lastName.toLowerCase().includes(e.target.value)) {
-                                        return name;
-                                    }
-                                })
-                                setUserList(data)
+                            <input onChange={(e) => {
+                                if(userList?.length){
+                                    const data = tempUserList.filter((name) => {
+                                        if (name.firstName.toLowerCase().includes(e.target.value) || name.lastName.toLowerCase().includes(e.target.value)) {
+                                            return name;
+                                        }
+                                    })
+                                    setUserList(data)
+                                }
                             }} type='text' placeholder="Search Friends" className="my-auto outline-none bg-transparent" />
-                            }
                         </div>
+                        {
+                            !isFetching && userList?.length === 0 && <div className="text-xl font-medium text-zinc-800 h-full flex justify-center items-center">
+                            No Message Found
+                        </div>
+                        }
                         {
                             userList?.map((Item) => (
                                 <div onClick={() => { setId(Item.friendId); setMessageDetailsOpen(!messageDetailsOpen) }} key={Item.friendId} >

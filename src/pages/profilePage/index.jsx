@@ -162,11 +162,13 @@ export default function ProfilePage() {
                                                         <div className="mt-2 text-xs text-neutral-500">{timeElapsed(Item.createdAt)}</div>
                                                     </div>
                                                 </div>
-                                                <img
-                                                    loading="lazy"
-                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/17fb2d504a4a46adf611331825b24e3490f3ff0a7aa1ff0f0783d4da246b0be9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                    className="shrink-0 my-auto aspect-square w-[25px]"
-                                                />
+                                                {
+                                                    id != userId && <img
+                                                        loading="lazy"
+                                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/17fb2d504a4a46adf611331825b24e3490f3ff0a7aa1ff0f0783d4da246b0be9?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                                        className="shrink-0 my-auto aspect-square w-[25px]"
+                                                    />
+                                                }
                                             </div>
                                             {
                                                 Item.text && <div className="self-start mt-6 text-base text-zinc-800 max-md:max-w-full">

@@ -49,10 +49,10 @@ const OtpConfirmation = () => {
                     </div>
                     <div className="mt-7 text-lg leading-6 text-neutral-500 max-md:max-w-full">
                         <span className="">
-                            Lorem Ipsum is simply dummy text of the printing{" "}
+                            An OTP has been successfully sent to your email. Please verify. If you havnt recieved please change the email or try again.
                         </span>
-                        <span className="font-bold text-neutral-500">abc@example.com</span>{" "}
-                        <span className="">and typesetting industry.</span>
+                        {/* <span className="font-bold text-neutral-500">abc@example.com</span>{" "} */}
+                        {/* <span className="">and typesetting industry.</span> */}
                     </div>
                     <div className="mt-10 text-lg tracking-wider leading-5 text-neutral-700 max-md:mt-10 max-md:max-w-full">
                         Enter 5 Digits OTP

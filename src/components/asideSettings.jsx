@@ -53,6 +53,9 @@ export default function AsideSettings() {
 
     useEffect(() => {
         getNotifications();
+    }, [open2])
+    
+    useEffect(() => {
         getNewEvents();
     }, [])
 
@@ -94,12 +97,18 @@ export default function AsideSettings() {
             </div>
             {
                 eventsData.map((Item) => (
-                    <div key={Item.startDate} className="flex overflow-hidden relative flex-col pt-2.5 pr-2.5 pb-6 pl-8 mt-5 w-full text-white border border-solid xl:aspect-[1.52] border-neutral-400 rounded-2xl">
-                        <img
+                    <div key={Item.startDate} style={{
+                        backgroundImage: "url('https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&')",
+                        backgroundSize: "cover",          // Ensures the image covers the whole div
+                        backgroundPosition: "center",     // Centers the image
+                        backgroundRepeat: "no-repeat",     // Prevents the image from repeating                    
+                    
+                    }} className="flex relative flex-col pt-2.5 pr-2.5 pb-6 pl-8 mt-5 w-full h-auto text-white border border-solid xl:aspect-[1.52] border-neutral-400 rounded-2xl">
+                        {/* <img
                             loading="lazy"
-                            srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                            srcSet=""
                             className="object-cover absolute inset-0 size-full h-full"
-                        />
+                        /> */}
                         <div className="flex relative gap-5 items-start">
                             <div className="flex-auto self-end mt-18 text-xl xl:text-2xl font-semibold">
                                 {Item.name}
