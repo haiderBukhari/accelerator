@@ -96,9 +96,9 @@ export default function AsideSettings() {
                 Upcoming Event
             </div>
             {
-                eventsData.map((Item) => (
+                eventsData?.slice(0, 2)?.map((Item) => (
                     <div key={Item.startDate} style={{
-                        backgroundImage: "url('https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&')",
+                        backgroundImage: `url('${Item.backgroundImage ? Item.backgroundImage : 'https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/403a90de513ea495029061c20fbfa2a9993fbc03768aa00cec53af7fce98cb94?apiKey=cf358c329e0d49a792d02d32277323ef&'}')`,
                         backgroundSize: "cover",          // Ensures the image covers the whole div
                         backgroundPosition: "center",     // Centers the image
                         backgroundRepeat: "no-repeat",     // Prevents the image from repeating                    
@@ -127,6 +127,7 @@ export default function AsideSettings() {
                     </div>
                 ))
             }
+            <a href="/dashboard/events" className="relative justify-center self-start px-8 text-base font-medium leading-4 bg-violet-800 rounded-lg cursor-pointer text-white py-3 mx-auto mt-6">Show More</a>
             <SettingDialog open={open} setOpen={setOpen} />
             <NotificationsDialog open={open2} setOpen={setOpen2} notifications={notifications} />
             <ViewEvent open={open1} setOpen={setOpen1} details={details} />
