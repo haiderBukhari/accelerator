@@ -42,7 +42,7 @@ export default function CreateModule() {
 
     useEffect(() => {
         getCourses();
-    }, []);
+    }, [title]);
 
     const handleVideoFileChange = (event) => {
         setVideoFile(event.target.files[0]);
@@ -168,7 +168,7 @@ export default function CreateModule() {
                     </div>
                 </div>
                 <div onClick={createNewModule} className="self-start px-12 py-3 mt-4 text-xl font-medium cursor-pointer leading-5 text-white bg-violet-800 rounded-2xl max-md:px-5">
-                    Add New Course
+                    Add New Module
                 </div>
             </div>
             {

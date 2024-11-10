@@ -208,10 +208,10 @@ function SubmittedQuizComponent({submission}) {
                                 {submission.percentage > 40 ? "Passed" : "Failed"}
                             </div>
                         </div>
-                        <div className="shrink-0 self-stretch mt-3.5 w-full h-px border border-solid border-neutral-400" />
+                        {/* <div className="shrink-0 self-stretch mt-3.5 w-full h-px border border-solid border-neutral-400" />
                         <button className="overflow-hidden gap-2.5 self-stretch px-12 py-3 mt-11 text-xl font-medium leading-none text-white rounded-2xl bg-neutral-400 max-md:px-5 max-md:mt-10 w-[300px] text-center cursor-pointer">
                             Download PDF
-                        </button>
+                        </button> */}
                     </div>
                 </div>
                 <img

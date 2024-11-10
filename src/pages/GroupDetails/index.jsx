@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import defaultPic from '../../assets/professionalPicture.jpeg'
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, setDate } from "date-fns";
 import { failedToast, successToast } from "../../utils/toastNotifications";
 import { ChevronLeft, ThumbsUp } from 'lucide-react';
 import CreateFolderDialog from "../../components/groups/createFolder";
@@ -13,6 +13,7 @@ import CreatePostDialog from "../../components/CreatePost";
 import { Heart } from 'lucide-react';
 import Courses from "../Courses";
 import CommentsDialog from "../../components/comments";
+import ModalImage from "react-modal-image";
 
 export default function GroupsDetails() {
     const [selected, setSelected] = useState(1);
@@ -37,12 +38,14 @@ export default function GroupsDetails() {
     const [joinedUsers, setJoinedUsers] = useState([])
     const [pendingUsers, setPendingUsers] = useState([])
     const [createPost, setCreatePost] = useState(false);
-    const [data, setData] = useState([])
+    const fileInputRef = useRef(null);
+    const fileInputRef1 = useRef(null);
 
     const timeElapsed = (dateString) => {
         const date = new Date(dateString);
         return formatDistanceToNow(date, { addSuffix: true });
     };
+
 
     async function getGroupUsersData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/allusers?groupId=${id}`, {
@@ -54,6 +57,19 @@ export default function GroupsDetails() {
             setJoinedUsers(Item.data.joinedUsers)
             setPendingUsers(Item.data.pendingUsers)
             // setUserData(Item.data.user);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+    async function handleLikes1() {
+        await axios.put(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/${id}`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setUserData(Item.data.group)
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
@@ -204,6 +220,7 @@ export default function GroupsDetails() {
         getGroupUsersData()
     }, [id])
 
+
     async function handleLike(id) {
         await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/post`, {
             id: id
@@ -218,12 +235,89 @@ export default function GroupsDetails() {
         });
     }
 
+    const handlePhotoChange = async (event) => {
+        const formData = new FormData();
+        formData.append("groupId", id);
+        formData.append('file', event.target.files[0]);
+
+        await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/picture`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            successToast("Picture updated successfully")
+            setUserData({ ...userData, groupImage: Item.data.groupImage });
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    };
+
+    const handlePhotoClick = () => {
+        fileInputRef.current.click();
+    };
+
+
+    const handlePhotoChange1 = async (event) => {
+        const formData = new FormData();
+        formData.append("groupId", id);
+        formData.append('file', event.target.files[0]);
+
+        await axios.put(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/picture`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setUserData({ ...userData, backgroundImage: Item.data.groupImage });
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    };
+
+    const handlePhotoClick1 = () => {
+        fileInputRef1.current.click();
+    };
+
+    const tempImage = "https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&";
+
     return (
         <div className="flex flex-col mx-3">
-            <img
-                loading="lazy"
-                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                className="w-full max-w-auto mt-7"
+            {
+                !userData1.isAdmin && <ModalImage
+                    className="h-[250px] w-full"
+                    small={userData?.backgroundImage ? userData?.backgroundImage : tempImage}
+                    large={userData?.backgroundImage ? userData?.backgroundImage : tempImage}
+                    alt="Group Picture!"
+                />
+            }
+            {
+                userData1.isAdmin && <>
+                    {
+                        userData?.backgroundImage ? <img
+                            loading="lazy"
+                            onClick={() => {
+                                handlePhotoClick1()
+                            }}
+                            src={userData?.backgroundImage}
+                            className="w-full max-w-auto mt-7 cursor-pointer h-[250px]"
+                        /> : <img
+                            loading="lazy"
+                            onClick={() => {
+                                handlePhotoClick1()
+                            }}
+                            srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/c811a66c7c5a068d0e33944711b39ea9dafd8d913a0c97a76ea9cd74028a868d?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                            className="w-full max-w-auto mt-7 cursor-pointer h-[250px]"
+                        />
+                    }
+                </>
+            }
+            <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange1}
+                className="hidden"
+                ref={fileInputRef1}
             />
             <div className="flex z-10 flex-col pr-6 pl-16 mt-0 relative w-full max-md:px-5 max-md:max-w-full">
                 <div className="relative">
@@ -231,11 +325,32 @@ export default function GroupsDetails() {
                     <div style={{ top: "-90px", left: "0", transform: "translate(0, -10%" }} className="max-w-full w-[580px] absolute">
                         <div className="flex gap-5 max-md:flex-col max-md:gap-0 w-full">
                             <div className="flex flex-col w-full max-md:ml-0 max-md:w-full max-w-[229px]">
-                                <img
-                                    loading="lazy"
-                                    src={userData?.groupImage}
-                                    className="w-full rounded-full border-4 border-violet-800 border-solid aspect-square max-md:mt-7"
+                                {
+                                    !userData1.isAdmin && <ModalImage
+                                        className="h-[250px] w-[250px] rounded-full"
+                                        small={userData?.groupImage}
+                                        large={userData?.groupImage}
+                                        alt="Group Picture!"
+                                    />
+                                }
+                                {
+                                    userData1.isAdmin && <img
+                                        onClick={() => {
+                                            handlePhotoClick()
+                                        }}
+                                        loading="lazy"
+                                        src={userData?.groupImage}
+                                        className="w-full rounded-full border-4 border-violet-800 border-solid bg-transparent aspect-square max-md:mt-7 cursor-pointer"
+                                    />
+                                }
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handlePhotoChange}
+                                    className="hidden"
+                                    ref={fileInputRef}
                                 />
+
                             </div>
                             <div className="flex flex-col ml-5 w-full max-md:ml-0 max-md:w-full">
                                 <div className="flex flex-col grow mt-36 max-md:mt-10 w-full">
@@ -244,7 +359,9 @@ export default function GroupsDetails() {
                                     </div>
                                     <div className="flex gap-5 mt-3.5 text-lg items-center">
                                         {
-                                            !userData1.isAdmin && <ThumbsUp className="cursor-pointer" />
+                                            !userData1.isAdmin && <ThumbsUp onClick={()=>{
+                                                handleLikes1()
+                                            }} className={`cursor-pointer ${userData?.likeBy?.includes(userId) ? 'text-violet-800' : 'text-neutral-500'}`} />
                                         }
                                         <div className="justify-center px-2.5 py-1.5 font-medium text-violet-800 rounded-md border border-violet-800 border-solid bg-blue-700 bg-opacity-20 w-[100px]">
                                             {userData?.likes} Likes
@@ -290,7 +407,8 @@ export default function GroupsDetails() {
                                         <div className="text-xl font-semibold text-neutral-700">
                                             General Information
                                         </div>
-                                        <div className="mt-6">Contact Info: {userData?.contactNumber}</div>
+                                        <div className="mt-6">Group Name: {userData?.name}</div>
+                                        <div className="mt-3">Contact Info: {userData?.contactNumber}</div>
                                         <div className="mt-3">Email Address: {userData?.email}</div>
                                         <div className="mt-3">
                                             Talks About: {userData?.talksAbout || 'NA'}{" "}
@@ -347,7 +465,7 @@ export default function GroupsDetails() {
                                     </div>
                                 }
                                 {
-                                    posts?.map((Item, index) => (
+                                    posts?.map((Item) => (
                                         <div key={Item.text ?? ''} className="flex flex-col px-5 md:px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400  max-md:max-w-full">
                                             <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                                                 <div onClick={() => { Navigate(`/dashboard/profile/${Item.userInfo._id}`) }} className="flex gap-2 md:gap-4 cursor-pointer">

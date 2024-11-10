@@ -46,6 +46,21 @@ export default function Groups() {
         getAllGroupData();
     }, [open])
 
+    async function handleLikes1(id) {
+        await axios.put(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/${id}`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
+            getAllGroupData();
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+
+
     return (
         <div className="flex flex-col px-5 max-w-[99%] ">
             <div className="flex justify-between items-center max-md:mt-10 mt-14 ">
@@ -89,6 +104,9 @@ export default function Groups() {
                                             <div className="flex gap-2.5 justify-between text-sm text-violet-800 whitespace-nowrap mr-4 xl:mr-7 max-md:gap-1.5 max-md:mr-5">
                                                 <img
                                                     loading="lazy"
+                                                    onClick={()=>{
+                                                        handleLikes1(item._id)
+                                                    }}
                                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/cbf9f452b2ad0d9bc2072c788e3cdac85906c6c3a63ab0a7ec8669c8d70dc7de?apiKey=cf358c329e0d49a792d02d32277323ef&"
                                                     className="shrink-0 aspect-square w-[25px] max-md:w-[15px] cursor-pointer"
                                                 />

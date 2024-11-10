@@ -46,7 +46,7 @@ export default function Members() {
     useEffect(() => {
         setData([])
         getNonFriendsList(1);
-    }, [fetchAgain, name])
+    }, [fetchAgain])
 
     const addFriend = async (id) => {
         await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/friends`, {
@@ -90,9 +90,12 @@ export default function Members() {
                     <div className="text-base tracking-wider text-neutral-800">
                         Name / Email
                     </div>
-                    <input onChange={(e)=>{setName(e.target.value)}} type='text' className="justify-center items-start px-5 py-3 mt-3.5 text-base tracking-wider rounded-xl border border-solid outline-none bg-zinc-300 border-stone-300 text-neutral-400 w-full max-md:max-w-full focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300] max-xl:py-2" placeholder="i.e. jhon" />
+                    <input onChange={(e)=>{setName(e.target.value);}} type='text' className="justify-center items-start px-5 py-3 mt-3.5 text-base tracking-wider rounded-xl border border-solid outline-none bg-zinc-300 border-stone-300 text-neutral-400 w-full max-md:max-w-full focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300] max-xl:py-2" placeholder="i.e. jhon" />
                 </div>
-                <div className="flex justify-center self-end px-12 py-3.5 text-xl leading-5 text-white bg-violet-800 hover:bg-[#FA5300] rounded-2xl max-md:px-5 max-xl:px-6 max-xl:text-base cursor-pointer mt-5 md:mt-0 max-xl:py-2 max-lg:self-start">
+                <div onClick={()=>{
+                    setData([])
+                    getNonFriendsList(1);
+                }}  className="flex justify-center self-end px-12 py-3.5 text-xl leading-5 text-white bg-violet-800 hover:bg-[#FA5300] rounded-2xl max-md:px-5 max-xl:px-6 max-xl:text-base cursor-pointer mt-5 md:mt-0 max-xl:py-2 max-lg:self-start">
                     Search People
                 </div>
             </div>
