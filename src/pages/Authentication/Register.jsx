@@ -110,10 +110,14 @@ const Register = () => {
         Phone Number
       </div>
       <input
-        onChange={(e) => setPhoneNumber(e.target.value)}
+        onChange={(e) => {
+          if(e.target.value[e.target.value.length - 1] >= 0 || e.target.value[e.target.value.length - 1] <= 9 || e.target.value == ''){
+            setPhoneNumber(e.target.value)
+          }
+        }}
         value={phoneNumber}
         placeholder="i.e. (XX) XXX XXXXXXX"
-        type="number"
+        type="text"
         className="justify-center items-start px-6 py-2 mt-4 text-lg tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300] max-md:px-5 max-md:max-w-full"
       />
       <div className="mt-4 text-xl tracking-wider text-neutral-700 max-md:max-w-full">

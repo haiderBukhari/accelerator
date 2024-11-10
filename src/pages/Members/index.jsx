@@ -17,6 +17,7 @@ export default function Members() {
     const [pendingApprovals, setPendingApprovals] = useState(0);
     const Navigate = useNavigate('')
     const [name, setName] = useState('')
+    const userId = useSelector(state => state.profile.id);
 
     const handlePageChange = (event, value) => {
         if (page === value) return;
@@ -58,11 +59,43 @@ export default function Members() {
             },
         }).then(() => {
             setFetchAgain(!fetchAgain);
-            successToast("Friend Added")
+            successToast("Friend Request Sent")
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
     }
+
+    const acceptFriend = async (owner, friendId) => {
+        await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/friends`, {
+            owner: owner,
+            friendId: friendId
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
+            setFetchAgain(!fetchAgain);
+            successToast("Friend Request Accepted")
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+    const declineFriendRequest = async (owner, friendId) => {
+        await axios.delete(`${import.meta.env.VITE_APP_BACKEND_URL}/friends?owner=${owner}&friendId=${friendId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
+            setFetchAgain(!fetchAgain);
+            successToast("Friend Removed")
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
 
     return (
         <div className="flex flex-col px-5 mt-5 pb-20">
@@ -90,12 +123,12 @@ export default function Members() {
                     <div className="text-base tracking-wider text-neutral-800">
                         Name / Email
                     </div>
-                    <input onChange={(e)=>{setName(e.target.value);}} type='text' className="justify-center items-start px-5 py-3 mt-3.5 text-base tracking-wider rounded-xl border border-solid outline-none bg-zinc-300 border-stone-300 text-neutral-400 w-full max-md:max-w-full focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300] max-xl:py-2" placeholder="i.e. jhon" />
+                    <input onChange={(e) => { setName(e.target.value); }} type='text' className="justify-center items-start px-5 py-3 mt-3.5 text-base tracking-wider rounded-xl border border-solid outline-none bg-zinc-300 border-stone-300 text-neutral-400 w-full max-md:max-w-full focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300] max-xl:py-2" placeholder="i.e. jhon" />
                 </div>
-                <div onClick={()=>{
+                <div onClick={() => {
                     setData([])
                     getNonFriendsList(1);
-                }}  className="flex justify-center self-end px-12 py-3.5 text-xl leading-5 text-white bg-violet-800 hover:bg-[#FA5300] rounded-2xl max-md:px-5 max-xl:px-6 max-xl:text-base cursor-pointer mt-5 md:mt-0 max-xl:py-2 max-lg:self-start">
+                }} className="flex justify-center self-end px-12 py-3.5 text-xl leading-5 text-white bg-violet-800 hover:bg-[#FA5300] rounded-2xl max-md:px-5 max-xl:px-6 max-xl:text-base cursor-pointer mt-5 md:mt-0 max-xl:py-2 max-lg:self-start">
                     Search People
                 </div>
             </div>
@@ -112,7 +145,7 @@ export default function Members() {
                             <div className="w-full grid  grid-cols-2 mx-auto items-start max-xl:grid-cols-1">
                                 {
                                     data?.map((Item, Index) => (
-                                        <div onClick={()=>{
+                                        <div onClick={() => {
                                             Navigate(`/dashboard/profile/${Item._id}`)
                                         }} key={Item.firstName} className={`flex flex-col w-full cursor-pointer mb-5 max-md:ml-0 gap-5 max-xl:ml-0 max-xl:mr-0 max-md:mb-0 ${Index % 2 != 0 ? 'ml-4' : 'mr-4'}`}>
                                             <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
@@ -137,12 +170,41 @@ export default function Members() {
                                                     <div className="mt-3.5 text-base tracking-wider leading-4 text-zinc-500 hidden md:block">
                                                         {Item.aboutMe}
                                                     </div>
-                                                    <div onClick={(e) => { 
-                                                        e.stopPropagation()
-                                                        setData([]); setPage(1); addFriend(Item._id)
+                                                    {
+                                                        Item.noAcceptFriendRequest && <div onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            setData([]);
+                                                            setPage(1);
+                                                            acceptFriend(Item._id, userId)
+                                                        }} className="md:mt-3 justify-center self-end px-8 py-2 text-base leading-4 text-white bg-green-600 cursor-pointer rounded-xl max-md:px-5 hover:bg-[#FA5300]">
+                                                            Accept Friend Request
+                                                        </div>
+                                                    }
+                                                    {
+                                                        Item.isFriendRequestSent && <div onClick={(e) => {
+                                                            e.stopPropagation()
+                                                        }} className="md:mt-3 justify-center self-end px-8 py-2 text-base leading-4 text-white bg-blue-800 cursor-pointer rounded-xl max-md:px-5 hover:bg-[#FA5300]">
+                                                            Friend Request Sent
+                                                        </div>
+                                                    }
+                                                    {
+                                                        Item.isFriend && <div onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            declineFriendRequest(Item._id, userId)
+                                                        }} className="md:mt-3 justify-center self-end px-8 py-2 text-base leading-4 text-white bg-red-600 cursor-pointer rounded-xl max-md:px-5 hover:bg-[#FA5300]">
+                                                            Remove Friend
+                                                        </div>
+                                                    }
+                                                    {
+                                                        (!Item.isFriend && !Item.noAcceptFriendRequest && !Item.isFriendRequestSent) && <div onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            setData([]);
+                                                            setPage(1);
+                                                            addFriend(Item._id)
                                                         }} className="md:mt-3 justify-center self-end px-8 py-2 text-base leading-4 text-white bg-violet-800 cursor-pointer rounded-xl max-md:px-5 hover:bg-[#FA5300]">
-                                                        Add Friend
-                                                    </div>
+                                                            Add Friend
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>

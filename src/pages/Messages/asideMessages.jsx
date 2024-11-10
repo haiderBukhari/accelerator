@@ -112,9 +112,10 @@ const AsideMessages = () => {
                     <div className="flex flex-col px-2.5 pt-5 pb-14 text-sm bg-zinc-300 w-[320px] h-[450px] fixed bottom-0 right-[20px] overflow-auto">
                         <div style={{ zIndex: 100 }} className="flex gap-5 justify-between items-start px-4 py-2.5 rounded-xl border border-solid bg-neutral-200 border-stone-300 text-neutral-500">
                             <input onChange={(e) => {
-                                if(userList?.length){
+                                if(tempUserList?.length){
                                     const data = tempUserList.filter((name) => {
-                                        if (name.firstName.toLowerCase().includes(e.target.value) || name.lastName.toLowerCase().includes(e.target.value)) {
+                                        const names = name.firstName.toLowerCase() + " " + name.lastName.toLowerCase(); 
+                                        if (names.includes(e.target.value.trim())) {
                                             return name;
                                         }
                                     })

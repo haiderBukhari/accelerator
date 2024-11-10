@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { failedToast, successToast } from "../../utils/toastNotifications";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -15,28 +15,31 @@ export default function CreateEvent() {
     const token = useSelector(state => state.profile.jwt);
     const Navigate = useNavigate();
     const [eventsData, setEventsData] = useState([]);
+    const [profilePhoto, setProfilePhoto] = useState(null);
 
     const submitEvent = async () => {
         //check if start date is less than end date
-        if(!name || !description || !startDate || !endDate){
+        if(!name || !description || !startDate || !endDate || !profilePhoto){
             return failedToast("All fields are required");
         }
         
         if (startDate > endDate) {
             return failedToast("Unable to select end date prior to start date");
         }
+
+        const formData = new FormData();
+        formData.append('file', profilePhoto);
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('startDate', startDate);
+        formData.append('endDate', endDate);
+        formData.append('eventType', eventType);
+        formData.append('address', address);
+        formData.append('joiningLink', joiningLink);
         
-        await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/events`, {
-            name: name,
-            description: description,
-            startDate: startDate,
-            endDate: endDate,
-            eventType: eventType,
-            address: address,
-            joiningLink: joiningLink
-        }, {
+        await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/events`, formData, {
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'miltipart/form-data',
                 'Authorization': `Bearer ${token}`
             },
         }).then(() => {
@@ -63,6 +66,16 @@ export default function CreateEvent() {
         getNewEvents();
     }, [])
 
+    const fileInputRef = useRef(null);
+
+    const handlePhotoChange = (event) => {
+        setProfilePhoto(event.target.files[0]);
+    };
+
+    const handlePhotoClick = () => {
+        fileInputRef.current.click();
+    };
+    
     return (
         <div className="flex flex-col px-5 mb-20">
             <div className="mt-14 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-md:max-w-full">
@@ -71,7 +84,28 @@ export default function CreateEvent() {
             <div className="mt-4 w-full text-base text-neutral-500 max-md:max-w-full">
                 Fill the given fields.
             </div>
-            <div className="mt-14 w-full max-md:mt-10 max-md:max-w-full">
+            <div
+                className="w-full border border-solid aspect-[9.09] max-w-[447px] stroke-[1px] bg-[#AAAAAA] mt-7  bg-opacity-40 rounded-2xl px-3 py-3 cursor-pointer"
+                onClick={handlePhotoClick}
+            >
+                <div className="flex gap-2 text-lg font-bold leading-4 text-violet-800 whitespace-nowrap">
+                    <img
+                        loading="lazy"
+                        src={profilePhoto ? URL.createObjectURL(profilePhoto) : "https://cdn.builder.io/api/v1/image/assets/TEMP/92a2157aee4e429aae8e4dbeb9e67d66034defda4c489409e9a2e3627dc8db0e?"}
+                        className="shrink-0 aspect-square w-[23px]"
+                        alt="Profile"
+                    />
+                    <div className="my-auto text-[17px] ml-0">Event Picture</div>
+                </div>
+            </div>
+            <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className="hidden"
+                ref={fileInputRef}
+            />
+            <div className="mt-10 w-full max-md:mt-10 max-md:max-w-full">
                 <div className="flex gap-5 max-md:flex-col">
                     <div className="flex flex-col w-[40%] max-md:ml-0 max-md:w-full">
                         <div className="flex flex-col py-px text-base font-medium text-neutral-800 max-md:mt-10">

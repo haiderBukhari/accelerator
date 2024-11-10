@@ -37,7 +37,8 @@ export default function Messages() {
                         <div className="flex gap-5 items-start px-5 py-3 rounded-xl border border-solid bg-neutral-200 border-stone-300 text-neutral-500 max-md:pr-5">
                             <input onChange={(e)=>{
                                 const data = tempUserList.filter((name) => {
-                                    if(name.firstName.toLowerCase().includes(e.target.value) || name.lastName.toLowerCase().includes(e.target.value)){
+                                    const names = name.firstName.toLowerCase() + " " + name.lastName.toLowerCase(); 
+                                    if(names.includes(e.target.value)){
                                         return name;
                                     }
                                 })
@@ -86,9 +87,7 @@ export default function Messages() {
                             Chat With Friends
                         </div>
                         <div className="self-stretch mt-3 text-base 2xl:text-lg text-center text-neutral-500 w-full max-w-[530px] mx-auto max-md:max-w-full ">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting
-                            industry. Lorem Ipsum has been the industrys standard dummy text
-                            ever since the 1500s
+                        Connect with friends and mentors to share ideas, learn, and collaborate on projects. Engage in meaningful discussions, get advice, and grow together in a supportive community.
                         </div>
                     </div>
                 </div>
