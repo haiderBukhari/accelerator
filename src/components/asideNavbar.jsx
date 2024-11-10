@@ -194,20 +194,20 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                         <div className="cursor-pointer" onClick={() => { Navigate(`/dashboard/details/groups?id=${Item._id}`) }} key={Item.groupImage}>
                             <div className="flex gap-5 justify-between mt-6">
                                 <div className="flex flex-col justify-center">
-                                    <div className="flex gap-3">
-                                        <div className="flex overflow-hidden relative flex-col justify-center items-center border-2 border-solid aspect-square border-neutral-400 w-[59px]">
+                                    <div className="flex gap-3 items-center">
+                                        <div className="flex-1 relative flex-col justify-center items-center border-2 border-solid aspect-square w-[30%] ">
                                             <img
                                                 loading="lazy"
                                                 src={Item.groupImage}
-                                                className="object-cover absolute inset-0 size-full"
+                                                className="object-cover absolute inset-0 h-auto w-[100px]"
                                             />
                                         </div>
-                                        <div className="flex flex-col my-auto">
+                                        <div className="w-[70%] flex-col my-auto">
                                             <div className="text-sm font-semibold text-zinc-800">
                                                 {Item.name}
                                             </div>
                                             <div className="mt-1.5 text-xs text-ellipsis text-zinc-600">
-                                                {Item.talksAbout}
+                                                {Item.talksAbout.slice(0, 140)}
                                                 <br />
                                             </div>
                                         </div>

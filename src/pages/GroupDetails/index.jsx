@@ -135,6 +135,7 @@ export default function GroupsDetails() {
         }).then((Item) => {
             successToast(Item.data.message)
             setUserData(Item.data.group)
+            fetchAgain(true)
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });

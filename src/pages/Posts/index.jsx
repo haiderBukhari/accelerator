@@ -31,10 +31,10 @@ export default function Posts() {
 
     const handleScroll = () => {
         if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
-            if((data.length%10<=9 && data.length%10!==0)){
+            if ((data.length % 10 <= 9 && data.length % 10 !== 0)) {
                 return;
-            }else{
-                const nextPage= currentPage + 1;
+            } else {
+                const nextPage = currentPage + 1;
                 setCurrentPage(nextPage)
                 getPosts(nextPage);
             }
@@ -43,7 +43,7 @@ export default function Posts() {
 
     // Add scroll event listener
     useEffect(() => {
-        if(!loading){
+        if (!loading) {
             window.addEventListener('scroll', handleScroll);
             return () => window.removeEventListener('scroll', handleScroll); // Cleanup on unmount
         }
@@ -59,9 +59,9 @@ export default function Posts() {
             },
         }).then((Item) => {
             setLoading(false)
-            if(data.length){
+            if (data.length) {
                 setData([...data, ...Item.data])
-            }else{
+            } else {
                 setData(Item.data)
             }
             setFetched(Item.data.length ? false : true)
@@ -138,9 +138,9 @@ export default function Posts() {
             </div>
             <div className="mt-6 flex justify-end items-center">
                 <h1 className="mr-4">Filter By</h1>
-                <select onChange={(e)=>{
+                <select onChange={(e) => {
                     setData([])
-                    setIsOnlySavedPost(e.target.value ==='saved')
+                    setIsOnlySavedPost(e.target.value === 'saved')
                 }} className="justify-center text-start items-start py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 hidden md:block outline-none px-3" name="" id="">
                     <option value="all">All Posts</option>
                     <option value="saved">Saved Posts</option>
@@ -152,7 +152,7 @@ export default function Posts() {
                 </div>
             }
             {
-                data?.map((Item, index) => (
+                data?.map((Item) => (
                     <div key={Item._id ?? ''} className="flex flex-col px-5 md:px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400  max-md:max-w-full">
                         <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                             <div onClick={() => { Navigate(`/dashboard/profile/${Item.owner}`) }} className="flex gap-2 md:gap-4 cursor-pointer">
@@ -162,6 +162,15 @@ export default function Posts() {
                                     className="shrink-0 border-4 border-violet-800 border-solid aspect-square w-[45px] max-md:h-[45px] md:w-[60px] rounded-xl"
                                 />
                                 <div className="flex flex-col py-1 my-auto">
+                                    {
+                                        Item?.groupInfo?.name &&
+                                        <div onClick={(e)=>{
+                                            e.stopPropagation();
+                                            Navigate(`/dashboard/details/groups?id=${Item.group}`)
+                                        }} className="text-sm md:text-base text-zinc-800 font-bold">
+                                            {Item.groupInfo.name}
+                                        </div>
+                                    }
                                     <div className="text-sm md:text-base font-medium text-zinc-800">
                                         {Item.userInfo.firstName} {Item.userInfo.lastName}
                                     </div>
@@ -194,7 +203,7 @@ export default function Posts() {
                                         )
                                         handleSave(Item._id)
                                     }}
-                                    className="cursor-pointer text-gray-500" />
+                                        className="cursor-pointer text-gray-500" />
                             }
                         </div>
 
