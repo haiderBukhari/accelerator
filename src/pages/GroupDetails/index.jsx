@@ -430,7 +430,7 @@ export default function GroupsDetails() {
                             </div>
                             <div className="flex flex-col px-6 w-full rounded-3xl text-2xl text-center max-md:pl-5 max-md:max-w-full">
                                 {
-                                    userData?.joinedUsers?.includes(userId) && <div onClick={() => { setCreatePost(!createPost) }} className="flex flex-col md:flex-row gap-5 justify-between pl-5 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:flex-wrap max-md:max-w-full h-[200px] max-md:h-[170px] md:h-auto">
+                                    (userData?.joinedUsers?.includes(userId) || userData1.isAdmin) && <div onClick={() => { setCreatePost(!createPost) }} className="flex flex-col md:flex-row gap-5 justify-between pl-5 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:flex-wrap max-md:max-w-full h-[200px] max-md:h-[170px] md:h-auto">
                                         <div className="flex gap-4 max-md:mt-5 my-auto text-base font-medium text-zinc-500">
                                             <img
                                                 loading="lazy"
