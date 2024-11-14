@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { successToast } from '../../utils/toastNotifications';
+import { failedToast, successToast } from '../../utils/toastNotifications';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,6 +43,9 @@ const CreateGroup = ({ open, setOpen, submit, setSubmit }) => {
     };
 
     const handleSubmit = async () => {
+        if (userData.email === "" || userData.email.includes("@") === false || userData.email.includes(".") === false) {
+            return failedToast("Please Enter Valid Email");
+        }
         const formData = new FormData();
         formData.append('file', profilePhoto);
         formData.append('name', userData.name);
@@ -111,7 +114,7 @@ const CreateGroup = ({ open, setOpen, submit, setSubmit }) => {
                     <textarea onChange={(event) => { setUserData({ ...userData, description: event.target.value }) }} value={userData?.description ?? ""} rows={4} style={{ border: "1px solid #AAAAAA" }} className="justify-center items-start px-5 py-2 mt-3 w-full text-base tracking-wider rounded-xl border border-solid outline-none text-black bg-zinc-300 border-stone-300" placeholder='Type here' name="" id=""></textarea>
                     <div className="mt-5 w-full font-semibold">Group Type</div>
                     {/* <textarea  placeholder='Type here' name="" id=""></textarea> */}
-                    <select onChange={(event) => { setUserData({ ...userData, isPrivate: event.target.value == "true" ? true: false }); }} rows={4} style={{ border: "1px solid #AAAAAA" }} className="justify-center items-start px-5 py-2 mt-3 w-full text-base tracking-wider rounded-xl border border-solid outline-none text-black bg-zinc-300 border-stone-300" name="" id="">
+                    <select onChange={(event) => { setUserData({ ...userData, isPrivate: event.target.value == "true" ? true : false }); }} rows={4} style={{ border: "1px solid #AAAAAA" }} className="justify-center items-start px-5 py-2 mt-3 w-full text-base tracking-wider rounded-xl border border-solid outline-none text-black bg-zinc-300 border-stone-300" name="" id="">
                         <option value={"false"}>Public</option>
                         <option value={"true"}>Private</option>
                     </select>

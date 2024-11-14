@@ -147,7 +147,7 @@ export default function Members() {
                                     data?.map((Item, Index) => (
                                         <div onClick={() => {
                                             Navigate(`/dashboard/profile/${Item._id}`)
-                                        }} key={Item.firstName} className={`flex flex-col w-full cursor-pointer mb-5 max-md:ml-0 gap-5 max-xl:ml-0 max-xl:mr-0 max-md:mb-0 ${Index % 2 != 0 ? 'ml-4' : 'mr-4'}`}>
+                                        }} key={Item.firstName} className={`flex relative flex-col w-full cursor-pointer mb-5 max-md:ml-0 gap-5 max-xl:ml-0 max-xl:mr-0 max-md:mb-0 ${Index % 2 != 0 ? 'ml-4' : 'mr-4'}`}>
                                             <div className="flex flex-col grow justify-center font-medium max-md:mt-5">
                                                 <div className="flex flex-row md:flex-col justify-between px-4 py-5 w-full rounded-2xl border border-solid bg-neutral-200 border-neutral-400 max-md:pr-5 max-md:flex-col max-md:min-h-[200px]">
                                                     <div className="flex gap-4 justify-start leading-[95%]">
@@ -181,10 +181,30 @@ export default function Members() {
                                                         </div>
                                                     }
                                                     {
-                                                        Item.isFriendRequestSent && <div onClick={(e) => {
+                                                        Item.noAcceptFriendRequest && <div onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            declineFriendRequest(Item._id, userId)
+                                                        }} className="md:mt-3 justify-center absolute top-[-20px] right-[-10px] self-end px-2 py-2 text-base leading-4 text-white bg-red-600 cursor-pointer rounded-xl max-md:px-5 hover:bg-[#FA5300]">
+                                                            Reject Request
+                                                        </div>
+                                                    }
+                                                    {
+                                                        Item.isFriendRequestSent &&
+                                                        <div onClick={(e) => {
                                                             e.stopPropagation()
                                                         }} className="md:mt-3 justify-center self-end px-8 py-2 text-base leading-4 text-white bg-blue-800 cursor-pointer rounded-xl max-md:px-5 hover:bg-[#FA5300]">
                                                             Friend Request Sent
+                                                        </div>
+                                                    }
+                                                    {
+                                                        Item.isFriendRequestSent &&
+                                                        <div>
+                                                            <div onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                declineFriendRequest(Item._id, userId)
+                                                            }} className="md:mt-3 justify-center absolute top-[-20px] right-[-10px] self-end px-2 py-2 text-base leading-4 text-white bg-red-600 cursor-pointer rounded-xl max-md:px-5 hover:bg-[#FA5300]">
+                                                                Remove Request
+                                                            </div>
                                                         </div>
                                                     }
                                                     {

@@ -80,7 +80,7 @@ const Notes = () => {
             <div className="flex justify-between items-center">
                 <div>
                     <div className="mt-14 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-md:max-w-full">
-                        Notes
+                        Blank Pages
                     </div>
                     <div className="mt-4 w-full text-xl text-zinc-500 max-md:max-w-full">
                         Add New Note and keep updated{" "}

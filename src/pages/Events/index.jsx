@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { failedToast } from "../../utils/toastNotifications";
+import { failedToast, successToast } from "../../utils/toastNotifications";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ViewEvent from "./viewEvent";
+import { Trash } from "lucide-react";
 
 export default function Events() {
     const [userData, setUserData] = useState({});
@@ -13,6 +14,8 @@ export default function Events() {
     const [details, setDetails] = useState({})
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(true)
+
+
 
     async function getUserData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/userData`, {
@@ -26,6 +29,21 @@ export default function Events() {
             return failedToast(err.response.data.error);
         });
     }
+    
+    async function deleteEvent(id) {
+        await axios.delete(`${import.meta.env.VITE_APP_BACKEND_URL}/events?id=${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
+            successToast("Event Removed")
+            getNewEvents();
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
     useEffect(() => {
         getUserData();
     }, [])
@@ -87,7 +105,7 @@ export default function Events() {
                     <div className="flex gap-5 justify-center max-md:flex-wrap max-md:max-w-full">
                         <div>People Attending</div>
                         <div className="pr-9">InPerson/Virtual</div>
-                        <div>Action</div>
+                        <div className="pr-10">Action</div>
                     </div>
                 </div>
                 {
@@ -103,6 +121,9 @@ export default function Events() {
                                     <div className="flex gap-5 justify-between text-violet-800 max-md:flex-wrap max-md:max-w-full">
                                         <div className="text-neutral-500 pr-7">{Item.eventType}</div>
                                         <div onClick={() => { setDetails(Item); setOpen(!open) }} className="my-auto font-bold cursor-pointer">See Details</div>
+                                        {
+                                            userData.isAdmin && <Trash onClick={()=>{deleteEvent(Item._id)}} className="text-red-800 cursor-pointer" />
+                                        }
                                     </div>
                                 </div>
                             </div>
