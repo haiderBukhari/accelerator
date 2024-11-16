@@ -153,7 +153,7 @@ export default function CreateEvent() {
                                         </div>
                                         <div className="flex gap-5 justify-between my-auto">
                                             <div className="flex gap-2.5 justify-between my-auto text-xs whitespace-nowrap text-neutral-400">
-                                                <div className="my-auto">{Item.attendingPeoples.length} {"Attending"}</div>
+                                                <div className="my-auto">{Item?.attendees?.length} {"Attending"}</div>
                                             </div>
                                             <div className="px-5 py-1 text-md text-white bg-violet-800 rounded-lg border border-solid border-neutral-400">
                                                 Attend event

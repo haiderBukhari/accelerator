@@ -39,7 +39,7 @@ export default function ViewEvent({ open, setOpen, details }) {
     };
 
     const attendEvent = async () => {
-        await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/events?id=${details._id}`, {}, {
+        await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/events?id=${details.id}`, {}, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -71,7 +71,7 @@ export default function ViewEvent({ open, setOpen, details }) {
                         {"Event Details"}
                     </p>
                     {
-                        details.attending && <p className='text-sm'>{"You are already attending this event"}</p>
+                        details?.attending && <p className='text-sm'>{"You are already attending this event"}</p>
                     }
                 </DialogTitle>
                 <DialogContent>

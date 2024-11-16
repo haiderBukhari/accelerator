@@ -4,9 +4,9 @@ import { useSearchParams } from "react-router-dom";
 import defaultPic from '../../assets/professionalPicture.jpeg'
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { formatDistanceToNow, setDate } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { failedToast, successToast } from "../../utils/toastNotifications";
-import { ChevronLeft, ThumbsUp } from 'lucide-react';
+import { Bookmark, ChevronLeft, Pin, ThumbsUp } from 'lucide-react';
 import CreateFolderDialog from "../../components/groups/createFolder";
 import CreateFolderImageDialog from "../../components/groups/uploadImage";
 import CreatePostDialog from "../../components/CreatePost";
@@ -14,6 +14,7 @@ import { Heart } from 'lucide-react';
 import Courses from "../Courses";
 import CommentsDialog from "../../components/comments";
 import ModalImage from "react-modal-image";
+import { data } from "autoprefixer";
 
 export default function GroupsDetails() {
     const [selected, setSelected] = useState(1);
@@ -57,6 +58,20 @@ export default function GroupsDetails() {
             setJoinedUsers(Item.data.joinedUsers)
             setPendingUsers(Item.data.pendingUsers)
             // setUserData(Item.data.user);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+    async function handleSave(id) {
+        await axios.put(`${import.meta.env.VITE_APP_BACKEND_URL}/post`, {
+            id: id
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
@@ -194,6 +209,28 @@ export default function GroupsDetails() {
             },
         }).then((Item) => {
             setUserData(Item.data.details);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+    async function togglePin(id1) {
+        const tempPost = [...posts]
+        const data1 = tempPost.map(post => {
+            if (post._id === id1) {
+                return { ...post, isPinedPost: !post.isPinedPost }
+            }
+            return post;
+        })
+        setPosts(data1)
+
+        await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/${id1}`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(async () => {
+            // update the isPinedPost on post array for specific id
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
@@ -360,7 +397,7 @@ export default function GroupsDetails() {
                                     </div>
                                     <div className="flex gap-5 mt-3.5 text-lg items-center">
                                         {
-                                            !userData1.isAdmin && <ThumbsUp onClick={()=>{
+                                            !userData1.isAdmin && <ThumbsUp onClick={() => {
                                                 handleLikes1()
                                             }} className={`cursor-pointer ${userData?.likeBy?.includes(userId) ? 'text-violet-800' : 'text-neutral-500'}`} />
                                         }
@@ -482,11 +519,35 @@ export default function GroupsDetails() {
                                                         <div className="mt-0 md:mt-2 text-xs text-neutral-500">{timeElapsed(Item.createdAt)}</div>
                                                     </div>
                                                 </div>
-                                                <img
-                                                    loading="lazy"
-                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/17fb2d504a4a46adf611331825b24e3490f3ff0a7aa1ff0f0783d4da246b0be9?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                    className="shrink-0 my-auto aspect-square w-[20px] md:w-[25px]"
-                                                />
+                                                <div className="flex items-center gap-3">
+                                                    <Pin onClick={() => { togglePin(Item._id) }} className={`${Item.isPinedPost ? 'text-black' : 'text-gray-400'} cursor-pointer`} />
+                                                    {
+                                                        Item.savedBy?.includes(id) ? <Bookmark
+                                                            onClick={() => {
+                                                                setPosts(
+                                                                    posts.map((post) => {
+                                                                        if (post._id === Item._id) {
+                                                                            post.savedBy = post.savedBy.filter((like) => like !== id);
+                                                                        }
+                                                                        return post;
+                                                                    })
+                                                                )
+                                                                handleSave(Item._id)
+                                                            }}
+                                                            className="cursor-pointer text-black" /> :
+                                                            <Bookmark onClick={() => {
+                                                                setPosts(
+                                                                    posts.map((post) => {
+                                                                        if (post._id === Item._id) {
+                                                                            post.savedBy.push(id);
+                                                                        }
+                                                                        return post;
+                                                                    })
+                                                                )
+                                                                handleSave(Item._id)
+                                                            }} className="cursor-pointer text-gray-500" />
+                                                    }
+                                                </div>
                                             </div>
 
                                             {

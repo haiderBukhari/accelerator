@@ -4,7 +4,8 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ViewEvent from "./viewEvent";
-import { Trash } from "lucide-react";
+import { ExternalLink, Trash } from "lucide-react";
+import Attendees from "./attendees";
 
 export default function Events() {
     const [userData, setUserData] = useState({});
@@ -13,9 +14,10 @@ export default function Events() {
     const [eventsData, setEventsData] = useState([]);
     const [details, setDetails] = useState({})
     const [open, setOpen] = useState(false)
+    const [open1, setOpen1] = useState(false)
+    const [selectedEventName, setSelectedEventName] = useState('')
+    const [selectedAttendees, setSelectedAttendees] = useState([])
     const [loading, setLoading] = useState(true)
-
-
 
     async function getUserData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/userData`, {
@@ -56,8 +58,9 @@ export default function Events() {
                 'Authorization': `Bearer ${token}`
             },
         }).then((Item) => {
+            console.log(Item.data.events)
             setEventsData(Item.data.events);
-            setLoading(Item.data.events.length ? true : false)
+            setLoading(Item?.data?.events?.length ? true : false)
         }).catch((err) => {
             setLoading(false)
             return failedToast(err.response.data.error);
@@ -104,8 +107,8 @@ export default function Events() {
                     </div>
                     <div className="flex gap-5 justify-center max-md:flex-wrap max-md:max-w-full">
                         <div>People Attending</div>
-                        <div className="pr-9">InPerson/Virtual</div>
-                        <div className="pr-10">Action</div>
+                        <div className="pr-10">InPerson/Virtual</div>
+                        <div className="pr-[100px]">Action</div>
                     </div>
                 </div>
                 {
@@ -114,21 +117,29 @@ export default function Events() {
                             <div className="flex gap-5 justify-between mt-6 w-full max-md:flex-wrap max-md:max-w-full">
                                 <div className="flex gap-5 w-[600px]">
                                     <div className="font-bold text-violet-800 w-[110px]">{Item.startDate.slice(0, 10)}</div>
-                                    <div className="text-neutral-500 ">{Item.name}</div>
+                                    <div className="text-neutral-800 ">{Item.name}</div>
                                 </div>
                                 <div className="flex gap-5 justify-between px-0.5 py-px max-md:flex-wrap max-md:max-w-full">
-                                    <div className="my-auto text-neutral-500 pr-20">{Item.attendingPeoples.length}</div>
+                                    <div className="my-auto text-neutral-800 pr-20">{Item?.attendees?.length}</div>
                                     <div className="flex gap-5 justify-between text-violet-800 max-md:flex-wrap max-md:max-w-full">
-                                        <div className="text-neutral-500 pr-7">{Item.eventType}</div>
+                                        <div className="text-neutral-800 pr-7">{Item.eventType}</div>
                                         <div onClick={() => { setDetails(Item); setOpen(!open) }} className="my-auto font-bold cursor-pointer">See Details</div>
                                         {
                                             userData.isAdmin && <Trash onClick={()=>{deleteEvent(Item._id)}} className="text-red-800 cursor-pointer" />
+                                        }
+                                        {
+                                            userData.isAdmin && <ExternalLink onClick={()=>{
+                                                setSelectedAttendees(Item.attendees)
+                                                setSelectedEventName(Item.name)
+                                                setOpen1(!open1)
+                                            }
+                                        } className="text-green-800 cursor-pointer" />
                                         }
                                     </div>
                                 </div>
                             </div>
                             {
-                                eventsData.length - 1 !== index && <div className="shrink-0 mt-2 h-px border border-solid bg-neutral-400 border-neutral-400 max-md:max-w-full" />
+                                eventsData?.length - 1 !== index && <div className="shrink-0 mt-2 h-px border border-solid bg-neutral-400 border-neutral-400 max-md:max-w-full" />
                             }
                         </div>
                     ))
@@ -136,12 +147,13 @@ export default function Events() {
 
             </div>
             {
-                !loading && eventsData.length === 0 && <div className="text-center mt-10 text-2xl">No New Event Yet</div>
+                !loading && eventsData?.length === 0 && <div className="text-center mt-10 text-2xl">No New Event Yet</div>
             }
             {
-                loading && eventsData.length===0 && <div className="text-center mt-10 text-2xl">Loading...</div>
+                loading && eventsData?.length===0 && <div className="text-center mt-10 text-2xl">Loading...</div>
             }
             <ViewEvent open={open} setOpen={setOpen} details={details} />
+            <Attendees open={open1} setOpen={setOpen1} attendees={selectedAttendees} name={selectedEventName} />
         </div>
     );
 }

@@ -132,12 +132,12 @@ export default function SettingDialog({ open, setOpen }) {
                 <DialogActions>
                     <div className='w-[290px] md:w-[400px] mb-3'>
                         <div className='mx-3 my-2 mb-5' style={{ borderBottom: "2px solid #ccc" }}></div>
-                        <div className='mx-4'>
+                        {/* <div className='mx-4'>
                             <div className="flex w-full justify-between">
                                 <button onClick={handleClose} className='w-[140px] px-10 py-2 rounded-xl text-center text-black bg-[#CCCCCC]'>Cancel</button>
                                 <button onClick={()=>{setClickedSave(true);}} className='w-[140px] px-10 py-2 rounded-xl text-center text-white bg-[#4C1DBE]'>Save</button>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </DialogActions>
             </Dialog>

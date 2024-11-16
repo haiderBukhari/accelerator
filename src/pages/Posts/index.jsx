@@ -164,7 +164,7 @@ export default function Posts() {
                                 <div className="flex flex-col py-1 my-auto">
                                     {
                                         Item?.groupInfo?.name &&
-                                        <div onClick={(e)=>{
+                                        <div onClick={(e) => {
                                             e.stopPropagation();
                                             Navigate(`/dashboard/details/groups?id=${Item.group}`)
                                         }} className="text-sm md:text-base text-zinc-800 font-bold">
@@ -202,8 +202,7 @@ export default function Posts() {
                                             })
                                         )
                                         handleSave(Item._id)
-                                    }}
-                                        className="cursor-pointer text-gray-500" />
+                                    }} className="cursor-pointer text-gray-500" />
                             }
                         </div>
 
