@@ -7,13 +7,13 @@ import { removeUserDetails } from "../features/profile";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
+const AsideNavbar = ({ navbarOpen, setNavbarOpen, fetch }) => {
     const Location = useLocation();
     const Navigate = useNavigate();
-    const dispatch = useDispatch();
     const [joinedGroups, setJoinedGroups] = useState([]);
     const token = useSelector(state => state.profile.jwt);
     const [userData, setUserData] = useState({});
+    const [htmlList, setHtmlList] = useState([]);
 
 
     async function getUserData() {
@@ -37,7 +37,6 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
             },
         }).then((Item) => {
             setJoinedGroups(Item.data)
-            // setUserData(Item.data.user);
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
@@ -47,6 +46,24 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
         getUserData();
         getGroupUsersData();
     }, [])
+
+    async function getEmbeddedHtml() {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/embedded-html`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        }).then((res) => {
+            setHtmlList(res.data);
+        }).catch((err) => {
+            failedToast(err.response?.data?.error || "Failed to fetch content.");
+        });
+    }
+
+    useEffect(() => {
+        getEmbeddedHtml();
+    }, [fetch]);
+
 
     const hyperLinks = [
         {
@@ -152,7 +169,7 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                             >
                                 <BookHeart className="w-[20px]" />
                                 <p className="text-sm">
-                                Blank Pages
+                                    Blank Pages
                                 </p>
                             </div>
                         </div>
@@ -169,6 +186,25 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                                 </p>
                             </div>
                         </div>
+                    }
+                    {
+                        htmlList?.map((Item) => {
+                            // Only render the item if the user is an admin or if the item is not private
+                            if (userData.isAdmin || !Item.isPrivate) {
+                                return (
+                                    <div key={Item.routeName} className="flex cursor-pointer items-center h-[35px] my-1">
+                                        <div onClick={() => { Navigate(`/embedding-section/${Item.routeName}`); }}
+                                            className={`flex gap-2.5 pr-5 ml-8 md:ml-5 text-neutral-500 w-18.5 `}>
+                                            <ExternalLink className="w-[20px]" />
+                                            <p className="text-sm">
+                                                {Item.title}
+                                            </p>
+                                        </div>
+                                    </div>
+                                );
+                            }
+                            return null; // Return null if the item is not visible
+                        })
                     }
                     {
                         (userData.isAdmin) &&

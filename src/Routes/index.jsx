@@ -29,8 +29,10 @@ import PersonalSection from "../pages/Personal-Section";
 import HTMLEMBEDDINGSection from "../pages/HTML-Embedding";
 import Leaderboard from "../pages/leaderboard";
 import Moderators from "../pages/Moderator";
+import Embedding from "../pages/Embedding";
+import { useState } from "react";
 
-const Index = ({ navbarOpen, setNavbarOpen }) => {
+const Index = ({ navbarOpen, setNavbarOpen, fetch, setFetch }) => {
   const location = useLocation();
   const currentLocation =
     location.pathname === "/" ||
@@ -94,7 +96,8 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
         <Route path="/dashboard/video" element={token ? <TripVideo /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/events" element={token ? <Events /> : <Navigate to ="/login"/>} />
         <Route path="/personal-section" element={token ? <PersonalSection /> : <Navigate to ="/login"/>} />
-        <Route path="/embedding-section" element={token ? <HTMLEMBEDDINGSection /> : <Navigate to ="/login"/>} />
+        <Route path="/embedding-section" element={token ? <HTMLEMBEDDINGSection fetch={fetch} setFetch={setFetch} /> : <Navigate to ="/login"/>} />
+        <Route path="/embedding-section/:routeName" element={token ? <Embedding /> : <Navigate to ="/login"/>} />
         <Route path="/moderator" element={token ? <Moderators /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/events/create" element={token ? <CreateEvent /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/details/groups" element={token ? <GroupsDetails /> : <Navigate to ="/login"/>} />

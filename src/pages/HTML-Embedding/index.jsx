@@ -1,12 +1,11 @@
 import { CssBaseline } from '@mui/material'
-import React from 'react'
 import Notes from './Notes'
 
-const PersonalSection = () => {
+const PersonalSection = ({fetch, setFetch}) => {
     return (
         <div>
             <CssBaseline />
-            <Notes />
+            <Notes fetch={fetch} setFetch={setFetch}/>
         </div>
     )
 }
