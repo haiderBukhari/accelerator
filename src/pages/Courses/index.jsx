@@ -5,14 +5,17 @@ import { useNavigate } from "react-router-dom";
 import { failedToast, successToast } from "../../utils/toastNotifications";
 import CreateCourseDialog from "../../components/courses/createCourse";
 import { BookOpenCheck, Trash2 } from 'lucide-react';
+import DrippingCourseDialog from "../../components/courses/DrippingCourseDialog";
 
 export default function Courses({ groupId }) {
     const Navigate = useNavigate();
     const [userData, setUserData] = useState({});
     const token = useSelector(state => state.profile.jwt);
     const [open, setOpen] = useState(false)
+    const [open1, setOpen1] = useState(false)
     const [data, setData] = useState([])
     const [fetchAgain, setFetchAgain] = useState(false);
+    const [selectedModules, setSelectedModules] = useState([])
 
     async function getUserData() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/userData`, {
@@ -54,6 +57,7 @@ export default function Courses({ groupId }) {
                 'Authorization': `Bearer ${token}`
             },
         }).then((res) => {
+            console.log(res.data.courses)
             setData(res.data.courses)
         }).catch((err) => {
             return failedToast(err.response.data.error);
@@ -75,7 +79,26 @@ export default function Courses({ groupId }) {
 
     useEffect(() => {
         getCourses();
-    }, [open, fetchAgain])
+    }, [fetchAgain])
+
+    const isUnlockable = (unLockDays, userCreatedAt) => {
+        if (!userCreatedAt) {
+            return 1;
+        }
+
+        // Parse the user's joining date and normalize it to remove time
+        const userJoinDate = new Date(userCreatedAt);
+        userJoinDate.setHours(0, 0, 0, 0);
+
+        // Get the current date and normalize it
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+
+        // Calculate the number of days since the user's joining date
+        const daysSinceJoining = Math.floor((currentDate - userJoinDate) / (1000 * 60 * 60 * 24));
+
+        return daysSinceJoining >= unLockDays;
+    };
 
     return (
         <div className={`flex flex-col px-5 pb-10 ${!groupId ? 'bg-neutral-100' : 'pt-3'} min-h-screen`}>
@@ -113,6 +136,12 @@ export default function Courses({ groupId }) {
                                         <button onClick={() => { Navigate(`/dashboard/modules?title=${Item.name}&${groupId ? `groupId=${groupId ?? ''}` : ''}`) }} className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl hover:opacity-80">Add New Module</button>
 
                                         <button onClick={() => { Navigate(`/dashboard/quiz?title=${Item.name}&${groupId ? `groupId=${groupId ?? ''}` : ''}`) }} className="inline-flex items-center justify-center px-6 py-2 text-sm ml-5 font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl hover:opacity-80">Add New Quiz</button>
+
+                                        <button onClick={() => {
+                                            console.log(Item.modules)
+                                            setOpen1(!open1)
+                                            setSelectedModules(Item.modules)
+                                        }} className="inline-flex items-center justify-center px-6 py-2 text-sm ml-5 font-medium leading-5 text-white transition duration-150 ease-in-out bg-red-800 border border-transparent hover:bg-red-700 focus:outline-none focus:ring-offset-2 focus:ring-red-700 rounded-2xl hover:opacity-80">Driping Time</button>
                                     </div>
                                 }
                             </div>
@@ -122,7 +151,7 @@ export default function Courses({ groupId }) {
                             Item.modules?.map((ItemDetails) => {
                                 return (
                                     <>
-                                        { (userData.isAdmin || (!userData.isAdmin && ItemDetails.isTrip)) &&
+                                        {(userData.isAdmin || (!userData.isAdmin && ItemDetails.isTrip)) &&
                                             <div key={ItemDetails.id}>
                                                 <div className="flex gap-5 justify-between items-center mt-6 w-full max-lg:flex-wrap max-lg:max-w-full">
                                                     <div className="self-stretch w-full">
@@ -147,7 +176,7 @@ export default function Courses({ groupId }) {
                                                         </div>
                                                     </div>
                                                     {
-                                                        (userData.isAdmin && !ItemDetails.isTrip) && <button onClick={(e)=>{
+                                                        (userData.isAdmin && !ItemDetails.isTrip) && <button onClick={(e) => {
                                                             e.stopPropagation();
                                                             tripVideo(ItemDetails.id)
                                                         }}
@@ -166,12 +195,18 @@ export default function Courses({ groupId }) {
                                                             <div className="my-auto">{ItemDetails.views} Attendies</div>
                                                         </div>
                                                     </div>
-                                                    <img
-                                                        onClick={() => { Navigate(`/dashboard/course/details/${ItemDetails.id}`) }}
-                                                        loading="lazy"
-                                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/f7c99789c18d7823e75d0ea2e0789fa546a117a0f4744c541ab08390c619b505?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                        className="shrink-0 self-stretch my-auto aspect-[1.25] w-full max-w-[60px] max-md:max-w-[50px] cursor-pointer"
-                                                    />
+                                                    {
+                                                        isUnlockable(ItemDetails.unLockDays, userData?.createdAt) ? <img
+                                                            onClick={() => { Navigate(`/dashboard/course/details/${ItemDetails.id}`) }}
+                                                            loading="lazy"
+                                                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/f7c99789c18d7823e75d0ea2e0789fa546a117a0f4744c541ab08390c619b505?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                                            className="shrink-0 self-stretch my-auto aspect-[1.25] w-full max-w-[60px] max-md:max-w-[50px] cursor-pointer"
+                                                        /> : <img
+                                                            loading="lazy"
+                                                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/f7c99789c18d7823e75d0ea2e0789fa546a117a0f4744c541ab08390c619b505?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                                            className="shrink-0 self-stretch my-auto aspect-[1.25] w-full max-w-[60px] max-md:max-w-[50px] cursor-pointer"
+                                                        />
+                                                    }
                                                 </div>
                                                 <div className="shrink-0 self-center mt-7 h-[1px] border border-solid border-[#AAAAAA] max-w-[90%] w-full mx-auto" />
                                             </div>
@@ -216,6 +251,7 @@ export default function Courses({ groupId }) {
                 ))
             }
             <CreateCourseDialog open={open} setOpen={setOpen} groupId={groupId} />
+            <DrippingCourseDialog open={open1} setOpen={setOpen1} module={selectedModules} setSelectedModules={setSelectedModules} />
         </div>
     );
 }

@@ -26,6 +26,7 @@ import TripVideo from "../pages/Courses/TripVideo";
 import CreateQuiz from "../pages/Courses/createQuiz";
 import { Quiz } from "../pages/Courses/Quiz";
 import PersonalSection from "../pages/Personal-Section";
+import HTMLEMBEDDINGSection from "../pages/HTML-Embedding";
 import Leaderboard from "../pages/leaderboard";
 import Moderators from "../pages/Moderator";
 
@@ -93,6 +94,7 @@ const Index = ({ navbarOpen, setNavbarOpen }) => {
         <Route path="/dashboard/video" element={token ? <TripVideo /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/events" element={token ? <Events /> : <Navigate to ="/login"/>} />
         <Route path="/personal-section" element={token ? <PersonalSection /> : <Navigate to ="/login"/>} />
+        <Route path="/embedding-section" element={token ? <HTMLEMBEDDINGSection /> : <Navigate to ="/login"/>} />
         <Route path="/moderator" element={token ? <Moderators /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/events/create" element={token ? <CreateEvent /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/details/groups" element={token ? <GroupsDetails /> : <Navigate to ="/login"/>} />

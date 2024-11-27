@@ -433,6 +433,9 @@ export default function GroupsDetails() {
                     <div onClick={() => setSelected(4)} className={`justify-center px-5 py-2 ${selected === 4 ? 'bg-violet-800 text-zinc-100' : 'bg-stone-300 text-black'} rounded-xl cursor-pointer`}>
                         Courses
                     </div>
+                    <div onClick={() => setSelected(5)} className={`justify-center px-5 py-2 ${selected === 5 ? 'bg-violet-800 text-zinc-100' : 'bg-stone-300 text-black'} rounded-xl cursor-pointer`}>
+                        Liked Members
+                    </div>
                 </div>
                 <div className="shrink-0 mt-5 h-px border border-solid bg-neutral-400 border-neutral-400 max-md:max-w-full" />
                 {

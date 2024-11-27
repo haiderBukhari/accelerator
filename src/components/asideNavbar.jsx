@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { BookHeart, LogOut, X, Crown } from "lucide-react";
+import { BookHeart, LogOut, X, Crown, ExternalLink } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { failedToast, successToast } from "../utils/toastNotifications";
 import { useDispatch, useSelector } from "react-redux";
@@ -152,7 +152,20 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen }) => {
                             >
                                 <BookHeart className="w-[20px]" />
                                 <p className="text-sm">
-                                    Personal Section
+                                Blank Pages
+                                </p>
+                            </div>
+                        </div>
+                    }
+                    {
+                        userData.isAdmin &&
+                        <div className="flex cursor-pointer items-center h-[35px] my-1">
+                            <div onClick={() => { Navigate('/embedding-section'); }}
+                                className={`flex gap-2.5 pr-5 ml-8 md:ml-5 text-neutral-500 w-18.5 `}
+                            >
+                                <ExternalLink className="w-[20px]" />
+                                <p className="text-sm">
+                                    HTML Embedding
                                 </p>
                             </div>
                         </div>

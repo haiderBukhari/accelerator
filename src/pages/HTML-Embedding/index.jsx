@@ -1,4 +1,5 @@
 import { CssBaseline } from '@mui/material'
+import React from 'react'
 import Notes from './Notes'
 
 const PersonalSection = () => {
