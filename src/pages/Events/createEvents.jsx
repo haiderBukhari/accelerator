@@ -9,6 +9,7 @@ export default function CreateEvent() {
     const [description, setDescription] = useState('')
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
+    const [time, setTime] = useState('')
     const [eventType, setEventType] = useState('Virtual')
     const [address, setAdress] = useState('')
     const [joiningLink, setJoiningLink] = useState('')
@@ -19,7 +20,7 @@ export default function CreateEvent() {
 
     const submitEvent = async () => {
         //check if start date is less than end date
-        if(!name || !description || !startDate || !endDate || !profilePhoto){
+        if(!name || !description || !startDate || !endDate || !profilePhoto || !time){
             return failedToast("All fields are required");
         }
         
@@ -35,6 +36,7 @@ export default function CreateEvent() {
         formData.append('endDate', endDate);
         formData.append('eventType', eventType);
         formData.append('address', address);
+        formData.append('time', time);
         formData.append('joiningLink', joiningLink);
         
         await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/events`, formData, {
@@ -113,10 +115,12 @@ export default function CreateEvent() {
                             <input onChange={(e) => { setName(e.target.value) }} value={name} className="px-5 py-3.5 mt-5 text-base tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none" type="text" name="" id="" placeholder="i.e. Basics of HTML" />
                             <div className="mt-5 tracking-wider">Description</div>
                             <textarea onChange={(e) => { setDescription(e.target.value) }} value={description} rows={2} className="px-5 pt-3.5 pb-16 mt-3.5 text-base tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-neutral-400 outline-none" name="" id="" placeholder="Type here."></textarea>
-                            <div className="mt-5 tracking-wider">Start Date/Time</div>
+                            <div className="mt-5 tracking-wider">Start Date</div>
                             <input onChange={(e) => { setStartDate(e.target.value) }} value={startDate} className="px-5 py-3.5 mt-5 text-base tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none" type="date" name="" id="" placeholder="DD MM YYYY" />
-                            <div className="mt-5 tracking-wider">End Date/Time</div>
+                            <div className="mt-5 tracking-wider">End Date</div>
                             <input onChange={(e) => { setEndDate(e.target.value) }} value={endDate} className="px-5 py-3.5 mt-5 text-base tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none" type="date" name="" id="" placeholder="DD MM YYYY" />
+                            <div className="mt-5 tracking-wider">Time</div>
+                            <input onChange={(e) => { setTime(e.target.value) }} value={time} className="px-5 py-3.5 mt-5 text-base tracking-wider rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none" type="time" name="" id="" />
                             <div className="mt-6 tracking-wider">Event Type</div>
                             <select onChange={(e) => { setEventType(e.target.value) }} className="px-5 py-3.5 mt-3.5 text-base tracking-wider whitespace-nowrap rounded-xl border border-solid bg-zinc-300 border-stone-300 text-black outline-none" name="" id="">
                                 <option value="Virtual">Virtual</option>

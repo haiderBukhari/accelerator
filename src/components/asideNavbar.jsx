@@ -248,7 +248,7 @@ const AsideNavbar = ({ navbarOpen, setNavbarOpen, fetch }) => {
                                             <img
                                                 loading="lazy"
                                                 src={Item.groupImage}
-                                                className="object-cover absolute inset-0 h-auto w-[100px]"
+                                                className="object-cover inset-0 h-auto w-[100px]"
                                             />
                                         </div>
                                         <div className="w-[70%] flex-col my-auto">

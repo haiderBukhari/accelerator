@@ -33,7 +33,7 @@ export default function CreateFolderImageDialog({ open, setOpen, folderId, setFe
                     'Authorization': `Bearer ${token}`
                 }
             }).then(() => {
-                successToast("Folder Created Successfully");
+                successToast("Photo added successfully");
                 setFetchAgain(true)
                 handleClose();
             })

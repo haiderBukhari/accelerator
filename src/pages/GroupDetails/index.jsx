@@ -256,7 +256,7 @@ export default function GroupsDetails() {
         getPosts();
         getGroupsFolders();
         getGroupUsersData()
-    }, [id])
+    }, [id, fetchAgain])
 
 
     async function handleLike(id) {
@@ -506,7 +506,7 @@ export default function GroupsDetails() {
                                     </div>
                                 }
                                 {
-                                    posts?.map((Item) => (
+                                     (userData?.joinedUsers?.includes(userId) || userData1.isAdmin) && posts?.map((Item) => (
                                         <div key={Item.text ?? ''} className="flex flex-col px-5 md:px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400  max-md:max-w-full">
                                             <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                                                 <div onClick={() => { Navigate(`/dashboard/profile/${Item.userInfo._id}`) }} className="flex gap-2 md:gap-4 cursor-pointer">
@@ -605,6 +605,7 @@ export default function GroupsDetails() {
                                                     }
                                                     <div className="my-auto ml-[-10px]">{Item.likes}</div>
                                                     <img
+                                                        onClick={()=>{setSelectedPostId(Item._id); setOpen2(!open2) }}
                                                         loading="lazy"
                                                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/81b3988206ae45b69d451692ab183825d130156ed8d4f79341e2ae1d2c11b2ce?apiKey=cf358c329e0d49a792d02d32277323ef&"
                                                         className="shrink-0 aspect-square w-[25px]"
@@ -671,7 +672,7 @@ export default function GroupsDetails() {
                                 </div>
                             </div>
                             {
-                                userData.joinedUsers.includes(userId) && <div onClick={() => { setOpen1(true) }} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer w-[180px] text-center">
+                                (userData.joinedUsers.includes(userId) || userData1.isAdmin) && <div onClick={() => { setOpen1(true) }} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer w-[180px] text-center">
                                     Upload Image
                                 </div>
                             }

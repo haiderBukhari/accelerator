@@ -29,9 +29,13 @@ export default function ViewEvent({ open, setOpen, details }) {
             value: details.endDate
         },
         {
+            title: 'Time',
+            value: details.time
+        },
+        {
             title: 'Event Type',
             value: details.eventType
-        },
+        }
     ]
 
     const handleClose = () => {

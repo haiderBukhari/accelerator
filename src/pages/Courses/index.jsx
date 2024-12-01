@@ -145,7 +145,9 @@ export default function Courses({ groupId }) {
                                     </div>
                                 }
                             </div>
-                            <Trash2 onClick={() => { DeleteCourses(Item.id) }} className="text-red-900 text-5xl" />
+                            {
+                                userData.isAdmin &&  <Trash2 onClick={() => { DeleteCourses(Item.id) }} className="text-red-900 text-5xl" />
+                            }
                         </div>
                         {
                             Item.modules?.map((ItemDetails) => {
@@ -175,7 +177,7 @@ export default function Courses({ groupId }) {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    {
+                                                    {/* {
                                                         (userData.isAdmin && !ItemDetails.isTrip) && <button onClick={(e) => {
                                                             e.stopPropagation();
                                                             tripVideo(ItemDetails.id)
@@ -184,7 +186,7 @@ export default function Courses({ groupId }) {
                                                         >
                                                             Trip video
                                                         </button>
-                                                    }
+                                                    } */}
                                                     <div className="flex w-full max-w-[130px] items-center gap-5 self-stretch my-auto text-base">
                                                         <div className="flex gap-2.5 text-neutral-500">
                                                             <img

@@ -37,13 +37,38 @@ export default function Messages() {
     }, [])
 
     useEffect(() => {
-        socket.on('recieve_message', getMessages)
+        socket.on('message_status', (data) => {
+            setMessagesList(prevMessages => {
+                return prevMessages.map(msg =>
+                    msg._id === data.messageId ? { ...msg, status: data.status } : msg
+                );
+            });
+        });
     }, [])
+
+    useEffect(() => {
+        if (isConnected) {
+            socket.emit('message_read', { userId: id })
+        }
+    }, [isConnected, id])
+
+    useEffect(() => {
+        socket.on('recieve_message', getMessages)
+    }, [id])
+
 
     const sendMessage = () => {
         socket.emit('send_message', { message: message, id: id })
         setMessage('')
     }
+
+    const getStatusIcon = (status) => {
+        if (status === 'delivered') {
+            return <span className="text-gray-500">✓</span>; // Single tick for delivered
+        } else {
+            return <span className="text-blue-500">✓✓</span>; // Double tick for read
+        }
+    };
 
     async function getFriends() {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/chat/friends`, {
@@ -91,6 +116,51 @@ export default function Messages() {
         getUserInformation();
         getMessages();
     }, [id])
+
+    const sortedAndGroupedMessages = useMemo(() => {
+        // Sort messages by `createdAt`
+        const sortedMessages = [...messagesList].sort((a, b) =>
+            moment(a.createdAt).isAfter(moment(b.createdAt)) ? 1 : -1
+        );
+
+        // Group by day
+        const today = moment().startOf("day");
+        const yesterday = moment().subtract(1, "days").startOf("day");
+
+        return sortedMessages.reduce((acc, message) => {
+            const messageDate = moment(message.createdAt).startOf("day");
+            let group;
+
+            if (messageDate.isSame(today, "day")) {
+                group = "Today";
+            } else if (messageDate.isSame(yesterday, "day")) {
+                group = "Yesterday";
+            } else {
+                group = messageDate.format("MMMM DD, YYYY");
+            }
+
+            if (!acc[group]) {
+                acc[group] = [];
+            }
+
+            acc[group].push(message);
+            return acc;
+        }, {});
+    }, [messagesList]);
+
+    const getDateLabel = (date) => {
+        const today = moment().startOf("day");
+        const yesterday = moment().subtract(1, "days").startOf("day");
+        const messageDate = moment(date);
+
+        if (messageDate.isSame(today, "day")) {
+            return "Today";
+        } else if (messageDate.isSame(yesterday, "day")) {
+            return "Yesterday";
+        } else {
+            return messageDate.format("MMMM DD, YYYY");
+        }
+    };
 
     return (
         <div className="w-full">
@@ -148,61 +218,48 @@ export default function Messages() {
                                         <div className="font-medium text-zinc-800">{userData?.firstName} {userData?.lastName}</div>
                                     </div>
                                 </div>
-                                {/* <div className="flex gap-5 justify-between my-auto">
-                                    <img
-                                        loading="lazy"
-                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/0875e08c910b2ca80c6353466fd26d849803614b91b12ed0f6c0755eb0f7f694?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                        className="shrink-0 aspect-square w-[25px] md:w-[35px]"
-                                    />
-                                    <img
-                                        loading="lazy"
-                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/791b92829cb2704be8ebe8c7af937be2f83b1c99aa55482a7d4ffbe2df299e8f?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                        className="shrink-0 aspect-square w-[25px] md:w-[35px]"
-                                    />
-                                    <div className="shrink-0 self-start h-[33px] w-[7px]" />
-                                </div> */}
                             </div>
                         </div>
                         <ScrollToBottom className={ROOT_CSS}>
                             <div className="flex flex-col px-12 pt-[12px] md:pt-[122px] max-md:px-5 h-[600px] max-md:mt-10 max-md:max-w-full bg-transparent">
-                                {
-                                    messagesList.map((message, index) => (
-                                        <div
-                                            key={index}
-                                            className={`flex flex-col my-3 py-2.5 max-w-[400px] pr-8 pl-4 ${message.senderId == id ? "border-blue-700 border-opacity-10 self-start items-start rounded-xl bg-orange-600 bg-opacity-10 max-md:pr-5" : "border-opacity-10 items-end rounded-xl max-md:pr-5 bg-blue-700 self-end bg-opacity-10"
-                                                }`}
-                                        >
-                                            <div className="text-xs text-zinc-600">
-                                                {moment(message.createdAt).format("hh:mm A")}
-                                            </div>
-                                            <div className="mt-1.5 text-xl text-black">
-                                                {message.message}
-                                            </div>
+                                {Object.keys(sortedAndGroupedMessages).map((dateGroup, index) => (
+                                    <div key={index}>
+                                        <div className="text-center my-4 text-gray-500 font-semibold">
+                                            {dateGroup}
                                         </div>
-                                    ))
-                                }
+                                        {sortedAndGroupedMessages[dateGroup].map((message, msgIndex) => (
+                                            <div key={msgIndex} className={`flex ${message.senderId === id ? 'justify-start': 'justify-end'}`}>
+                                            <div
+                                                className={`flex flex-col my-3 py-2.5 max-w-[400px] w-fit pl-4 ${message.senderId === id
+                                                        ? "border-blue-700 border-opacity-10 self-start items-start rounded-xl bg-orange-600 bg-opacity-10"
+                                                        : "border-opacity-10 items-end rounded-xl bg-blue-700 self-end bg-opacity-10"
+                                                    }`}
+                                            >
+                                                <div className="text-xs text-zinc-600 pr-8">
+                                                    {moment(message.createdAt).format("hh:mm A")}
+                                                </div>
+                                                <div className="mt-1.5 text-xl text-black pr-8">
+                                                    {message.message}
+                                                </div>
+                                                {!(message.senderId === id) && (
+                                                    <div
+                                                        style={{ display: "flex", justifyContent: "end" }}
+                                                        className="mt-1 text-md text-blue-500 w-full pr-3 font-bold"
+                                                    >
+                                                        {getStatusIcon(message.status)}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            </div>
+
+                                        ))}
+                                    </div>
+                                ))}
                             </div>
                         </ScrollToBottom>
                         <div className="flex gap-5 self-center pt-5 md:pt-20 md:max-md:flex-wrap max-md:mt-10 w-full px-5 pb-5 bg-transparent">
                             <div className="flex flex-auto gap-5 justify-between py-3.5 rounded-xl border border-solid bg-[#e9e9e9] border-stone-300 md:max-md:flex-wrap w-full pr-10 pl-5">
                                 <input value={message} onChange={(e) => { setMessage(e.target.value) }} className="my-auto text-lg text-neutral-500 w-full bg-[#e9e9e9] outline-none" type="text" name="" id="" placeholder="Type Here" />
-                                <div className="flex gap-2.5 justify-between">
-                                    <img
-                                        loading="lazy"
-                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/0ddfcc9b84d86a41700fda54352c1076c20ed5ff21004f6c63a60947ab4dd937?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                        className="shrink-0 w-6 aspect-square cursor-pointer"
-                                    />
-                                    <img
-                                        loading="lazy"
-                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/da329a985978015750535007642553b587703e072af3c1b5e86da2d0bfc23447?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                        className="shrink-0 w-6 aspect-square cursor-pointer"
-                                    />
-                                    <img
-                                        loading="lazy"
-                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/3994a18ed97f75af9bd494ec21dfed3503d640428250ae088db060749297cce5?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                        className="shrink-0 w-6 aspect-square cursor-pointer"
-                                    />
-                                </div>
                             </div>
                             <img
                                 onClick={sendMessage}

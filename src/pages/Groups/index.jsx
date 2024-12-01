@@ -5,6 +5,7 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import { failedToast } from "../../utils/toastNotifications";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { Delete, Trash } from "lucide-react";
 
 export default function Groups() {
     const Navigate = useNavigate();
@@ -37,6 +38,19 @@ export default function Groups() {
         }).then((Item) => {
             setData(Item.data.data);
             console.log(Item.data.data)
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+    async function deleteSpecificGroup(id) {
+        await axios.delete(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then(() => {
+            getAllGroupData();
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
@@ -100,7 +114,11 @@ export default function Groups() {
                                         </div>
                                     </div>
                                     <div className="flex flex-col ml-2 lg:ml-3 xl:ml-5 max-md:ml-0 max-md:w-full">
-                                        <div className="flex justify-end 2xl:justify-between self-stretch my-auto max-md:my-auto">
+                                        <div className="flex justify-end 2xl:justify-between self-stretch my-auto max-md:my-auto items-center gap-4">
+                                            {
+                                                userData.isAdmin &&  <Trash onClick={() => { deleteSpecificGroup(item._id) }} className="shrink-0 aspect-square cursor-pointer text-red-600" />
+                                            }
+
                                             <div className="flex gap-2.5 justify-between text-sm text-violet-800 whitespace-nowrap mr-4 xl:mr-7 max-md:gap-1.5 max-md:mr-5">
                                                 <img
                                                     loading="lazy"
@@ -151,6 +169,9 @@ export default function Groups() {
                                     </div>
                                     <div className="flex flex-col ml-2 lg:ml-3 xl:ml-5 max-md:ml-0 max-md:w-full">
                                         <div className="flex justify-end 2xl:justify-between self-stretch my-auto max-md:my-auto">
+                                        {
+                                                userData.isAdmin &&  <Trash onClick={() => { deleteSpecificGroup(item._id) }} className="shrink-0 aspect-square cursor-pointer text-red-600" />
+                                            }
                                             <div className="flex gap-2.5 justify-between text-sm text-violet-800 whitespace-nowrap mr-4 xl:mr-7 max-md:gap-1.5 max-md:mr-5">
                                                 <img
                                                     loading="lazy"

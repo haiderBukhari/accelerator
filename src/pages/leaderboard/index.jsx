@@ -222,7 +222,7 @@ export default function Leaderboard() {
                             <div className="w-1/8 w-full">Rank</div>
                             <div className="w-3/8 w-full">Name</div>
                             <div className="w-1/8 w-full">Course Completed</div>
-                            <div className="w-1/8 w-full">Quiz Scroe</div>
+                            <div className="w-1/8 w-full">Quiz Score</div>
                             <div className="w-1/8 w-full">Activity</div>
                             <div className="w-1/8 w-full">Total Points</div>
                         </div>

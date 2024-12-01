@@ -157,7 +157,7 @@ export default function CreateModule() {
                                     </div>
                                     <input
                                         type="file"
-                                        accept="video/*"
+                                        accept=".pdf,.doc,.docx,.txt,video/*"
                                         ref={videoFileInputRef}
                                         className="hidden"
                                         onChange={handleVideoFileChange}

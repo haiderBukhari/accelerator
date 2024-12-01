@@ -46,6 +46,15 @@ const CreateGroup = ({ open, setOpen, submit, setSubmit }) => {
         if (userData.email === "" || userData.email.includes("@") === false || userData.email.includes(".") === false) {
             return failedToast("Please Enter Valid Email");
         }
+        if (
+            userData.name === "" ||
+            userData.contactNumber === "" ||
+            userData.email === "" ||
+            userData.talksAbout === "" ||
+            userData.description === ""
+        ) {
+            return failedToast("Please Fill All The Fields");
+        }
         const formData = new FormData();
         formData.append('file', profilePhoto);
         formData.append('name', userData.name);

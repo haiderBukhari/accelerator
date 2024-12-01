@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { failedToast, successToast } from "../../utils/toastNotifications";
 import { useParams, useNavigate } from 'react-router-dom';
+import { DownloadCloud } from "lucide-react";
 
 export default function CourseDetails() {
     const Navigate = useNavigate();
@@ -94,6 +95,20 @@ export default function CourseDetails() {
         });
     }
 
+    const isVideoFile = (fileUrl) => {
+        const videoExtensions = ['mp4', 'webm', 'ogg', '.mov'];
+        const isVideo = videoExtensions.filter((ext) => fileUrl.includes(ext));
+        return isVideo.length > 0;
+    };
+
+    // Helper function to get the file type based on file extension
+    const getFileType = (fileUrl) => {
+        const ext = fileUrl.split('.').pop().toLowerCase();
+        if (ext === 'pdf') return 'PDF';
+        if (ext === 'doc' || ext === 'docx') return 'Word';
+        return 'Document';
+    };
+
     return (
         <div className="flex flex-col px-5 mb-20">
             <div className="mt-12 w-full text-4xl font-bold text-neutral-700 max-md:mt-10 max-md:max-w-full">
@@ -107,7 +122,24 @@ export default function CourseDetails() {
                     <div className="flex flex-col max-md:ml-0 max-w-[800px] w-full max-md:w-full">
                         <div className="flex flex-col grow max-md:mt-7 max-md:max-w-full">
                             {
-                                data?.videoLink && <video className="mt-6" src={data?.videoLink} controls />
+                                data?.videoLink ? (
+                                    isVideoFile(data.videoLink) ? (
+                                        <video className="mt-6" src={data.videoLink} controls />
+                                    ) : (
+                                        <div className="mt-6 p-4 bg-gray-200 rounded-lg max-w-[300px] w-fit flex">
+                                            <a
+                                                href={data.videoLink}
+                                                download
+                                                className="lucid-btn lucid-btn-primary flex"
+                                            >
+                                                Download {getFileType(data.videoLink)}
+                                                <DownloadCloud className="text-gray-700 ml-2"/>
+                                            </a>
+                                        </div>
+                                    )
+                                ) : (
+                                    <p>No video or document available</p>
+                                )
                             }
                             <div className="flex gap-5 mt-7 w-full text-sm text-violet-800 max-md:flex-wrap max-md:pr-5 max-md:max-w-full">
                                 <div className="flex gap-2.5">
@@ -143,25 +175,25 @@ export default function CourseDetails() {
                                 onClick={() => { Navigate(`/dashboard/video?id=${id}`) }}
                                 className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-violet-800 border border-transparent hover:bg-violet-700 focus:outline-none focus:ring-offset-2 focus:ring-violet-700 rounded-2xl w-[200px] mb-5 mx-auto"
                             >
-                                Trip in video
+                                Add Submodule
                             </button>
                         }
                         <div className="flex flex-col items-start py-8 pl-10 w-[400px] rounded-3xl border border-solid bg-neutral-200 border-neutral-400 max-md:mt-7 ">
 
                             <div className="text-xl font-bold text-neutral-700 max-md:max-w-full">
-                                Other Videos
+                                Other Sub-Module
                             </div>
                             {
                                 asideData?.map((AsideItems) => {
                                     if (AsideItems.id !== id) {
                                         return (
-                                            <div onClick={() => { 
-                                                if(AsideItems.isTrip){
+                                            <div onClick={() => {
+                                                if (AsideItems.isTrip) {
                                                     Navigate(`/dashboard/course/details/${AsideItems._id}`)
                                                 }
-                                             }} key={AsideItems.id} className="flex gap-5 mt-10 max-md:flex-wrap max-md:mt-10 cursor-pointer relative">
+                                            }} key={AsideItems.id} className="flex gap-5 mt-10 max-md:flex-wrap max-md:mt-10 cursor-pointer relative">
                                                 {
-                                                    (userData.isAdmin || userData.isManager) && !AsideItems.isTrip && <button onClick={()=>{tripVideo(AsideItems._id)}} className="bg-red-700 cursor-pointer hover:opacity-90 rounded-md w-20 py-1 absolute top-[-20px] left-[-30px] z-10 text-white">Trip</button>
+                                                    (userData.isAdmin || userData.isManager) && !AsideItems.isTrip && <button onClick={() => { tripVideo(AsideItems._id) }} className="bg-red-700 cursor-pointer hover:opacity-90 rounded-md w-20 py-1 absolute top-[-20px] left-[-30px] z-10 text-white">Trip</button>
                                                 }
                                                 <img
                                                     loading="lazy"
