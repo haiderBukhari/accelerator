@@ -34,6 +34,9 @@ const EditProfile = ({open, handleClose, loading, setLoading, clickedSave, setSe
             formData.append('lastName', userData.lastName);
             formData.append('bio', userData.bio);
             formData.append('aboutMe', userData.aboutMe);
+            formData.append('location', userData.location);
+            formData.append('industry', userData.industry);
+
             try {
                 await axios.put(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/update`, formData, {
                     headers: {
@@ -54,15 +57,14 @@ const EditProfile = ({open, handleClose, loading, setLoading, clickedSave, setSe
                 alert('Error uploading file');
             }
         } else {
-            if(tempUserData.firstName === userData.firstName && tempUserData.lastName === userData.lastName && tempUserData.bio === userData.bio && tempUserData.aboutMe === userData.aboutMe){
-                return;
-            }
             try {
                 await axios.put(`${import.meta.env.VITE_APP_BACKEND_URL}/auth`, {
                     firstName: userData.firstName,
                     lastName: userData.lastName,
                     bio: userData.bio,
                     aboutMe: userData.aboutMe,
+                    location: userData.location,
+                    industry: userData.industry,
                 }, {
                     headers: {
                         'Content-Type': 'application/json',
@@ -138,6 +140,11 @@ const EditProfile = ({open, handleClose, loading, setLoading, clickedSave, setSe
                     <input onChange={(event)=>{setUserData({...userData, lastName: event.target.value})}} value={userData?.lastName ?? ""} style={{ border: "1px solid #AAAAAA" }} type="text" name="" id="" className="justify-center items-start px-5 py-2 mt-3 w-full text-base tracking-wider rounded-xl border border-solid outline-none text-black bg-zinc-300 border-stone-300" placeholder='i.e. bravo' />
                     <div className="mt-5 w-full font-semibold">Bio</div>
                     <textarea onChange={(event)=>{setUserData({...userData, bio: event.target.value})}} value={userData?.bio ?? ""} rows={4} style={{ border: "1px solid #AAAAAA" }} className="justify-center items-start px-5 py-2 mt-3 w-full text-base tracking-wider rounded-xl border border-solid outline-none text-black bg-zinc-300 border-stone-300" placeholder='Type here' name="" id=""></textarea>
+                    <div className="mt-5 w-full font-semibold">Industry</div>
+                    <textarea onChange={(event)=>{setUserData({...userData, industry: event.target.value})}} value={userData?.industry ?? ""} rows={1} style={{ border: "1px solid #AAAAAA" }} className="justify-center items-start px-5 py-2 mt-3 w-full text-base tracking-wider rounded-xl border border-solid outline-none text-black bg-zinc-300 border-stone-300" placeholder='Type Here.' name="" id=""></textarea>
+                    <div className="mt-5 w-full font-semibold">Location</div>
+                    <textarea onChange={(event)=>{setUserData({...userData, location: event.target.value})}} value={userData?.location ?? ""} rows={1} style={{ border: "1px solid #AAAAAA" }} className="justify-center items-start px-5 py-2 mt-3 w-full text-base tracking-wider rounded-xl border border-solid outline-none text-black bg-zinc-300 border-stone-300" placeholder='Type here' name="" id=""></textarea>
+
                     <div className="mt-5 w-full font-semibold">About Me</div>
                     <textarea onChange={(event)=>{setUserData({...userData, aboutMe: event.target.value})}} value={userData?.aboutMe ?? ""} rows={4} style={{ border: "1px solid #AAAAAA" }} className="justify-center items-start px-5 py-2 mt-3 w-full text-base tracking-wider rounded-xl border border-solid outline-none text-black bg-zinc-300 border-stone-300" placeholder='Type here' name="" id=""></textarea>
                 </div>

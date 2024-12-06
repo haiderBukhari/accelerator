@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { failedToast } from '../../utils/toastNotifications';
 import { CircularProgress } from '@mui/material';
-import certificate from '../../assets/Certificate.png'
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 export function Quiz() {
     const Navigate = useNavigate();
@@ -42,6 +43,8 @@ export function Quiz() {
             return failedToast(err.response.data.error);
         });
     }
+
+
 
     const getQuizDetails = async () => {
         await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/quiz?id=${id}`, {
@@ -163,7 +166,78 @@ export function Quiz() {
 }
 
 
-function SubmittedQuizComponent({submission}) {
+function SubmittedQuizComponent({ submission }) {
+
+    const data = useSelector(state => state.profile);
+
+    const downloadPdf = async () => {
+        const doc = new jsPDF();
+
+        doc.setFontSize(20);
+        doc.setTextColor(40);
+        doc.text("Quiz Summary Report", 105, 20, null, null, "center");
+
+        // Add User Information
+        doc.setFontSize(12);
+        doc.text(`Name: ${data.firstName} ${data.lastName}`, 20, 40);
+
+        // Fetch and Add Profile Picture
+        if (data.profilePicture) {
+            try {
+                const response = await fetch(data.profilePicture);
+                const blob = await response.blob();
+
+                // Convert Blob to Base64
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64Image = reader.result.split(",")[1];
+                    doc.addImage(base64Image, "JPEG", 150, 30, 40, 40);
+                    generatePdfBody(doc); // Proceed with the rest of the content
+                };
+                reader.readAsDataURL(blob);
+            } catch (error) {
+                console.error("Failed to load image", error);
+                generatePdfBody(doc); // Continue generating the PDF even if the image fails
+            }
+        } else {
+            generatePdfBody(doc); // Skip image if not available
+        }
+    };
+
+    const generatePdfBody = (doc) => {
+        const quizData = [
+            ["Total Questions", submission?.totalQuestions],
+            ["Total Marks", submission?.totalMarks],
+            ["Total Points Obtained", submission?.totalPointsObtained],
+            ["Points Number Obtained", submission?.totalNumberObtained],
+            [
+                "Correctly Answered Questions",
+                (submission?.totalNumberObtained /
+                    (submission?.totalMarks / submission?.totalQuestions)),
+            ],
+            ["Overall Percentage", `${submission?.percentage.toFixed(2)}%`],
+            ["Status", submission.percentage > 40 ? "Passed" : "Failed"],
+        ];
+
+        doc.autoTable({
+            startY: 80,
+            head: [["Detail", "Value"]],
+            body: quizData,
+            theme: "grid",
+            styles: { fontSize: 10, halign: "center" },
+            headStyles: { fillColor: [40, 125, 245], textColor: 255, fontStyle: "bold" },
+        });
+
+        doc.setFontSize(10);
+        doc.text(
+            "This report was generated automatically. For further details, contact theappaccelerator@gmail.com.",
+            20,
+            doc.lastAutoTable.finalY + 10
+        );
+
+        // Save the PDF
+        doc.save("quiz-summary.pdf");
+    };
     return (
         <div className="flex overflow-hidden flex-col items-start">
             <div className="flex flex-col items-start self-stretch w-full font-bold max-md:max-w-full">
@@ -171,8 +245,8 @@ function SubmittedQuizComponent({submission}) {
                     Lets Check What You Have Done?
                 </div>
             </div>
-            <div className='flex items-start'>
-                <div style={{ border: "1px solid #ccc", borderLeft: "none" }} className='flex flex-col p-5 m-4 flex-1'>
+            <div className='flex items-center justify-center mx-auto'>
+                <div style={{ border: "2px solid #ccc", borderLeft: "none" }} className='flex flex-col p-5 m-4 w-full justify-center'>
                     <div className="flex flex-row justify-between py-px mt-3 w-[300px] md:w-[400px] max-w-full text-lg font-bold text-neutral-700 max-md:ml-2.5">
                         <div className="self-start w-[250px]">Total Number of Questions</div>
                         <div className="z-10 shrink-0 self-end -mt-6 border border-solid border-neutral-400 h-[22px] w-[1px]" />
@@ -202,23 +276,15 @@ function SubmittedQuizComponent({submission}) {
                                 Overall Percentage
                             </div>
                             <div className="mt-1 text-5xl font-semibold text-gray-400 max-md:text-4xl">
-                                {submission?.percentage}%
+                                {submission?.percentage.toFixed(2)}%
                             </div>
                             <div className="mt-6 text-8xl font-bold text-violet-800 max-md:text-4xl">
                                 {submission.percentage > 40 ? "Passed" : "Failed"}
                             </div>
+                            <div onClick={downloadPdf} className="relative justify-center self-center mt-20 ml-4 px-10 text-base font-medium leading-4 bg-violet-800 rounded-lg cursor-pointer text-white py-3 mx-auto">Download Result</div>
                         </div>
-                        {/* <div className="shrink-0 self-stretch mt-3.5 w-full h-px border border-solid border-neutral-400" />
-                        <button className="overflow-hidden gap-2.5 self-stretch px-12 py-3 mt-11 text-xl font-medium leading-none text-white rounded-2xl bg-neutral-400 max-md:px-5 max-md:mt-10 w-[300px] text-center cursor-pointer">
-                            Download PDF
-                        </button> */}
                     </div>
                 </div>
-                <img
-                    loading="lazy"
-                    src={certificate}
-                    className="object-contain grow shrink-0 aspect-[1.3] basis-0 max-md:max-w-full flex-1 w-[500px]"
-                />
             </div>
         </div>
     );

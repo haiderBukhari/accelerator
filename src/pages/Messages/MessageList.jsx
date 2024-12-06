@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { failedToast } from "../../utils/toastNotifications";
 import { useSelector } from "react-redux";
 import professionalPicture from '../../assets/professionalPicture.jpeg'
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { socket } from "../../socket";
 import { useParams } from 'react-router-dom';
 import moment from "moment";
@@ -228,28 +228,31 @@ export default function Messages() {
                                             {dateGroup}
                                         </div>
                                         {sortedAndGroupedMessages[dateGroup].map((message, msgIndex) => (
-                                            <div key={msgIndex} className={`flex ${message.senderId === id ? 'justify-start': 'justify-end'}`}>
-                                            <div
-                                                className={`flex flex-col my-3 py-2.5 max-w-[400px] w-fit pl-4 ${message.senderId === id
+                                            <div key={msgIndex} className={`flex ${message.senderId === id ? 'justify-start' : 'justify-end'}`}>
+                                                <div
+                                                    className={`flex flex-col my-3 py-2.5 max-w-[400px] w-fit pl-4 ${message.senderId === id
                                                         ? "border-blue-700 border-opacity-10 self-start items-start rounded-xl bg-orange-600 bg-opacity-10"
                                                         : "border-opacity-10 items-end rounded-xl bg-blue-700 self-end bg-opacity-10"
-                                                    }`}
-                                            >
-                                                <div className="text-xs text-zinc-600 pr-8">
-                                                    {moment(message.createdAt).format("hh:mm A")}
-                                                </div>
-                                                <div className="mt-1.5 text-xl text-black pr-8">
-                                                    {message.message}
-                                                </div>
-                                                {!(message.senderId === id) && (
-                                                    <div
-                                                        style={{ display: "flex", justifyContent: "end" }}
-                                                        className="mt-1 text-md text-blue-500 w-full pr-3 font-bold"
-                                                    >
-                                                        {getStatusIcon(message.status)}
+                                                        }`}
+                                                >
+                                                    <div className="text-xs text-zinc-600 pr-8">
+                                                        {moment(message.createdAt).format("hh:mm A")}
                                                     </div>
-                                                )}
-                                            </div>
+                                                    {
+                                                        message.message.includes('/dashboard/shared/post') ? <Link to="message.message" className="underline">{message.message}</Link> :
+                                                            <div className="mt-1.5 text-xl text-black pr-8">
+                                                                {message.message}
+                                                            </div>
+                                                    }
+                                                    {!(message.senderId === id) && (
+                                                        <div
+                                                            style={{ display: "flex", justifyContent: "end" }}
+                                                            className="mt-1 text-md text-blue-500 w-full pr-3 font-bold"
+                                                        >
+                                                            {getStatusIcon(message.status)}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
 
                                         ))}

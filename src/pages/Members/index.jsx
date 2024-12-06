@@ -17,6 +17,8 @@ export default function Members() {
     const [pendingApprovals, setPendingApprovals] = useState(0);
     const Navigate = useNavigate('')
     const [name, setName] = useState('')
+    const [industry, setIndustry] = useState('')
+    const [location, setLocation] = useState('')
     const userId = useSelector(state => state.profile.id);
 
     const handlePageChange = (event, value) => {
@@ -29,7 +31,7 @@ export default function Members() {
     async function getNonFriendsList(pageNum) {
         setLoading(true);
         setData([])
-        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/friends?currentPage=${pageNum}&name=${name}`, {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/friends?currentPage=${pageNum}&name=${name}&location=${location}&industry=${industry}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -118,12 +120,24 @@ export default function Members() {
                     <div className='bg-red-500 absolute top-[-10px] max-md:top-[0px] left-[-10px] rounded-full flex justify-center items-center h-7 w-7 font-bold text-white text-center'>{pendingApprovals}</div>
                 </div>
             </div>
-            <div className="flex items-center gap-5 mt-10 font-medium leading-[95%] max-md:flex-wrap max-lg:flex-col max-lg:justify-start">
-                <div className="flex flex-col w-full max-w-[300px] max-xl:max-w-[250px] justify-center max-lg:max-w-[100%]">
+            <div className="flex items-center gap-5 mt-10 font-medium leading-[95%] max-md:flex-wrap max-lg:flex-col justify-start">
+                <div className="flex flex-col w-full max-w-[250px] max-xl:max-w-[250px]  max-lg:max-w-[100%]">
                     <div className="text-base tracking-wider text-neutral-800">
                         Name / Email
                     </div>
-                    <input onChange={(e) => { setName(e.target.value); }} type='text' className="justify-center items-start px-5 py-3 mt-3.5 text-base tracking-wider rounded-xl border border-solid outline-none bg-zinc-300 border-stone-300 text-neutral-400 w-full max-md:max-w-full focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300] max-xl:py-2" placeholder="i.e. jhon" />
+                    <input onChange={(e) => { setName(e.target.value); }} type='text' className="justify-center items-start px-5 py-3 mt-3.5 text-base tracking-wider rounded-xl border border-solid outline-none bg-zinc-300 border-stone-300 text-neutral-400 w-[240px] max-md:max-w-full focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300] max-xl:py-2" placeholder="i.e. jhon" />
+                </div>
+                <div className="flex flex-col w-full max-w-[250px] max-xl:max-w-[250px]  max-lg:max-w-[100%]">
+                    <div className="text-base tracking-wider text-neutral-800">
+                        Industry
+                    </div>
+                    <input onChange={(e) => { setIndustry(e.target.value); }} type='text' className="justify-center items-start px-5 py-3 mt-3.5 text-base tracking-wider rounded-xl border border-solid outline-none bg-zinc-300 border-stone-300 text-neutral-400 w-[240px] max-md:max-w-full focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300] max-xl:py-2" placeholder="i.e. Tech" />
+                </div>
+                <div className="flex flex-col w-full max-w-[250px] max-xl:max-w-[250px]  max-lg:max-w-[100%]">
+                    <div className="text-base tracking-wider text-neutral-800">
+                        Location
+                    </div>
+                    <input onChange={(e) => { setLocation(e.target.value); }} type='text' className="justify-center items-start px-5 py-3 mt-3.5 text-base tracking-wider rounded-xl border border-solid outline-none bg-zinc-300 border-stone-300 text-neutral-400 w-[240px] max-md:max-w-full focus:outline-none focus:border-[#FA5300] focus:placeholder:text-[#FA5300] max-xl:py-2" placeholder="i.e. New York City" />
                 </div>
                 <div onClick={() => {
                     setData([])

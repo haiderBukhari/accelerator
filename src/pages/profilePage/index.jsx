@@ -7,6 +7,8 @@ import defaultPic from '../../assets/professionalPicture.jpeg'
 import { useParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { Heart } from "lucide-react";
+import SendPost from "../Posts/PostSend";
+import CommentsDialog from "../../components/comments";
 
 export default function ProfilePage() {
     const [selected, setSelected] = useState(1);
@@ -17,6 +19,9 @@ export default function ProfilePage() {
     const { id } = useParams();
     const [posts, setPosts] = useState([]);
     const [fetched, setFetched] = useState(false);
+    const [open2, setOpen2] = useState(false);
+    const [selectedPostId, setSelectedPostId] = useState('')
+    const [isSend, setIsSend] = useState(false)
 
     const timeElapsed = (dateString) => {
         const date = new Date(dateString);
@@ -99,11 +104,13 @@ export default function ProfilePage() {
                                     <div className="text-3xl font-bold text-neutral-700">
                                         {userData?.firstName} {" "} {userData?.lastName}
                                     </div>
-                                    <div className="flex gap-5 mt-3.5 text-lg">
+                                    {
+                                        userId != id &&  <div className="flex gap-5 mt-3.5 text-lg">
                                         <div onClick={() => { Navigate('/dashboard/messages') }} className="justify-center px-5 py-1.5 text-white bg-violet-800 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer">
                                             Message
                                         </div>
                                     </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -111,9 +118,11 @@ export default function ProfilePage() {
                 </div>
                 <div className="mt-32"></div>
                 <div className="flex gap-4 self-start mt-12 text-lg font-medium whitespace-nowrap text-neutral-500 max-md:flex-wrap max-md:mt-10">
-                    <div onClick={() => setSelected(1)} className={`justify-center px-5 py-2 ${selected === 1 ? 'bg-violet-800 text-zinc-100' : 'bg-stone-300 text-black'} rounded-xl cursor-pointer`}>
+                    {
+                        userId != id  && <div onClick={() => setSelected(1)} className={`justify-center px-5 py-2 ${selected === 1 ? 'bg-violet-800 text-zinc-100' : 'bg-stone-300 text-black'} rounded-xl cursor-pointer`}>
                         Profile
                     </div>
+                    }
                 </div>
                 <div className="shrink-0 mt-5 h-px border border-solid bg-neutral-400 border-neutral-400 max-md:max-w-full" />
                 {
@@ -129,6 +138,12 @@ export default function ProfilePage() {
                                         <div className="mt-3">Email Address: {userData?.email}</div>
                                         <div className="mt-3">
                                             Talks About: {userData?.bio || 'NA'}{" "}
+                                        </div>
+                                        <div className="mt-3">
+                                            Location: {userData?.location || 'NA'}{" "}
+                                        </div>
+                                        <div className="mt-3">
+                                            Industry: {userData?.industry || 'NA'}{" "}
                                         </div>
                                         <div className="mt-7 text-base font-semibold text-neutral-700">
                                             Description
@@ -188,11 +203,11 @@ export default function ProfilePage() {
                                             }
                                             <div className="flex gap-5 justify-between px-px mt-6 w-full text-sm max-md:flex-wrap max-md:max-w-full">
                                                 <div className="flex w-full flex-col justify-center text-neutral-400 max-md:max-w-full">
-                                                    <button onClick={() => { setOpen(!open) }} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full hidden md:block">
+                                                    <button onClick={() => { setSelectedPostId(Item._id); setOpen2(!open2) }} className="justify-center text-start items-start px-3.5 py-3.5 rounded-xl border border-solid bg-neutral-300 border-neutral-400 max-md:pr-5 w-full hidden md:block">
                                                         Write a comment
                                                     </button>
                                                 </div>
-                                                <div className="flex max-w-[150px] md:max-w-[200px] justify-between w-full my-auto whitespace-nowrap text-neutral-400">
+                                                <div className="flex max-w-[130px] md:max-w-[130px] justify-between w-full my-auto whitespace-nowrap text-neutral-400">
                                                     {
                                                         Item.likeBy?.includes(id) ? <Heart onClick={() => {
                                                             setPosts(
@@ -224,13 +239,12 @@ export default function ProfilePage() {
                                                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/81b3988206ae45b69d451692ab183825d130156ed8d4f79341e2ae1d2c11b2ce?apiKey=cf358c329e0d49a792d02d32277323ef&"
                                                         className="shrink-0 aspect-square w-[25px]"
                                                     />
-                                                    <div className="my-auto">{Item.comments}</div>
                                                     <img
+                                                        onClick={()=>{setSelectedPostId(Item._id); setIsSend(true)}}
                                                         loading="lazy"
                                                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/cc32947d0dc0dffaf5b54937d22a080004ed72c715c0b2d4d6a6def7314ff0f6?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                        className="shrink-0 aspect-square w-[25px]"
+                                                        className="shrink-0 aspect-square w-[25px] cursor-pointer"
                                                     />
-                                                    <div className="my-auto">{Item.shares}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -314,6 +328,8 @@ export default function ProfilePage() {
                     </div>
                 }
             </div>
+            <SendPost open={isSend} setOpen={setIsSend} id={selectedPostId} />
+            <CommentsDialog open={open2} setOpen={setOpen2} selectedPostId={selectedPostId} setSelectedPostId={setSelectedPostId} />
         </div>
     );
 }

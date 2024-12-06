@@ -14,8 +14,9 @@ import { Heart } from 'lucide-react';
 import Courses from "../Courses";
 import CommentsDialog from "../../components/comments";
 import ModalImage from "react-modal-image";
-import { data } from "autoprefixer";
 import LikedMembers from "./likedMembers";
+import { Edit2 } from "lucide-react";
+import SendPost from "../Posts/PostSend";
 
 export default function GroupsDetails() {
     const [selected, setSelected] = useState(1);
@@ -27,6 +28,7 @@ export default function GroupsDetails() {
     const token = useSelector(state => state.profile.jwt);
     const userId = useSelector(state => state.profile.id);
     const [posts, setPosts] = useState([]);
+    const [isSend, setIsSend] = useState(false)
     const [fetched, setFetched] = useState(false);
     const [open, setOpen] = useState(false);
     const [open1, setOpen1] = useState(false);
@@ -44,7 +46,14 @@ export default function GroupsDetails() {
     const fileInputRef = useRef(null);
     const fileInputRef1 = useRef(null);
     const [likedModelOpen, setLikedModelOpen] = useState(false)
-
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedData, setEditedData] = useState({
+        name: userData?.name || "",
+        contactNumber: userData?.contactNumber || "",
+        email: userData?.email || "",
+        talksAbout: userData?.talksAbout || "",
+        description: userData?.description || "",
+    });
 
     const timeElapsed = (dateString) => {
         const date = new Date(dateString);
@@ -174,6 +183,28 @@ export default function GroupsDetails() {
         });
     }
 
+    const handleSaveGroupInformation = async () => {
+        await axios.put(`${import.meta.env.VITE_APP_BACKEND_URL}/groups`, {
+            groupId: id,
+            name: editedData.name,
+            contactNumber: editedData.contactNumber,
+            email: editedData.email,
+            talksAbout: editedData.talksAbout,
+            description: editedData.description,
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            successToast("Group Information Updated")
+            setIsEditing(false)
+            setUserData(Item.data.group);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
     const togleGroup = async () => {
         await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/joined-groups`, {
             groupId: id
@@ -182,7 +213,7 @@ export default function GroupsDetails() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-        }).then((Item) => {
+        }).then(() => {
             successToast("Group Privacy Changed")
             getGroupData();
         }).catch((err) => {
@@ -199,7 +230,7 @@ export default function GroupsDetails() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-        }).then((Item) => {
+        }).then(() => {
             getGroupUsersData();
         }).catch((err) => {
             return failedToast(err.response.data.error);
@@ -227,6 +258,13 @@ export default function GroupsDetails() {
             },
         }).then((Item) => {
             setUserData(Item.data.details);
+            setEditedData({
+                name: Item.data.details?.name || "",
+                contactNumber: Item.data.details?.contactNumber || "",
+                email: Item.data.details?.email || "",
+                talksAbout: Item.data.details?.talksAbout || "",
+                description: Item.data.details?.description || "",
+            })
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
@@ -452,7 +490,7 @@ export default function GroupsDetails() {
                     <div onClick={() => setSelected(4)} className={`justify-center px-5 py-2 ${selected === 4 ? 'bg-violet-800 text-zinc-100' : 'bg-stone-300 text-black'} rounded-xl cursor-pointer`}>
                         Courses
                     </div>
-                    <div onClick={()=>{setLikedModelOpen(true)}} className={`justify-center px-5 py-2 ${selected === 5 ? 'bg-violet-800 text-zinc-100' : 'bg-stone-300 text-black'} rounded-xl cursor-pointer`}>
+                    <div onClick={() => { setLikedModelOpen(true) }} className={`justify-center px-5 py-2 ${selected === 5 ? 'bg-violet-800 text-zinc-100' : 'bg-stone-300 text-black'} rounded-xl cursor-pointer`}>
                         Liked Members
                     </div>
                 </div>
@@ -463,27 +501,132 @@ export default function GroupsDetails() {
                         <div className="flex gap-5 max-md:flex-col max-md:gap-0 w-full">
                             <div className="flex flex-col max-md:ml-0 max-w-full md:max-w-[300px] w-full">
                                 <div className="flex flex-col grow max-md:mt-5">
-                                    <div className="flex flex-col px-5 py-9 text-base font-medium rounded-3xl border border-solid bg-neutral-200 border-neutral-400 text-neutral-500 w-full">
+                                    <div className="relative flex flex-col px-5 py-9 text-base font-medium rounded-3xl border border-solid bg-neutral-200 border-neutral-400 text-neutral-500 w-full">
+                                        {userData1.isAdmin && (
+                                            <Edit2
+                                                onClick={() => setIsEditing((prev) => !prev)}
+                                                size={24}
+                                                className="absolute top-3 right-3 cursor-pointer text-neutral-500 hover:text-neutral-700 rounded-md"
+                                                style={{border: "2px solid #ccc", padding: "0 2px"}}
+                                            />
+                                        )}
+
                                         <div className="text-xl font-semibold text-neutral-700">
                                             General Information
                                         </div>
-                                        <div className="mt-6">Group Name: {userData?.name}</div>
-                                        <div className="mt-3">Contact Info: {userData?.contactNumber}</div>
-                                        <div className="mt-3">Email Address: {userData?.email}</div>
-                                        <div className="mt-3">
-                                            Talks About: {userData?.talksAbout || 'NA'}{" "}
-                                        </div>
+
+                                        {isEditing ? (
+                                            <div className="mt-6">
+                                                <label className="block mb-1">Group Name:</label>
+                                                <input
+                                                    type="text"
+                                                    className="w-full p-2 border border-neutral-400 rounded"
+                                                    value={editedData.name}
+                                                    onChange={(e) =>
+                                                        setEditedData({ ...editedData, name: e.target.value })
+                                                    }
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="mt-6">Group Name: {userData?.name}</div>
+                                        )}
+
+                                        {isEditing ? (
+                                            <div className="mt-3">
+                                                <label className="block mb-1">Contact Info:</label>
+                                                <input
+                                                    type="text"
+                                                    className="w-full p-2 border border-neutral-400 rounded"
+                                                    value={editedData.contactNumber}
+                                                    onChange={(e) =>
+                                                        setEditedData({
+                                                            ...editedData,
+                                                            contactNumber: e.target.value,
+                                                        })
+                                                    }
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="mt-3">Contact Info: {userData?.contactNumber}</div>
+                                        )}
+
+                                        {isEditing ? (
+                                            <div className="mt-3">
+                                                <label className="block mb-1">Email Address:</label>
+                                                <input
+                                                    type="text"
+                                                    className="w-full p-2 border border-neutral-400 rounded"
+                                                    value={editedData.email}
+                                                    onChange={(e) =>
+                                                        setEditedData({ ...editedData, email: e.target.value })
+                                                    }
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="mt-3">Email Address: {userData?.email}</div>
+                                        )}
+
+                                        {isEditing ? (
+                                            <div className="mt-3">
+                                                <label className="block mb-1">Talks About:</label>
+                                                <input
+                                                    type="text"
+                                                    className="w-full p-2 border border-neutral-400 rounded"
+                                                    value={editedData.talksAbout}
+                                                    onChange={(e) =>
+                                                        setEditedData({
+                                                            ...editedData,
+                                                            talksAbout: e.target.value,
+                                                        })
+                                                    }
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="mt-3">
+                                                Talks About: {userData?.talksAbout || "NA"}
+                                            </div>
+                                        )}
+
                                         <div className="mt-7 text-base font-semibold text-neutral-700">
                                             Description
                                         </div>
-                                        <div className="mt-2 text-zinc-500">
-                                            {userData?.description || 'NA'}
-                                        </div>
-                                        {
-                                            userData1.isAdmin && <div onClick={togleGroup} className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer my-4 w-[180px]">
-                                                {userData?.isPrivate ? 'Change to Public' : 'Change to Private'}
+                                        {isEditing ? (
+                                            <textarea
+                                                className="w-full p-2 border border-neutral-400 rounded mt-2"
+                                                rows={3}
+                                                value={editedData.description}
+                                                onChange={(e) =>
+                                                    setEditedData({
+                                                        ...editedData,
+                                                        description: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        ) : (
+                                            <div className="mt-2 text-zinc-500">
+                                                {userData?.description || "NA"}
                                             </div>
-                                        }
+                                        )}
+
+                                        {userData1.isAdmin && !isEditing && (
+                                            <div
+                                                onClick={togleGroup}
+                                                className="justify-center px-5 py-1.5 text-white bg-red-500 rounded-md border border-solid border-neutral-400 max-md:px-5 cursor-pointer my-4 w-[180px]"
+                                            >
+                                                {userData?.isPrivate
+                                                    ? "Change to Public"
+                                                    : "Change to Private"}
+                                            </div>
+                                        )}
+
+                                        {isEditing && (
+                                            <button
+                                                onClick={handleSaveGroupInformation}
+                                                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+                                            >
+                                                Save
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -525,7 +668,7 @@ export default function GroupsDetails() {
                                     </div>
                                 }
                                 {
-                                     (userData?.joinedUsers?.includes(userId) || userData1.isAdmin) && posts?.map((Item) => (
+                                    (userData?.joinedUsers?.includes(userId) || userData1.isAdmin) && posts?.map((Item) => (
                                         <div key={Item.text ?? ''} className="flex flex-col px-5 md:px-6 pt-5 pb-7 mt-8 w-full rounded-3xl border border-solid bg-neutral-200 border-neutral-400  max-md:max-w-full">
                                             <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                                                 <div onClick={() => { Navigate(`/dashboard/profile/${Item.userInfo._id}`) }} className="flex gap-2 md:gap-4 cursor-pointer">
@@ -624,18 +767,18 @@ export default function GroupsDetails() {
                                                     }
                                                     <div className="my-auto ml-[-10px]">{Item.likes}</div>
                                                     <img
-                                                        onClick={()=>{setSelectedPostId(Item._id); setOpen2(!open2) }}
+                                                        onClick={() => { setSelectedPostId(Item._id); setOpen2(!open2) }}
                                                         loading="lazy"
                                                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/81b3988206ae45b69d451692ab183825d130156ed8d4f79341e2ae1d2c11b2ce?apiKey=cf358c329e0d49a792d02d32277323ef&"
                                                         className="shrink-0 aspect-square w-[25px]"
                                                     />
                                                     <div className="my-auto">{Item.comments}</div>
                                                     <img
+                                                        onClick={()=>{setSelectedPostId(Item._id); setIsSend(true)}}
                                                         loading="lazy"
                                                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/cc32947d0dc0dffaf5b54937d22a080004ed72c715c0b2d4d6a6def7314ff0f6?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                                        className="shrink-0 aspect-square w-[25px]"
+                                                        className="shrink-0 aspect-square w-[25px] cursor-pointer"
                                                     />
-                                                    <div className="my-auto">{Item.shares}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -800,6 +943,7 @@ export default function GroupsDetails() {
             <CreatePostDialog open={createPost} setOpen={setCreatePost} fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} groupPost={true} groupId={id} />
             <CommentsDialog open={open2} setOpen={setOpen2} selectedPostId={selectedPostId} setSelectedPostId={setSelectedPostId} />
             <LikedMembers open={likedModelOpen} setOpen={setLikedModelOpen} attendees={likedUsers} name={userData?.name} />
+            <SendPost open={isSend} setOpen={setIsSend} id={selectedPostId} />
         </div>
     );
 }

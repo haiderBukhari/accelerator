@@ -31,6 +31,7 @@ import Leaderboard from "../pages/leaderboard";
 import Moderators from "../pages/Moderator";
 import Embedding from "../pages/Embedding";
 import { useState } from "react";
+import SinglePost from "../pages/Posts/SinglePost";
 
 const Index = ({ navbarOpen, setNavbarOpen, fetch, setFetch }) => {
   const location = useLocation();
@@ -100,6 +101,7 @@ const Index = ({ navbarOpen, setNavbarOpen, fetch, setFetch }) => {
         <Route path="/embedding-section/:routeName" element={token ? <Embedding /> : <Navigate to ="/login"/>} />
         <Route path="/moderator" element={token ? <Moderators /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/events/create" element={token ? <CreateEvent /> : <Navigate to ="/login"/>} />
+        <Route path="/dashboard/shared/post" element={token ? <SinglePost /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/details/groups" element={token ? <GroupsDetails /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/course/details/:id" element={token ? <CourseDetails /> : <Navigate to ="/login"/>} />
         <Route path="/dashboard/profile/:id" element={token ? <ProfilePage /> : <Navigate to ="/login"/>} />
