@@ -15,6 +15,7 @@ import Courses from "../Courses";
 import CommentsDialog from "../../components/comments";
 import ModalImage from "react-modal-image";
 import { data } from "autoprefixer";
+import LikedMembers from "./likedMembers";
 
 export default function GroupsDetails() {
     const [selected, setSelected] = useState(1);
@@ -39,8 +40,11 @@ export default function GroupsDetails() {
     const [joinedUsers, setJoinedUsers] = useState([])
     const [pendingUsers, setPendingUsers] = useState([])
     const [createPost, setCreatePost] = useState(false);
+    const [likedUsers, setLikedUsers] = useState([]);
     const fileInputRef = useRef(null);
     const fileInputRef1 = useRef(null);
+    const [likedModelOpen, setLikedModelOpen] = useState(false)
+
 
     const timeElapsed = (dateString) => {
         const date = new Date(dateString);
@@ -58,6 +62,20 @@ export default function GroupsDetails() {
             setJoinedUsers(Item.data.joinedUsers)
             setPendingUsers(Item.data.pendingUsers)
             // setUserData(Item.data.user);
+        }).catch((err) => {
+            return failedToast(err.response.data.error);
+        });
+    }
+
+
+    async function getGroupLikedUsers() {
+        await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/groups/likedusers?groupId=${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }).then((Item) => {
+            setLikedUsers(Item.data.likedUsers);
         }).catch((err) => {
             return failedToast(err.response.data.error);
         });
@@ -256,6 +274,7 @@ export default function GroupsDetails() {
         getPosts();
         getGroupsFolders();
         getGroupUsersData()
+        getGroupLikedUsers()
     }, [id, fetchAgain])
 
 
@@ -433,7 +452,7 @@ export default function GroupsDetails() {
                     <div onClick={() => setSelected(4)} className={`justify-center px-5 py-2 ${selected === 4 ? 'bg-violet-800 text-zinc-100' : 'bg-stone-300 text-black'} rounded-xl cursor-pointer`}>
                         Courses
                     </div>
-                    <div onClick={() => setSelected(5)} className={`justify-center px-5 py-2 ${selected === 5 ? 'bg-violet-800 text-zinc-100' : 'bg-stone-300 text-black'} rounded-xl cursor-pointer`}>
+                    <div onClick={()=>{setLikedModelOpen(true)}} className={`justify-center px-5 py-2 ${selected === 5 ? 'bg-violet-800 text-zinc-100' : 'bg-stone-300 text-black'} rounded-xl cursor-pointer`}>
                         Liked Members
                     </div>
                 </div>
@@ -780,7 +799,7 @@ export default function GroupsDetails() {
             <CreateFolderImageDialog open={open1} setOpen={setOpen1} folderId={folderId} setFetchAgain={setFetchAgain} />
             <CreatePostDialog open={createPost} setOpen={setCreatePost} fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} groupPost={true} groupId={id} />
             <CommentsDialog open={open2} setOpen={setOpen2} selectedPostId={selectedPostId} setSelectedPostId={setSelectedPostId} />
-            {/* <CreateFolderDialog open={open} setOpen={setOpen} groupId={id} /> */}
+            <LikedMembers open={likedModelOpen} setOpen={setLikedModelOpen} attendees={likedUsers} name={userData?.name} />
         </div>
     );
 }

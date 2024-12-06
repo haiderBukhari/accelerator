@@ -5,7 +5,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import professionalPicture from '../../assets/professionalPicture.jpeg'
 
-export default function Attendees({ open, setOpen, attendees, name }) {
+export default function LikedMembers({ open, setOpen, attendees, name }) {
     const handleClose = () => {
         setOpen(false);
     };
@@ -25,7 +25,7 @@ export default function Attendees({ open, setOpen, attendees, name }) {
             >
                 <DialogTitle id="alert-dialog-title">
                     <p className='font-semibold'>
-                        {`${name} Liked Members Details`}
+                        {`${name} Attendees Deatils`}
                     </p>
                 </DialogTitle>
                 <DialogContent>
