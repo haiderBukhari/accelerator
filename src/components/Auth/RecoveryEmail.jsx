@@ -31,11 +31,11 @@ const RecoveryEmail = () => {
           }
         )
         .then((Item) => {
-          if (!Item.data.isSubscriber) {
-            successToast("Please Select Payment Plan")
-            Navigate(`/payment?id=${Item.data.id}`)
-            return;
-          }
+          // if (!Item.data.isSubscriber) {
+          //   successToast("Please Select Payment Plan")
+          //   Navigate(`/payment?id=${Item.data.id}`)
+          //   return;
+          // }
           Navigate(`/dashboard/course`);
           dispatch(addUserDetails({
             jwt: Item.data.token,

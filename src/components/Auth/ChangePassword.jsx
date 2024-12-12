@@ -32,11 +32,11 @@ const ChangePassword = () => {
       )
       .then((Item) => {
         Navigate(`/dashboard/course`);
-        if (!Item.data.isSubscriber) {
-          successToast("Please Select Payment Plan")
-          Navigate(`/payment?id=${Item.data.id}`)
-          return;
-        }
+        // if (!Item.data.isSubscriber) {
+        //   successToast("Please Select Payment Plan")
+        //   Navigate(`/payment?id=${Item.data.id}`)
+        //   return;
+        // }
         dispatch(addUserDetails({
           jwt: Item.data.token,
           firstName: Item.data.firstName,

@@ -29,11 +29,11 @@ const Login = () => {
                 successToast("Successfully LogedIn")
                 Navigate(`/recovery-email?id=${Item.data.id}`);
             } else {
-                if(!Item.data.isSubscriber){
-                    successToast("Please Select Payment Plan")
-                    Navigate(`/payment?id=${Item.data.id}`)
-                    return;
-                }
+                // if(!Item.data.isSubscriber){
+                //     successToast("Please Select Payment Plan")
+                //     Navigate(`/payment?id=${Item.data.id}`)
+                //     return;
+                // }
                 successToast("Successfully LogedIn")
                 dispatch(addUserDetails({
                     jwt: Item.data.token,
