@@ -260,17 +260,21 @@ export default function Messages() {
                                 ))}
                             </div>
                         </ScrollToBottom>
-                        <div className="flex gap-5 self-center pt-5 md:pt-20 md:max-md:flex-wrap max-md:mt-10 w-full px-5 pb-5 bg-transparent">
+                        <form className="flex gap-5 self-center pt-5 md:pt-20 md:max-md:flex-wrap max-md:mt-10 w-full px-5 pb-5 bg-transparent">
                             <div className="flex flex-auto gap-5 justify-between py-3.5 rounded-xl border border-solid bg-[#e9e9e9] border-stone-300 md:max-md:flex-wrap w-full pr-10 pl-5">
                                 <input value={message} onChange={(e) => { setMessage(e.target.value) }} className="my-auto text-lg text-neutral-500 w-full bg-[#e9e9e9] outline-none" type="text" name="" id="" placeholder="Type Here" />
                             </div>
-                            <img
-                                onClick={sendMessage}
-                                loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/39f6a830627c4724d4e4b9a1c842273a5c29224950ceb40bbb983f57c759b036?apiKey=cf358c329e0d49a792d02d32277323ef&"
-                                className="shrink-0 w-16 aspect-[1.28] cursor-pointer"
-                            />
-                        </div>
+                            <button onClick={(e) => {
+                                e.preventDefault();
+                                sendMessage();
+                            }} type="submit">
+                                <img
+                                    loading="lazy"
+                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/39f6a830627c4724d4e4b9a1c842273a5c29224950ceb40bbb983f57c759b036?apiKey=cf358c329e0d49a792d02d32277323ef&"
+                                    className="shrink-0 w-16 aspect-[1.28] cursor-pointer"
+                                />
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

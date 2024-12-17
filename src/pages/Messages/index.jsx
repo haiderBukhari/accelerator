@@ -53,7 +53,9 @@ export default function Messages() {
                         {
                             userList?.map((Item, index) => (
                                 <>
-                                    <div onClick={()=>{Navigate(`/dashboard/messages/${Item.friendId}`)}} className="flex cursor-pointer gap-3 lg:gap-5 mt-7 overflow-hidden">
+                                    <div onClick={()=>{
+                                        window.location.href = `/dashboard/messages/${Item.friendId}`;
+                                    }} className="flex cursor-pointer gap-3 lg:gap-5 mt-7 overflow-hidden">
                                         <img
                                             loading="lazy"
                                             src={Item.photo ? Item.photo : professionalPicture}
